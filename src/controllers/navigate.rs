@@ -7,8 +7,8 @@ use axum::{
 };
 use crate::{IndexTemplate, Post};
 
-pub async fn page(Path(query_title): Path<String>, State(state): State<Arc<Vec<Post>>>) -> impl IntoResponse {
-    println!("{}", query_title);
+pub async fn page(Path(page_number): Path<String> , State(state): State<Arc<Vec<Post>>>) -> impl IntoResponse {
+    println!("{}", page_number);
     let mut plinks: Vec<String> = Vec::new();
     let number_of_pages = 5;
     let mut psec: Vec<String> = Vec::new();
@@ -25,13 +25,13 @@ pub async fn page(Path(query_title): Path<String>, State(state): State<Arc<Vec<P
 
     let s = state.clone();// s indicates state
     println!("{}", s[10].post_title);
-    if  query_title == "1" {
+    if  page_number == "1" {
         plinks.clear();
         for i in 0 .. 3 {
             plinks.push(s[i].post_title.clone());// clone of s[i]
         }
     }
-    else if query_title == "2" {
+    else if page_number == "2" {
         plinks.clear();
         for i in 3 .. 6 {
             plinks.push(s[i].post_title.clone());// clone of s[i]
@@ -39,22 +39,22 @@ pub async fn page(Path(query_title): Path<String>, State(state): State<Arc<Vec<P
             println!("new {}",s[i].post_title)// to check the items in vector.
         }
     }
-    else if  query_title == "3" {
-        println!("in {}",query_title);
+    else if  page_number == "3" {
+        println!("in {}",page_number);
         plinks.clear();
         for i in 6 .. 9 {
             plinks.push(s[i].post_title.clone());// clone of s[i]
             println!("{}",s[i].post_title)// to check the items in vector.
         }
     }
-    else if  query_title == "4" {
+    else if  page_number == "4" {
         plinks.clear();
         for i in 9 .. 12 {
             plinks.push(s[i].post_title.clone());// clone of s[i]
             println!("{}",s[i].post_title)// to check the items in vector.
         }
     }
-    else if  query_title == "5" {
+    else if  page_number == "5" {
         plinks.clear();
         for i in 12 .. 15 {
             plinks.push(s[i].post_title.clone());// clone of s[i]
@@ -70,7 +70,7 @@ pub async fn page(Path(query_title): Path<String>, State(state): State<Arc<Vec<P
     }
 
 
-    let template = IndexTemplate{index_title: String::from("Sakib"), index_links: &plinks, index_sec: &psec, page_nav_links: &pnav};
+    let template = IndexTemplate{index_title: String::from("Blogs"), index_links: &plinks, index_sec: &psec, page_nav_links: &pnav};
 
     match template.render() {
         Ok(html) => Html(html).into_response(),

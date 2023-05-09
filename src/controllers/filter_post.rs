@@ -6,63 +6,45 @@ use axum::{
     response::{Html, IntoResponse},
     extract::{State, Path},
 };
+use crate::model::models::{get_filtered_from_database, get_filtered_from_database_by_category};
 use tower_cookies::{Cookie, CookieManagerLayer, Cookies};
 use sqlx::postgres::PgPoolOptions;
 use crate::{Blog, BlogTemplate};
 use crate::controllers::filter_navigate::blog_pagination;
 
-
-pub async fn blogs(Path(query_title): Path<String>) -> impl IntoResponse {
-    println!("{}",query_title);
-    let name = query_title.clone();
-    let pools = PgPoolOptions::new()
-        .max_connections(5)
-        .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
-        .await
-        .expect("couldn't connect to the database");
-
-
+pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
+    println!("category {} page number", category);
     let mut psec: Vec<String> = Vec::new();
     psec.clear();
-    psec.push("Category A".to_string());// psec
-    psec.push("Category B".to_string());// psec
-    psec.push("Category C".to_string());// psec
+    psec.push("Category A".to_string());
+    psec.push("Category B".to_string());
+    psec.push("Category C".to_string());
     psec.push("No Category".to_string());
     let mut number_of_pages = 0;
-    //let s = state.clone();
     let mut plinks: Vec<String> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
-   // let shared_state2 = Arc::new(posts2);
-
-
-//     let query = r#"
-// insert into filter_category
-//     ( filter_name )
-// values
-//     ( $1 )
-// returning *
-// "#;
-//
-//     let result: Result<> = sqlx::query_as::<_, String>(query)
-//         .bind(&name);
-
-
-
-    let mut posts2 = sqlx::query_as::<_, Blog>("select p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1)")
-        .bind(query_title)
-        .fetch_all(&pools)
-        .await
-        .unwrap();
+    let mut string_a: String = category.clone().to_owned();
+    let mut string_b: &str = "/pages";
+    let mut current_url = string_a + string_b;
+    println!("current url {}",current_url);
+    let mut posts2 = get_filtered_from_database_by_category(category).await;
 
     for post in &mut posts2 {
         post.post_title = post.post_title.replace("-", " ");
     }
 
     let shared_state2 = Arc::new(posts2);
+    println!("len {}",shared_state2.len());
+
+    //number_of_pages = shared_state2.len();
     if shared_state2.len()%3==0 {
         number_of_pages = shared_state2.len()/3;
     }
+    // else if shared_state2.len() == 1{
+    //     number_of_pages = 1;
+    // }
     else{
+
         number_of_pages = (shared_state2.len()/3)+1;
     }
     println!("total{} number of pages {}",shared_state2.len(),number_of_pages);
@@ -81,7 +63,7 @@ pub async fn blogs(Path(query_title): Path<String>) -> impl IntoResponse {
         }
     }
 
-    let template = BlogTemplate{index_title: String::from("Sakib"), index_links: &plinks, index_sec: &psec, page_nav_links: &pnav};
+    let template = BlogTemplate{index_title: String::from("Blogs"), index_links: &plinks, index_sec: &psec, page_nav_links: &pnav,current_url_page: current_url};
 
     match template.render() {
         Ok(html) => Html(html).into_response(),

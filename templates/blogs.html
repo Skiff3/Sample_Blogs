@@ -15,7 +15,8 @@
   <select onchange="getval(this);" id="category" name="blog" id="blog">
     {% let name = " " %}
     {% for name in index_sec %}
-    <option id="sec" selected>{{ name }}</option>
+    <option id="sec">{{ name }}</option><br/>
+    <p>Description ..</p>
     {% endfor %}
   </select>
 </form>
@@ -25,7 +26,8 @@
 <div class="links">
   <ul>
     {% for item in index_links %}
-    <li><a href="/post/{{ item}}">{{ item }}</a></li>
+    <li><a href="/post/{{ item}}">{{ item }}</a></li><br/>
+    <p>Description .. </p>
     {% endfor %}
   </ul>
 </div>
@@ -34,7 +36,7 @@
   <ul class="pagination">
     {% for i in page_nav_links %}
     <li class="page-item">
-      <a class="page-link" href="/blogs/page/{{ i }}" >{{ i }}</a>
+      <a id="page_id" onclick="go_to_pagination()" class="page-link" href="{{current_url_page}}/{{ i }}" >{{ i }}</a>
     </li><br/><br/>
     {% endfor %}
   </ul>
@@ -43,11 +45,14 @@
 
     <script>
         function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/blogs/"+sel.value);
-        document.cookie = "category="+sel.value;
+        window.location.replace("http://0.0.0.0:4000/posts/category/"+sel.value);
+        document.getElementById("page_id").href = newString;
+        let element  = document.getElementById("category");
+        element.value = sel.value;
         }
-        function get_val(i){
-        window.location.replace("http://0.0.0.0:4000/blogs/page/"+i.value);
+
+        function go_to_pagination(val){
+
         }
     </script>
 </html>

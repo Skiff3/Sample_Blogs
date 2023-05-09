@@ -25,7 +25,8 @@
 		<div class="links">
 			<ul>
 			{% for item in index_links %}
-				<li><a href="/post/{{ item}}">{{ item }}</a></li>
+				<li><a href="/post/{{ item}}">{{ item }}</a></li><br/>
+				<p>Description ...</p>
 			{% endfor %}
 		   </ul>
 		</div>
@@ -43,7 +44,10 @@
 
 	<script>
         function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/blogs/"+sel.value);
+        window.location.replace("http://0.0.0.0:4000/posts/category/"+sel.value);
+        let element  = document.getElementById("category");
+
+        element.value = sel.value;
         }
     </script>
 </html>
