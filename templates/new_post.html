@@ -1,19 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  <title> {{ index_title }} </title>
-  <script>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
+        rel="stylesheet"  type='text/css'>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<script>
     $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
         });
   </script>
-  <style>
+<style>
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
     font-family: 'Poppins', sans-serif;
@@ -47,7 +50,7 @@ a:focus {
 
 .navbar-btn {
     box-shadow: none;
-    outline: none !important;
+    outline: none;
     border: none;
 }
 
@@ -122,8 +125,8 @@ a[data-toggle="collapse"] {
 }
 
 ul ul a {
-    font-size: 0.9em !important;
-    padding-left: 30px !important;
+    font-size: 0.9em ;
+    padding-left: 30px ;
     background: #6d7fcc;
 }
 
@@ -133,7 +136,7 @@ ul.CTAs {
 
 ul.CTAs a {
     text-align: center;
-    font-size: 0.9em !important;
+    font-size: 0.9em;
     display: block;
     border-radius: 5px;
     margin-bottom: 5px;
@@ -176,11 +179,23 @@ a.article:hover {
         display: none;
     }
 }
+.container {
+  padding: 2rem 0rem;
+}
+
+h4 {
+  margin: 2rem 0rem 1rem;
+}
+
+.table-image {
+  td, th {
+    vertical-align: middle;
+  }
+}
   </style>
 </head>
 
 <body>
-
 <div class="wrapper">
   <!-- Sidebar  -->
   <nav id="sidebar">
@@ -194,28 +209,18 @@ a.article:hover {
         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Blogs</a>
         <ul class="collapse list-unstyled" id="homeSubmenu">
           <li>
-            <a href="http://0.0.0.0:4000/posts">Create New Blog</a>
+            <a href="post/new">Create New Blog</a>
           </li>
           <li>
-            <a href="http://0.0.0.0:4000/post/new">View All Blogs</a>
+            <a href="#">View All Blogs</a>
           </li>
           <li>
-            <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
+            <a href="category/new">Create New Category</a>
           </li>
         </ul>
       </li>
       <li>
         <a href="#">About</a>
-      </li>
-      <li>
-        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-        <ul class="collapse list-unstyled" id="pageSubmenu">
-          {% for i in page_nav_links %}
-          <li>
-            <a id="page_ids" onclick="go_to_pagination()" class="page-link" href="{{current_url_page}}/{{ i }}" >{{ i }}</a>
-          </li>
-          {% endfor %}
-        </ul>
       </li>
       <li>
         <a href="#">Portfolio</a>
@@ -243,96 +248,52 @@ a.article:hover {
 
         <button type="button" id="sidebarCollapse" class="btn btn-info">
           <i class="fas fa-align-left"></i>
-          <span>Toggle Sidebar</span>
+          <span>Show Menu</span>
         </button>
         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-align-justify"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-          </ul>
-        </div>
+
       </div>
     </nav>
+<div class="container">
+  <h2>Get Started, Create a Blog</h2><br/><br/>
 
-    <h2>Displaying all blogs</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-<!--    <div class="line"></div>-->
-
-<!--    <h2>Lorem Ipsum Dolor</h2>-->
-<!--    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>-->
-
-<!--    <div class="line"></div>-->
-
-<!--    <h2>Lorem Ipsum Dolor</h2>-->
-<!--    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>-->
-
-<!--    <div class="line"></div>-->
-
-<!--    <h3>Lorem Ipsum Dolor</h3>-->
-<!--    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>-->
-<!--  </div>-->
-<!--</div>-->
-
-<form>
-  <label for="blog">Choose a category:</label>
-  <select onchange="getval(this);" id="category" name="blog" id="blog">
-    {% let name = " " %}
-    {% for name in index_sec %}
-    <option id="sec">{{ name }}</option><br/>
-    <p>Description ..</p>
-    {% endfor %}
-  </select>
-</form>
-<br><br>
+  <form action="/post/new" method="post">
+    <!--			<label><b>Post Id</b></label>-->
+    <!--			<input type="number" placeholder="Enter Post Id" name="post_id">-->
 
 
-<div class="links">
-  <ul>
-    {% for item in index_links %}
-    <li><a href="/post/{{ item}}">{{ item }}</a></li><br/>
-    <p>Description .. </p>
-    {% endfor %}
-  </ul>
-</div>
-<br/><br/><br/>
-<br/><br/><nav aria-label="Page navigation">
-  <ul class="pagination">
-    {% for i in page_nav_links %}
-    <li class="page-item">
-      <a id="page_id" onclick="go_to_pagination()" class="page-link" href="{{current_url_page}}/{{ i }}" >{{ i }}</a>
-    </li><br/><br/>
-    {% endfor %}
-  </ul>
-</nav>
+
+    <div class="mb-3">
+      <label><b>Post Title</b></label><br>
+      <input type="text" class="form-control" id="post_title"name="post_title" placeholder="Post Title">
+    </div>
+    <div class="mb-3">
+      <label  class="form-label"><b>Post Body</b></label>
+      <textarea class="form-control" id="post_body" name="post_body" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+    <label><b>Category</b></label><br/>
+    <select id="category_name" name="category_name">
+      <option id="category_name_gen_2">--Select--</option>
+      <option id="category_a">Category A</option>
+      <option id="category_b">Category B</option>
+      <option id="category_c">Category C</option>
+      <option id="category_d">Category D</option>
+      <option id="category_no">No Category</option>
+    </select><br/><br/>
+    </div>
+
+    <button type="submit">Create Post</button><br/><br/><br/>
+
+
+  </form>
   </div>
-</div>
+  </div>
+  </div>
+
 </body>
-
-    <script>
-        function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/posts/category/"+sel.value);
-        document.getElementById("page_id").href = newString;
-        let element  = document.getElementById("category");
-        element.value = sel.value;
-        }
-
-        function go_to_pagination(val){
-
-        }
-    </script>
 </html>

@@ -23,6 +23,7 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     let mut number_of_pages = 0;
     let mut plinks: Vec<String> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
+    let mut pids: Vec<i32> = Vec::new();
     let mut string_a: String = category.clone().to_owned();
     let mut string_b: &str = "/pages";
     let mut current_url = string_a + string_b;
@@ -55,15 +56,17 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     if shared_state2.len() >= 3 {
         for i in 0 .. 3 {
             plinks.push(shared_state2[i].post_title.clone());
+            pids.push(shared_state2[i].post_id.clone());
         }
     }
     else{
         for i in 0 .. shared_state2.len() {
             plinks.push(shared_state2[i].post_title.clone());
+            pids.push(shared_state2[i].post_id.clone());
         }
     }
 
-    let template = BlogTemplate{index_title: String::from("Blogs"), index_links: &plinks, index_sec: &psec, page_nav_links: &pnav,current_url_page: current_url};
+    let template = BlogTemplate{ index_id: &vec![], index_title: String::from("Blogs"), index_links: &plinks, index_sec: &psec, page_nav_links: &pnav,current_url_page: current_url};
 
     match template.render() {
         Ok(html) => Html(html).into_response(),
