@@ -189,7 +189,7 @@ async fn main() {
         .route("/update_post/:post_id",post(update_posts_form))
         .route("/category/new",get(create_category_form_ui).post(create_catgories_form))
          .route("/admins", get(admin_gui))
-        //.route_layer(RequireAuthorizationLayer::<i64,User>::login())
+        .route_layer(RequireAuthorizationLayer::<i64,User>::login())
          .route("/register",post(register_user))
          .route("/register/new",get(register_user_ui))
         .route("/login", get(login_user_ui).post(login_user))

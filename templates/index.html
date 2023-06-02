@@ -307,17 +307,16 @@ h4 {
 								</tr>
 								</thead>
 								<tbody>
+								{% for item in index_links %}
 								<tr>
-									{% for item in index_links %}
 									<td><a href="/post/{{ item}}">{{item}}</a> </td>
-									{% for items in index_id %}
 									<td>Description</td>
 									<td>20th May</td>
 									<td>
-										<a href="/post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-										<a href="/delete/{{items}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+										<a href="/post/{{ item}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+										<a href="/delete/{{item}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
 									</td>
-									{% endfor %}
+
 								</tr>
 								{% endfor %}
 

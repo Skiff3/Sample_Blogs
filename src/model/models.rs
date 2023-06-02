@@ -171,14 +171,14 @@ pub async fn get_all_categories() -> Vec<Category> {
     categories
 }
 
-pub async fn get_details_of_post(post_name: i32) -> Vec<Post> {
+pub async fn get_details_of_post(post_name: String) -> Vec<Post> {
     let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
         .await
         .expect("couldn't connect to the database");
 
-    let mut posts = sqlx::query_as::<_, Post>("select post_id, post_title, post_body, post_description from posts where post_id = ($1)")
+    let mut posts = sqlx::query_as::<_, Post>("select post_id, post_title, post_body, post_description from posts where post_title = ($1)")
         .bind(post_name)
         .fetch_all(&pool)
         .await

@@ -24,7 +24,7 @@ pub async fn page(Path(page_number): Path<String> , State(state): State<Arc<Vec<
     let mut page_number_integer = 0;
     let mut number_of_pages: i64 = 0;
     page_number_integer = page_number.parse().unwrap();
-    let mut offset_start: i32 = 0;// offset
+    let mut offset_start: i32 = 0;
     offset_start = (page_number_integer-1) * global_number_of_items_per_page();// offset value.
     println!("page starts from {}", offset_start);
     let s = get_posts_per_page(offset_start).await;

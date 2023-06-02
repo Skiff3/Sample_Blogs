@@ -56,6 +56,7 @@ pub async fn blog_pagination(Path((category, page_number)): Path<(String,String)
     }
         pids.clear();
         plinks.clear();
+
     for i in 0 .. shared_state2.len() {
             plinks.push(shared_state2[i].post_title.clone());
             pids.push(shared_state2[i].post_id.clone());

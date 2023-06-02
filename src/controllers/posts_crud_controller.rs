@@ -58,6 +58,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> impl Into
 pub async fn delete_posts_form(Path(post_id): Path<String>) -> Redirect {
     let pool = get_connection_for_crud().await;
     println!("Form {}", post_id);
+    //let mut post_ids = post_id.clone().parse().u;
     let mut res = sqlx::query("delete from posts where post_title = ($1)")
         .bind(post_id)
         .execute(&pool)

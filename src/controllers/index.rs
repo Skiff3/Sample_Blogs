@@ -19,7 +19,7 @@ pub async fn index(State(state): State<Arc<Vec<Post>>>) -> impl IntoResponse{
 
     let mut category_list = get_all_categories().await;
     for i in  0 .. category_list.len(){
-        psec.push(category_list[i].clone().category_name);
+        psec.push(category_list[i].clone().category_name);//
     }
     let s = state.clone();
     let mut number_of_pages: i64 = 0;
