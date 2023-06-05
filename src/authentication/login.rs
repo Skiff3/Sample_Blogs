@@ -10,8 +10,8 @@ use axum_login::{memory_store::MemoryStore as AuthMemoryStore, secrecy::SecretVe
 use sqlx::postgres::PgPoolOptions;
 
 fn get_password_hash_form(pass: String) -> SecretVec<u8> {
-    let sec = SecretVec::new(pass.clone().into());
-    sec
+    SecretVec::new(pass.into())
+
 }
 
 type AuthContext = axum_login::extractors::AuthContext<i64, User, AuthMemoryStore<i64, User>>;

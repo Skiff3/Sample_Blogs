@@ -12,8 +12,7 @@ pub async fn blog_pagination(
     Path((category, page_number)): Path<(String, String)>,
 ) -> impl IntoResponse {
     let mut plinks: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new();
-    let number_of_pages ; // number_of_pages.
+    let mut pids: Vec<i32> = Vec::new(); // number_of_pages.
     let final_category = &category[0..category.len()];
     println!("category {}", final_category.clone());
     let mut psec: Vec<String> = Vec::new();
@@ -25,21 +24,19 @@ pub async fn blog_pagination(
     psec.push("Category C".to_string()); // auth steps: html, database(user_db), controller() -> link >
     psec.push("No Category".to_string());
 
-    let page_number_integer :i32;
-    page_number_integer = page_number.parse().unwrap();
-    let offset_start: i32;
-    offset_start = (page_number_integer - 1) * global_number_of_items_per_page();
+    let page_number_integer:i32 = page_number.parse().unwrap();
+    let offset_start:i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     println!("page starts from {}", offset_start);
 
-    let mut posts2 =
+    let  posts2 =
         get_filtered_from_database(final_category.to_string(), offset_start.clone()).await;
 
-    for post in &mut posts2 {
-        post.post_title = post.post_title.replace("-", " ");
-    }
+    // for post in &mut posts2 {
+    //     post.post_title = post.post_title.replace("-", " ");
+    // }
 
     let shared_state2 = Arc::new(posts2);
-    number_of_pages = shared_state2.len();
+    let number_of_pages = shared_state2.len();
     // if shared_state2.len()%3==0 {
     //     number_of_pages = shared_state2.len()/3;
     // }
@@ -56,7 +53,7 @@ pub async fn blog_pagination(
     }
     for i in 0..shared_state2.len() {
         plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id.clone());
+        pids.push(shared_state2[i].post_id);
     }
     pids.clear();
     plinks.clear();

@@ -17,14 +17,13 @@ use crate::controllers::posts_crud_controller::{
 use crate::model::models::{get_connection, BlogTemplate, IndexTemplate, Post};
 use axum::response::{ Redirect};
 use axum::routing::post;
-use axum::{response::IntoResponse, routing::get, Extension, Router};
+use axum::{ routing::get, Extension, Router};
 use axum_login::{
     axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer},
     memory_store::MemoryStore as AuthMemoryStore,
     secrecy::SecretVec,
     AuthLayer, AuthUser, RequireAuthorizationLayer,
 };
-use axum_macros::debug_handler;
 use rand::Rng;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -139,18 +138,6 @@ async fn main() {
         Redirect::to("/login")
     }
 
-    #[debug_handler]
-    pub async fn protected_handler(Extension(user_state): Extension<User>) -> impl IntoResponse {
-        println!("Logged in router {:?}", user_state.name);
-        format!(
-            "Logged in as: {}, ---> {}",
-            user_state.name, user_state.password_hash
-        )
-    }
-
-    async fn admin_handler(Extension(user): Extension<User>) -> impl IntoResponse {
-        format!("Logged in as admin: {}", user.name)
-    }
 
     let posts = get_connection().await;
     let shared_state = Arc::new(posts);

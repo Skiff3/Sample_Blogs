@@ -16,31 +16,31 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
     psec.push("No Category".to_string());
-    let number_of_pages ;
+    let mut number_of_pages:i32 = 0;
     let mut plinks: Vec<String> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
     let mut pids: Vec<i32> = Vec::new();
-    let string_a: String = category.clone().to_owned();
+    let string_a: String = category.clone();
     let string_b: &str = "/pages";
     let current_url = string_a + string_b;
     println!("current url {}", current_url);
-    let mut posts2 = get_filtered_from_database_by_category(category).await;
+    let posts2 = get_filtered_from_database_by_category(category).await;
 
-    for post in &mut posts2 {
-        post.post_title = post.post_title.replace("-", " ");
-    }
+    // for post in &mut posts2 {
+    //     post.post_title = post.post_title.replace("-", " ");
+    // }
 
     let shared_state2 = Arc::new(posts2);
     println!("len {}", shared_state2.len());
 
     //number_of_pages = shared_state2.len();
-    if shared_state2.len() % 3 == 0 {
-        number_of_pages = shared_state2.len() / 3;
+     if shared_state2.len() % 3 == 0 {
+         number_of_pages = (shared_state2.len() / 3) as i32;
     } else {
-        number_of_pages = (shared_state2.len() / 3) + 1;
-    }
+         number_of_pages = ((shared_state2.len() / 3) + 1) as i32;
+    };
     println!(
-        "total{} number of pages {}",
+        "total{} number of pages {:?}",
         shared_state2.len(),
         number_of_pages
     );
@@ -51,12 +51,12 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     if shared_state2.len() >= 3 {
         for i in 0..3 {
             plinks.push(shared_state2[i].post_title.clone());
-            pids.push(shared_state2[i].post_id.clone());
+            pids.push(shared_state2[i].post_id);
         }
     } else {
         for i in 0..shared_state2.len() {
             plinks.push(shared_state2[i].post_title.clone());
-            pids.push(shared_state2[i].post_id.clone());
+            pids.push(shared_state2[i].post_id);
         }
     }
 
