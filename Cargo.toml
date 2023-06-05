@@ -37,3 +37,4 @@ axum-macros = "0.3.7"
 tower-service = "0.3"
 axum-login = "0.5"
 cookie = { version = "0.17", features = ["percent-encode"] }
+cargo-watch = "8.4.0"
