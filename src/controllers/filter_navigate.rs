@@ -14,7 +14,6 @@ pub async fn blog_pagination(
     let mut plinks: Vec<String> = Vec::new();
     let mut pids: Vec<i32> = Vec::new(); // number_of_pages.
     let final_category = &category[0..category.len()];
-    println!("category {}", final_category.clone());
     let mut psec: Vec<String> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
     //let mut check_category:String = category;
@@ -29,7 +28,7 @@ pub async fn blog_pagination(
     println!("page starts from {}", offset_start);
 
     let  posts2 =
-        get_filtered_from_database(final_category.to_string(), offset_start.clone()).await;
+        get_filtered_from_database(final_category.to_string(), offset_start).await;
 
     // for post in &mut posts2 {
     //     post.post_title = post.post_title.replace("-", " ");
@@ -60,7 +59,7 @@ pub async fn blog_pagination(
 
     for i in 0..shared_state2.len() {
         plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id.clone());
+        pids.push(shared_state2[i].post_id);
     }
 
     let template = BlogTemplate {

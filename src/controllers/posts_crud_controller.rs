@@ -1,11 +1,10 @@
+
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{
-    get_max_id_of_category, get_max_id_of_post, NewCategoryTemplate, NewPostTemplate,
-};
-use crate::{CreateCategory, CreatePost, UpdatePost};
+use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, NewCategoryTemplate, NewPostTemplate};
+use crate::{CreateCategory, CreatePost, global_number_of_items_per_page_64, UpdatePost};
 use askama::Template;
-use axum::extract::Path;
+use axum::extract::{Path};
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect};
 use axum::Form;
@@ -13,12 +12,12 @@ use sqlx::postgres::PgPoolOptions;
 use sqlx::{Pool, Postgres};
 
 pub async fn get_connection_for_crud() -> Pool<Postgres> {
-    let pool = PgPoolOptions::new()
+        PgPoolOptions::new()
         .max_connections(5)
         .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
         .await
-        .expect("couldn't connect to the database");
-    pool
+        .expect("couldn't connect to the database")
+
 }
 
 pub async fn create_posts_form_ui() -> impl IntoResponse {
@@ -76,6 +75,58 @@ pub async fn delete_posts_form(Path(post_id): Path<String>) -> Redirect {
 
     println!("Success ---> row {:?}", &res);
     Redirect::to("/page/1")
+}
+
+pub async fn home_gui() -> impl IntoResponse {
+    let mut psec: Vec<String> = Vec::new();
+    psec.clear();
+
+    let category_list = get_all_categories().await;
+    for i in 0..category_list.len() {
+        psec.push(category_list[i].clone().category_name);
+    }
+    let s = get_connection().await;
+    let number_of_pages: i64;
+    let mut plinks: Vec<String> = Vec::new();
+    let mut pids: Vec<i32> = Vec::new();
+    let mut pnav: Vec<String> = Vec::new();
+    let number_of_posts_vector = get_count_of_posts().await;
+    let m = number_of_posts_vector.clone();
+    if m[0].count % global_number_of_items_per_page_64() == 0 {
+        number_of_pages = (m[0].count) / global_number_of_items_per_page_64();
+    } else {
+        number_of_pages = (m[0].count) / global_number_of_items_per_page_64() + 1;
+    }
+    println!(
+        "the number of pages are {}, count of posts {}",
+        number_of_pages, m[0].count
+    );
+    for i in 1..number_of_pages + 1 {
+        pnav.push(i.to_string())
+    }
+
+    for i in 0..s.len() {
+        plinks.push(s[i].post_title.clone());
+        pids.push(s[i].post_id.clone());
+        println!("{}", s.len()) // prints the s length
+    }
+
+    let template = HomeTemplate {
+        index_id: &pids,
+        index_title: String::from("Blogs"),
+        index_links: &plinks,
+        index_sec: &psec,
+        page_nav_links: &pnav,
+    };
+
+    match template.render() {
+        Ok(html) => Html(html).into_response(),
+        Err(err) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to render template. Error {}", err),
+        )
+            .into_response(),
+    }
 }
 
 pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) -> Redirect {

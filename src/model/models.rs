@@ -6,7 +6,9 @@ use sqlx::*;
 
 mod filters {
     pub fn rmdashes(title: &str) -> askama::Result<String> {
-        Ok(title.replace("-", " ").into())
+        let a : char = '-';
+        let b : &str = " ";
+        Ok(title.replace(a, b))
     }
 }
 
@@ -60,6 +62,17 @@ pub struct RegisterTemplate<'a> {
 #[derive(Template)]
 #[template(path = "admins.html")]
 pub struct AdminTemplate {}
+
+
+#[derive(Template)]
+#[template(path = "home.html")]
+pub struct HomeTemplate<'a> {
+    pub index_id: &'a Vec<i32>,
+    pub index_title: String,
+    pub index_links: &'a Vec<String>,
+    pub index_sec: &'a Vec<String>,
+    pub page_nav_links: &'a Vec<String>,
+}
 
 #[derive(Template)]
 #[template(path = "new_post.html")]
@@ -118,14 +131,13 @@ pub async fn get_connection() -> Vec<Post> {
         .await
         .expect("couldn't connect to the database");
 
-    let posts = sqlx::query_as::<_, Post>(
+    sqlx::query_as::<_, Post>(
         "select post_id,post_title, post_body, post_description from posts limit 3 offset 0",
     )
     .fetch_all(&pool)
     .await
-    .unwrap(); //unwrap posts
+    .unwrap()//unwrap posts
 
-    posts
 }
 
 pub async fn get_posts_per_page(offset_value: i32) -> Vec<Post> {
@@ -135,16 +147,15 @@ pub async fn get_posts_per_page(offset_value: i32) -> Vec<Post> {
         .await
         .expect("couldn't connect to the database");
 
-    let posts = sqlx::query_as::<_, Post>(
+
+        sqlx::query_as::<_, Post>(
         "select post_id, post_title, post_body, post_description from posts limit ($1) offset ($2)",
     )
     .bind(global_number_of_items_per_page())
     .bind(offset_value)
     .fetch_all(&pool)
     .await
-    .unwrap();
-
-    posts
+    .unwrap()
 }
 
 pub async fn get_all_categories() -> Vec<Category> {
@@ -154,12 +165,10 @@ pub async fn get_all_categories() -> Vec<Category> {
         .await
         .expect("couldn't connect to the database");
 
-    let categories = sqlx::query_as::<_, Category>("select * from category_post")
+    sqlx::query_as::<_, Category>("select * from category_post")
         .fetch_all(&pool)
         .await
-        .unwrap();
-
-    categories
+        .unwrap()
 }
 
 pub async fn get_details_of_post(post_name: String) -> Vec<Post> {
@@ -169,13 +178,11 @@ pub async fn get_details_of_post(post_name: String) -> Vec<Post> {
         .await
         .expect("couldn't connect to the database");
 
-    let posts = sqlx::query_as::<_, Post>("select post_id, post_title, post_body, post_description from posts where post_title = ($1)")
+   sqlx::query_as::<_, Post>("select post_id, post_title, post_body, post_description from posts where post_title = ($1)")
         .bind(post_name)
         .fetch_all(&pool)
         .await
-        .unwrap();
-
-    posts
+        .unwrap()
 }
 
 pub async fn get_max_id_of_post() -> Vec<Max> {
@@ -185,12 +192,11 @@ pub async fn get_max_id_of_post() -> Vec<Max> {
         .await
         .expect("couldn't connect to the database");
 
-    let count = sqlx::query_as::<_, Max>("select max(post_id) from posts;")
+    sqlx::query_as::<_, Max>("select max(post_id) from posts;")
         .fetch_all(&pool)
         .await
-        .unwrap();
+        .unwrap()
 
-    count
 }
 
 pub async fn get_max_id_of_category() -> Vec<Max> {
@@ -200,12 +206,10 @@ pub async fn get_max_id_of_category() -> Vec<Max> {
         .await
         .expect("couldn't connect to the database");
 
-    let count = sqlx::query_as::<_, Max>("select max(category_id) from category_post;")
+    sqlx::query_as::<_, Max>("select max(category_id) from category_post;")
         .fetch_all(&pool)
         .await
-        .unwrap();
-
-    count
+        .unwrap()
 }
 
 pub async fn get_count_of_posts() -> Vec<Count> {
@@ -215,12 +219,10 @@ pub async fn get_count_of_posts() -> Vec<Count> {
         .await
         .expect("couldn't connect to the database"); // expects returns an error
 
-    let count = sqlx::query_as::<_, Count>("select count(*) from posts;")
+    sqlx::query_as::<_, Count>("select count(*) from posts;")
         .fetch_all(&pool)
         .await
-        .unwrap();
-
-    count
+        .unwrap()
 }
 
 // pub async fn get_count_of_posts_filtered_by_categories() -> Vec<Count> {
@@ -245,14 +247,12 @@ pub async fn get_filtered_from_database(final_category: String, page_number: i32
         .await // await
         .expect("couldn't connect to the database");
 
-    let posts2 = sqlx::query_as::<_, Blog>("select p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1) limit 3 offset ($2)")
+   sqlx::query_as::<_, Blog>("select p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1) limit 3 offset ($2)")
         .bind(final_category)
         .bind(page_number)
         .fetch_all(&pool)
         .await
-        .unwrap();
-
-    posts2
+        .unwrap()
 }
 
 pub async fn get_filtered_from_database_by_category(final_category: String) -> Vec<Blog> {
@@ -262,11 +262,11 @@ pub async fn get_filtered_from_database_by_category(final_category: String) -> V
         .await // await
         .expect("couldn't connect to the database");
 
-    let posts2 = sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1)")
+
+    sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1)")
         .bind(final_category)
         .fetch_all(&pool)
         .await
-        .unwrap(); // unwrap get filtered by category
+        .unwrap() // unwrap get filtered by category
 
-    posts2
 }

@@ -7,12 +7,17 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Clear warnings">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Clear warnings.">
+      <change afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/authentication/login.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/authentication/login.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/models.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +27,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Rust File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -115,7 +120,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685950475896</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Clear warnings.">
+      <created>1685952201824</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1685952201824</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -135,6 +147,7 @@
     <MESSAGE value="Authentication" />
     <MESSAGE value="Authentication Complete" />
     <MESSAGE value="Clear warnings" />
-    <option name="LAST_COMMIT_MESSAGE" value="Clear warnings" />
+    <MESSAGE value="Clear warnings." />
+    <option name="LAST_COMMIT_MESSAGE" value="Clear warnings." />
   </component>
 </project>

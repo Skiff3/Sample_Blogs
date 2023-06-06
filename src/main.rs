@@ -10,10 +10,7 @@ use crate::controllers::filter_navigate::blog_pagination;
 use crate::controllers::filter_post::blogs;
 use crate::controllers::index::index;
 use crate::controllers::navigate::page;
-use crate::controllers::posts_crud_controller::{
-    create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui,
-    delete_posts_form, update_posts_form,
-};
+use crate::controllers::posts_crud_controller::{create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui, delete_posts_form, home_gui, update_posts_form};
 use crate::model::models::{get_connection, BlogTemplate, IndexTemplate, Post};
 use axum::response::{ Redirect};
 use axum::routing::post;
@@ -94,8 +91,7 @@ impl AuthUser<i64> for User {
     }
 
     fn get_password_hash(&self) -> SecretVec<u8> {
-        let sec = SecretVec::new(self.password_hash.clone().into());
-        sec
+        SecretVec::new(self.password_hash.clone().into())
     }
 }
 
@@ -167,6 +163,7 @@ async fn main() {
         )
         .route("/admins", get(admin_gui))
         .route_layer(RequireAuthorizationLayer::<i64, User>::login())
+        .route("/", get(home_gui))
         .route("/register", post(register_user))
         .route("/register/new", get(register_user_ui))
         .route("/login", get(login_user_ui).post(login_user))

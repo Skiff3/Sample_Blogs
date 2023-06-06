@@ -32,7 +32,7 @@ pub async fn show_post(
         }
     }
 
-    if &template.post_title == &"none" {
+    if template.post_title == "none" {
         return (StatusCode::NOT_FOUND, "404 not found").into_response();
     }
     println!("{}", template);

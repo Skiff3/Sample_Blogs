@@ -26,20 +26,19 @@ pub async fn page(
     psec.push("Category C".to_string());
     psec.push("No Category".to_string());
 
-    let page_number_integer:i32;
-    let number_of_pages: i64;
-    page_number_integer = page_number.parse().unwrap();
-    let offset_start: i32;
-    offset_start = (page_number_integer - 1) * global_number_of_items_per_page(); // offset value.
+    // let page_number_integer:i32;
+    // let number_of_pages: i64;
+    let page_number_integer : i32 = page_number.parse().unwrap();
+    let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page(); // offset value.
     println!("page starts from {}", offset_start);
     let s = get_posts_per_page(offset_start).await;
     let number_of_posts_vector = get_count_of_posts().await;
-    let m = number_of_posts_vector.clone();
-    if m[0].count % global_number_of_items_per_page_64() == 0 {
-        number_of_pages = (m[0].count) / global_number_of_items_per_page_64();
+    let m = number_of_posts_vector;
+    let number_of_pages: i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
+        (m[0].count) / global_number_of_items_per_page_64()
     } else {
-        number_of_pages = (m[0].count) / global_number_of_items_per_page_64() + 1;
-    }
+        (m[0].count) / global_number_of_items_per_page_64() + 1
+    };
     println!(
         "the number of pages are {} count of posts {}",
         number_of_pages, m[0].count
@@ -49,9 +48,10 @@ pub async fn page(
     }
 
     plinks.clear();
-    for i in 0..s.len() {
-        plinks.push(s[i].post_title.clone());
-        pid.push(s[i].post_id.clone());
+    let list_iter = s.iter();
+    for i in list_iter{
+        plinks.push(i.post_title.clone());
+        pid.push(i.post_id);
     } //
 
     let template = IndexTemplate {
