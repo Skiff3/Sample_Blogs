@@ -82,21 +82,22 @@ pub async fn home_gui() -> impl IntoResponse {
     psec.clear();
 
     let category_list = get_all_categories().await;
-    for i in 0..category_list.len() {
-        psec.push(category_list[i].clone().category_name);
+    let list_iters = category_list.iter();
+    for i in list_iters {
+        psec.push(i.category_name.clone());
     }
     let s = get_connection().await;
-    let number_of_pages: i64;
+    // let number_of_pages: i64;
     let mut plinks: Vec<String> = Vec::new();
     let mut pids: Vec<i32> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
     let number_of_posts_vector = get_count_of_posts().await;
-    let m = number_of_posts_vector.clone();
-    if m[0].count % global_number_of_items_per_page_64() == 0 {
-        number_of_pages = (m[0].count) / global_number_of_items_per_page_64();
+    let m = number_of_posts_vector;
+    let number_of_pages: i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
+        (m[0].count) / global_number_of_items_per_page_64()
     } else {
-        number_of_pages = (m[0].count) / global_number_of_items_per_page_64() + 1;
-    }
+        (m[0].count) / global_number_of_items_per_page_64() + 1
+    };
     println!(
         "the number of pages are {}, count of posts {}",
         number_of_pages, m[0].count
@@ -107,7 +108,7 @@ pub async fn home_gui() -> impl IntoResponse {
 
     for i in 0..s.len() {
         plinks.push(s[i].post_title.clone());
-        pids.push(s[i].post_id.clone());
+        pids.push(s[i].post_id);
         println!("{}", s.len()) // prints the s length
     }
 

@@ -19,12 +19,13 @@ pub async fn show_post(
         post_description: "",
         post_body: "none",
     };
-    for i in 0..s2.len() {
-        if post_name == s2[i].post_title {
+    let list_iter = s2.iter();
+    for i in list_iter {
+        if post_name == i.post_title {
             template = PostTemplate {
-                post_title: &s2[i].post_title,
+                post_title: &i.post_title,
                 post_description: "",
-                post_body: &s2[i].post_body,
+                post_body: &i.post_body,
             };
             break;
         } else {

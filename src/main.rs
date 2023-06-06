@@ -118,6 +118,7 @@ async fn main() {
 
     let user = User::get_rusty_user();
     store.write().await.insert(user.get_id(), user.clone());
+    println!("{}",user.name);
 
     let user_store = AuthMemoryStore::new(&store);
     let auth_layer = AuthLayer::new(user_store, &secret);
