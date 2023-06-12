@@ -1,22 +1,22 @@
 
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, NewCategoryTemplate, NewPostTemplate};
-use crate::{CreateCategory, CreatePost, global_number_of_items_per_page_64, UpdatePost};
+use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, NewCategoryTemplate, NewPostTemplate, Post, UpdateCategory, UpdateCategoryTemplate};
+use crate::{global_number_of_items_per_page_64, CreateCategory, CreatePost, UpdatePost};
 use askama::Template;
-use axum::extract::{Path};
+use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect};
 use axum::Form;
 use sqlx::postgres::PgPoolOptions;
-use sqlx::{Pool, Postgres};
+use sqlx::{Error, Pool, Postgres};
 
 pub async fn get_connection_for_crud() -> Pool<Postgres> {
-        PgPoolOptions::new()
+   PgPoolOptions::new()
         .max_connections(5)
         .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
         .await
-        .expect("couldn't connect to the database")
+        .expect("failed to connect")
 
 }
 
@@ -61,7 +61,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> impl Into
         .await;
 
     println!("Success ---> row {:?}", &res);
-    Redirect::to("/page/1")
+    Redirect::to("/admin/page/1")
 }
 
 pub async fn delete_posts_form(Path(post_id): Path<String>) -> Redirect {
@@ -74,7 +74,19 @@ pub async fn delete_posts_form(Path(post_id): Path<String>) -> Redirect {
         .await;
 
     println!("Success ---> row {:?}", &res);
-    Redirect::to("/page/1")
+    Redirect::to("/admin/page/1")
+}
+
+pub async fn delete_categories_form(Path(category_id): Path<String>) -> Redirect {
+    let pool = get_connection_for_crud().await;
+    //let mut post_ids = post_id.clone().parse().u;
+    let res = sqlx::query("delete from category_post where category_name = ($1)")
+        .bind(category_id)
+        .execute(&pool)
+        .await;
+
+    println!("Success ---> row {:?}", &res);
+    Redirect::to("/admin/page/1")
 }
 
 pub async fn home_gui() -> impl IntoResponse {
@@ -106,11 +118,22 @@ pub async fn home_gui() -> impl IntoResponse {
         pnav.push(i.to_string())
     }
 
-    for i in 0..s.len() {
-        plinks.push(s[i].post_title.clone());
-        pids.push(s[i].post_id);
-        println!("{}", s.len()) // prints the s length
+   // let list_iter = s.iter();
+    let list_iter = s.iter();
+
+    for i in list_iter{
+        // plinks.push(i.);
+
+        // pids.push(s[i].post_id);
+        // println!("{}", s.len()) // prints the s length
     }
+   //  s.iter().map(|a|{println!(a.len())});
+   //  for i in s.into_iter().map(|a|{}){
+   //
+   //  }
+   //  s.into_iter().map(|letter| for j in 0..letter.len(){plinks.push(letter[j].post_title.clone());
+   //      pids.push(letter[j].post_id);
+   //  });
 
     let template = HomeTemplate {
         index_id: &pids,
@@ -118,6 +141,7 @@ pub async fn home_gui() -> impl IntoResponse {
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
+        current_url_page: ".".to_string(),
     };
 
     match template.render() {
@@ -131,7 +155,7 @@ pub async fn home_gui() -> impl IntoResponse {
 }
 
 pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) -> Redirect {
-    let pool = get_connection_for_crud().await;
+    let pool = get_connection_for_crud().await?;
     let m = get_max_id_of_category().await;
     let category_id = m[0].max + 1;
     let res =
@@ -142,7 +166,7 @@ pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) 
             .await;
 
     println!("Success ---> row {:?}", &res);
-    Redirect::to("/")
+    Redirect::to("/admin/page/1")
 }
 
 pub async fn update_posts_form(
@@ -150,6 +174,7 @@ pub async fn update_posts_form(
     Form(update_post): Form<UpdatePost>,
 ) -> Redirect {
     let pool = get_connection_for_crud().await;
+
     println!("Form {}", update_post.post_title);
     let res =
         sqlx::query("update posts set post_title = ($1), post_body = ($2) where post_title = ($3)")
@@ -165,6 +190,18 @@ pub async fn update_posts_form(
 
 pub async fn create_category_form_ui() -> impl IntoResponse {
     let template = NewCategoryTemplate {};
+    match template.render() {
+        Ok(html) => Html(html).into_response(),
+        Err(err) => (
+            StatusCode::UNAUTHORIZED,
+            format!("Failed to render template. Error {}", err),
+        )
+            .into_response(),
+    }
+}
+
+pub async fn update_category_form_ui(Path(category_id): Path<String>) -> impl IntoResponse {
+    let template = UpdateCategoryTemplate { index_sec: category_id };
 
     match template.render() {
         Ok(html) => Html(html).into_response(),
@@ -172,6 +209,20 @@ pub async fn create_category_form_ui() -> impl IntoResponse {
             StatusCode::UNAUTHORIZED,
             format!("Failed to render template. Error {}", err),
         )
-            .into_response(), // which is the most important
+            .into_response(),
     }
+}
+
+pub async fn update_category_form(Path(category_id): Path<String>,Form(update_category): Form<UpdateCategory>,) -> Redirect {
+    let pool = get_connection_for_crud().await;
+    println!("category {} {}",category_id,update_category.category_name);
+    let res =
+        sqlx::query("update category_post set category_name = ($1) where category_name = ($2)")
+            .bind(update_category.category_name)
+            .bind(category_id)
+            .execute(&pool)
+            .await;
+
+    println!("Success ---> row {:?}", &res);
+    Redirect::to("/posts")
 }

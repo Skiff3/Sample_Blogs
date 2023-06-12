@@ -1,4 +1,4 @@
-use sqlx::postgres::{ PgPoolOptions};
+use sqlx::postgres::PgPoolOptions;
 use std::env;
 use std::fs::File;
 use std::io::Read;

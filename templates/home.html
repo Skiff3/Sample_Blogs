@@ -276,7 +276,7 @@ h4 {
             <form>
                 <label for="blog">Filter by category:</label>
                 <select onchange="getval(this);" id="category" name="blog" id="blog">
-                    <option id="category_name_gen">--Select--</option>
+                    <option id="category_name_gen">All</option>
                     {% let name = " " %}
                     {% for name in index_sec %}
                     <option id="sec">{{ name }}</option>
@@ -318,8 +318,11 @@ h4 {
                                             <li><a href="javascript:void(0);" class="fa fa-comment">128</a></li>
                                         </ul>
                                     </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
+                            </div>
+                        </div>
+                    </div><br/><br/><br/>
 <!--                <div class="row">-->
 <!--                    <div class="col-12">-->
 <!--                        <table class="table table-bordered">-->
@@ -349,21 +352,16 @@ h4 {
 <!--                        </table>-->
 <!--                    </div>-->
 <!--                </div>-->
-            </div>
-            <br/><br/><br/>
-            <br/><br/><nav aria-label="Page navigation">
+
+            <nav aria-label="Page navigation">
             <ul class="pagination">
                 {% for i in page_nav_links %}
                 <li class="page-item">
-                    <a class="page-link" href="/page/{{ i }}" >{{ i }}</a>
+                    <a class="page-link" href="http://0.0.0.0:4000/{{current_url_page}}/page/{{ i }}" >{{ i }}</a>
                 </li><br/><br/>
                 {% endfor %}
             </ul>
         </nav><br><br><br>
-        </div>
-
-        <br/><br/>
-        <div class="container">
             <!--		<h2>Get Started, Create a Blog</h2><br/><br/>-->
 
             <!--		<form action="/create_post" method="post">-->
@@ -403,6 +401,9 @@ h4 {
             <!--	<a href="/show_categories">Show Categories</a><br/><br/><br/>-->
 
             <!--	</form>-->
+
+    </div>
+</div>
         </div>
     </div>
 </div>

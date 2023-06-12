@@ -7,3 +7,4 @@ pub mod index;
 pub mod navigate;
 mod posts_controller;
 pub mod posts_crud_controller;
+pub mod category_crud_controller;

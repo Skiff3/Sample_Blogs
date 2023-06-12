@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <title>New Category</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
         rel="stylesheet"  type='text/css'>
-    <meta charset="UTF-8">
-    <title>Title</title>
-<script>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script>
     $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
         });
   </script>
-<style>
+  <style>
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
     font-family: 'Poppins', sans-serif;
@@ -194,7 +196,6 @@ h4 {
 }
   </style>
 </head>
-
 <body>
 <div class="wrapper">
   <!-- Sidebar  -->
@@ -257,40 +258,27 @@ h4 {
 
       </div>
     </nav>
-<div class="container">
-  <h2>Create a Post</h2><br/><br/>
-
-  <form action="/post/new" method="post">
+    <div class="container">
+      <h2>Update Category</h2><br/><br/>
 
 
+      <!--			<label><b>Post Id</b></label>-->
+      <!--			<input type="number" placeholder="Enter Post Id" name="post_id">-->
 
-    <div class="mb-3">
-      <label><b>Post Title</b></label><br>
-      <input type="text" class="form-control" id="post_title"name="post_title" placeholder="Post Title">
+
+
+      <form action="/category/update/{{index_sec}}" method="post">
+        <div class="mb-3">
+          <label><b>Category Name</b></label><br>
+          <input type="text" class="form-control" id="category_name"name="category_name" value="{{index_sec}}" placeholder="Category Name">
+        </div>
+
+        <button type="submit">Update Category</button><br/><br/><br/>
+
+
+      </form>
     </div>
-    <div class="mb-3">
-      <label  class="form-label"><b>Post Body</b></label>
-      <textarea class="form-control" id="post_body" name="post_body" rows="3"></textarea>
-    </div>
-
-    <div class="mb-3">
-    <label><b>Category</b></label><br/>
-    <select id="category_name" name="category_name">
-      <option id="category_name_gen_2">--Select--</option>
-      <option id="category_a">Category A</option>
-      <option id="category_b">Category B</option>
-      <option id="category_c">Category C</option>
-      <option id="category_no">No Category</option>
-    </select><br/><br/>
-    </div>
-
-    <button type="submit">Create Post</button><br/><br/><br/>
-
-
-  </form>
   </div>
-  </div>
-  </div>
-
+</div>
 </body>
 </html>

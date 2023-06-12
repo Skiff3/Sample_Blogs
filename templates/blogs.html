@@ -122,8 +122,8 @@ a[data-toggle="collapse"] {
 }
 
 ul ul a {
-    font-size: 0.9em !important;
-    padding-left: 30px !important;
+    font-size: 0.9em
+    padding-left: 30px
     background: #6d7fcc;
 }
 
@@ -242,29 +242,13 @@ a.article:hover {
       <div class="container-fluid">
 
         <button type="button" id="sidebarCollapse" class="btn btn-info">
-          <i class="fas fa-align-left"></i>
+          <i class="fa fa-align-left"></i>
           <span>Toggle Sidebar</span>
         </button>
         <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fas fa-align-justify"></i>
+          <i class="fa fa-align-justify"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Page</a>
-            </li>
-          </ul>
-        </div>
       </div>
     </nav>
 
@@ -301,15 +285,70 @@ a.article:hover {
 <br><br>
 
 
-<div class="links">
-  <ul>
-    {% for item in index_links %}
-    <li><a href="/post/{{ item}}">{{ item }}</a></li><br/>
-    <p>Description .. </p>
-    {% endfor %}
-  </ul>
-</div>
-<br/><br/><br/>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col">Post Title</th>
+              <th scope="col">Post Body</th>
+              <th scope="col">Timestamp</th>
+              <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in index_links %}
+            <tr>
+              <td><a href="/post/{{ item}}">{{item}}</a> </td>
+              <td>Description</td>
+              <td>20th May</td>
+              <td>
+                <a href="/post/{{ item}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                <a href="/delete/{{item}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table><br/><br/><br/>
+
+          <div>
+            <a href="http://0.0.0.0:4000/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
+          </div><br/><br/>
+
+
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th scope="col">Category Id</th>
+              <th scope="col">Category Title</th>
+              <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for items in index_sec%}
+            <tr>
+              <td><a href="#">{{items}}</a> </td>
+              <td>Description</td>
+              <td>20th May</td>
+              <td>
+                <a href="http://0.0.0.0:4000//post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                <a href="http://0.0.0.0:4000//delete/category/{{items}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+          </table><br/><br/><br/>
+        </div>
+
+      </div>
+      <div>
+        <a href="http://0.0.0.0:4000/category/new" type="button" class="btn btn-primary">New Category<i class="fa fa-new"></i></a>
+      </div><br/><br/>
+    </div>
+    <br/><br/><br/>
 <br/><br/><nav aria-label="Page navigation">
   <ul class="pagination">
     {% for i in page_nav_links %}

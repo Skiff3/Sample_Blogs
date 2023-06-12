@@ -3,13 +3,12 @@ use askama::Template;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
-    response::{Html, IntoResponse}
+    response::{Html, IntoResponse},
 };
 use std::sync::Arc;
 
 pub async fn show_post(
-    Path(post_id): Path<String>,
-    State(_state): State<Arc<Vec<Post>>>,
+    Path(post_id): Path<String>
 ) -> impl IntoResponse {
     println!("post name {}", post_id.clone());
     let post_name = post_id.clone();

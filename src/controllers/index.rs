@@ -1,23 +1,16 @@
-use crate::model::models::{
-    get_all_categories, get_count_of_posts, IndexTemplate, Post,
-};
-use crate::{
-     global_number_of_items_per_page_64,
-};
+use crate::global_number_of_items_per_page_64;
+use crate::model::models::{get_all_categories, get_count_of_posts, IndexTemplate, Post};
 use askama::Template;
 use axum::response::IntoResponse;
-use axum::{
-    extract::{State},
-    http::StatusCode,
-    response::{Html},
-};
+use axum::{extract::State, http::StatusCode, response::Html};
 use std::sync::Arc;
+use sqlx::Error;
 
-pub async fn index(State(state): State<Arc<Vec<Post>>>) -> impl IntoResponse {
+pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl IntoResponse {
     let mut psec: Vec<String> = Vec::new();
     psec.clear();
 
-    let category_list = get_all_categories().await;
+    let category_list = get_all_categories().await?;
     let list_iter = category_list.iter();
     for i in list_iter {
         psec.push(i.clone().category_name);
@@ -29,7 +22,7 @@ pub async fn index(State(state): State<Arc<Vec<Post>>>) -> impl IntoResponse {
     let mut pnav: Vec<String> = Vec::new();
     let number_of_posts_vector = get_count_of_posts().await;
     let m = number_of_posts_vector;
-    let number_of_pages : i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
+    let number_of_pages: i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
         (m[0].count) / global_number_of_items_per_page_64()
     } else {
         (m[0].count) / global_number_of_items_per_page_64() + 1
@@ -41,12 +34,21 @@ pub async fn index(State(state): State<Arc<Vec<Post>>>) -> impl IntoResponse {
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
+    let list_iter = s.map(|posts| {
+        //plinks = posts.iter()
+            //.map(|post| {post.post_title.clone()}).collect();
+        let v: Vec<_> = posts.iter()
+            .map(|post| {post.post_title.clone()}).collect();
+        let v2: Vec<_> = posts.iter()
+            .map(|post| {post.post_id.clone()}).collect();
 
-    for i in 0..s.len() {
-        plinks.push(s[i].post_title.clone());
-        pids.push(s[i].post_id);
-        println!("{}", s.len()) // prints the s length
-    }
+        (v,v2)
+    });
+
+    let (plinks, pids) = list_iter.unwrap_or_default();
+    // let t = list_iter.unwrap_or_default();
+    // let plinks = t.0;
+    // let pids = t.1;
 
     let template = IndexTemplate {
         index_id: &pids,
