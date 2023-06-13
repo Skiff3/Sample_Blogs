@@ -7,6 +7,7 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::sync::Arc;
+use crate::controllers::posts_crud_controller::get_vec_len;
 
 pub async fn admin_blog_pagination(
     Path((category, page_number)): Path<(String, String)>,
@@ -27,14 +28,16 @@ pub async fn admin_blog_pagination(
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     println!("page starts from {}", offset_start);
 
-    let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await;
+    let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await?;
 
     // for post in &mut posts2 {
     //     post.post_title = post.post_title.replace("-", " ");
     // }
 
     let shared_state2 = Arc::new(posts2);
-    let number_of_pages = shared_state2.len();
+   // let vec1 = shared_state2;
+
+    let number_of_pages = 0;//get_vec_len(shared_state2.clone());
     // if shared_state2.len()%3==0 {
     //     number_of_pages = shared_state2.len()/3;
     // }
@@ -42,17 +45,30 @@ pub async fn admin_blog_pagination(
     //     number_of_pages = (shared_state2.len()/3)+1;
     // }
     println!(
-        "total{} number of pages {}",
-        shared_state2.len(),
+        "total{} number of pages",
         number_of_pages
     );
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-    for i in 0..shared_state2.len() {
-        plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id);
-    }
+    //let tmp = shared_state2.clone();
+    let tmp2 = shared_state2.as_ref();
+    let list_iter = shared_state2.iter().map(|posts| {
+        //plinks = posts.iter()
+        //.map(|post| {post.post_title.clone()}).collect();
+
+        let v: Vec<_> = posts.iter()
+            .map(|post| {post.post_title.clone()}).collect();
+        let v1: Vec<_> = posts.iter()
+            .map(|post| {post.post_id.clone()}).collect();
+        (v,v1)
+    });
+
+    (plinks,pids) = list_iter.unwrap_or_default().clone();
+    // for i in 0..shared_state2.len() {
+    //     plinks.push(shared_state2[i].post_title.clone());
+    //     pids.push(shared_state2[i].post_id);
+    // }
     pids.clear();
     plinks.clear();
 
@@ -60,7 +76,7 @@ pub async fn admin_blog_pagination(
     //     plinks.push(shared_state2[i].post_title.clone());
     //     pids.push(shared_state2[i].post_id);
     // }
-    let list_iter = shared_state2.map(|posts| {
+    let list_iter = shared_state2.as_ref().map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter()
@@ -70,6 +86,7 @@ pub async fn admin_blog_pagination(
 
         (v,v2)
     });
+
 
     let (plinks,pids) = list_iter.unwrap_or_default();
 
@@ -118,7 +135,7 @@ pub async fn blog_pagination(
     // }
 
     let shared_state2 = Arc::new(posts2);
-    let number_of_pages = shared_state2.len();
+    let number_of_pages = get_vec_len(shared_state2);
     // if shared_state2.len()%3==0 {
     //     number_of_pages = shared_state2.len()/3;
     // }
@@ -126,24 +143,32 @@ pub async fn blog_pagination(
     //     number_of_pages = (shared_state2.len()/3)+1;
     // }
     println!(
-        "total{} number of pages {}",
-        shared_state2.len(),
+        "total{} number of pages",
         number_of_pages
     );
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-    for i in 0..shared_state2.len() {
-        plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id);
-    }
-    pids.clear();
-    plinks.clear();
+    let list_iter = shared_state2.clone().map(|posts| {
+        //plinks = posts.iter()
+        //.map(|post| {post.post_title.clone()}).collect();
+        let v: Vec<_> = posts.iter()
+            .map(|post| {post.post_title.clone()}).collect();
+        let v2: Vec<_> = posts.iter()
+            .map(|post| {post.post_id.clone()}).collect();
 
-    for i in 0..shared_state2.len() {
-        plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id);
-    }
+        (v,v2)
+    });
+
+
+    (plinks,pids) = list_iter.unwrap_or_default();
+    // pids.clear();
+    // plinks.clear();
+
+    // for i in 0..shared_state2.len() {
+    //     plinks.push(shared_state2[i].post_title.clone());
+    //     pids.push(shared_state2[i].post_id);
+    // }
 
     let template = HomeTemplate {
         index_id: &pids,

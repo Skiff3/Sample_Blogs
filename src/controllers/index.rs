@@ -5,32 +5,32 @@ use axum::response::IntoResponse;
 use axum::{extract::State, http::StatusCode, response::Html};
 use std::sync::Arc;
 use sqlx::Error;
+use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 
 pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl IntoResponse {
     let mut psec: Vec<String> = Vec::new();
     psec.clear();
-
-    let category_list = get_all_categories().await?;
-    let list_iter = category_list.iter();
-    for i in list_iter {
-        psec.push(i.clone().category_name);
-    }
+    let mut m2:i64=0;
+    let category_list = get_all_categories().await;
+    let list_iter = category_list.map(|categories|{
+        let v:Vec<_> = categories.iter().map(|category|{
+            psec.push(category.clone().category_name);
+        }).collect();
+        v
+    });
+    list_iter;
     let s = state.clone();
     //let number_of_pages: i64;
     let mut plinks: Vec<String> = Vec::new();
     let mut pids: Vec<i32> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
     let number_of_posts_vector = get_count_of_posts().await;
-    let m = number_of_posts_vector;
-    let number_of_pages: i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
-        (m[0].count) / global_number_of_items_per_page_64()
+    m2 = get_vec_len_of_count(number_of_posts_vector);
+    let number_of_pages: i64 = if m2 % global_number_of_items_per_page_64() == 0 {
+        (m2) / global_number_of_items_per_page_64()
     } else {
-        (m[0].count) / global_number_of_items_per_page_64() + 1
+        (m2) / global_number_of_items_per_page_64() + 1
     };
-    println!(
-        "the number of pages are {}, count of posts {}",
-        number_of_pages, m[0].count
-    );
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }

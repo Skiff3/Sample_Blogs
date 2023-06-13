@@ -1,7 +1,7 @@
-
+use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, NewCategoryTemplate, NewPostTemplate, Post, UpdateCategory, UpdateCategoryTemplate};
+use crate::model::models::{Blog, Count, get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, Post, UpdateCategory, UpdateCategoryTemplate};
 use crate::{global_number_of_items_per_page_64, CreateCategory, CreatePost, UpdatePost};
 use askama::Template;
 use axum::extract::Path;
@@ -50,7 +50,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> impl Into
         category_id = 4;
     }
     let m = get_max_id_of_post().await;
-    let post_id = (m[0].max) + 1; //insert into posts(post_id,post_title,post_body,category_id) values (16,'random','random',4);
+    let post_id = (get_max(m)) + 1; //insert into posts(post_id,post_title,post_body,category_id) values (16,'random','random',4);
     let res = sqlx::query("insert into posts(post_id,post_title,post_body,category_id,post_description) values (($1),($2),($3),($4),($5))")
         .bind(post_id)// the id of post
         .bind(create_post.post_title)
@@ -95,9 +95,12 @@ pub async fn home_gui() -> impl IntoResponse {
 
     let category_list = get_all_categories().await;
     let list_iters = category_list.iter();
-    for i in list_iters {
-        psec.push(i.category_name.clone());
-    }
+    psec.clear();
+    //let mut psec: Vec<String> = Vec::new();
+    psec.push("Category A".to_string()); // psec.push("Category A")
+    psec.push("Category B".to_string());
+    psec.push("Category C".to_string());
+    psec.push("No Category".to_string());
     let s = get_connection().await;
     // let number_of_pages: i64;
     let mut plinks: Vec<String> = Vec::new();
@@ -105,28 +108,36 @@ pub async fn home_gui() -> impl IntoResponse {
     let mut pnav: Vec<String> = Vec::new();
     let number_of_posts_vector = get_count_of_posts().await;
     let m = number_of_posts_vector;
-    let number_of_pages: i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
-        (m[0].count) / global_number_of_items_per_page_64()
+    let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await) % global_number_of_items_per_page_64() == 0 {
+        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
     } else {
-        (m[0].count) / global_number_of_items_per_page_64() + 1
+        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
     };
-    println!(
-        "the number of pages are {}, count of posts {}",
-        number_of_pages, m[0].count
-    );
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
 
    // let list_iter = s.iter();
-    let list_iter = s.iter();
+   //  let list_iter = s.iter();
+   //
+   //  for i in list_iter{
+   //      // plinks.push(i.);
+   //
+   //      // pids.push(s[i].post_id);
+   //      // println!("{}", s.len()) // prints the s length
+   //  }
+    let list_iter = s.map(|posts| {
+        //plinks = posts.iter()
+        //.map(|post| {post.post_title.clone()}).collect();
+        let v: Vec<_> = posts.iter()
+            .map(|post| {post.post_title.clone()}).collect();
+        let v2: Vec<_> = posts.iter()
+            .map(|post| {post.post_id.clone()}).collect();
 
-    for i in list_iter{
-        // plinks.push(i.);
+        (v,v2)
+    });
 
-        // pids.push(s[i].post_id);
-        // println!("{}", s.len()) // prints the s length
-    }
+    (plinks,pids) = list_iter.unwrap_or_default();
    //  s.iter().map(|a|{println!(a.len())});
    //  for i in s.into_iter().map(|a|{}){
    //
@@ -155,9 +166,10 @@ pub async fn home_gui() -> impl IntoResponse {
 }
 
 pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) -> Redirect {
-    let pool = get_connection_for_crud().await?;
-    let m = get_max_id_of_category().await;
-    let category_id = m[0].max + 1;
+    let pool = get_connection_for_crud().await;
+    let mut m = get_max_id_of_category().await;
+    let m2 = get_max(m);
+    let category_id =m2+1;
     let res =
         sqlx::query("insert into category_post(category_id,category_name) values (($1),($2))")
             .bind(category_id) // category id
@@ -225,4 +237,52 @@ pub async fn update_category_form(Path(category_id): Path<String>,Form(update_ca
 
     println!("Success ---> row {:?}", &res);
     Redirect::to("/posts")
+}
+
+pub fn return_from_result(post: Vec<Post>) -> (Vec<String>,Vec<i32>){
+    let mut v:Vec<_> = vec![];
+    let mut v2:Vec<_> = vec![];
+    let list_iter = post.iter().map(|posts| {
+        //plinks = posts.iter()
+        //.map(|post| {post.post_title.clone()}).collect();
+        v.push(posts.clone().post_title);
+           // .map(|post1| {post1.post_title.clone()}).collect();
+        v2.push(posts.clone().post_id);
+            //.map(|post1| {post1.post_id.clone()}).collect();
+
+        (v,v2)
+    });
+
+    (v.clone(),v2.clone())
+}
+
+pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64{
+    let mut len:i64=0;
+    let iter = shared_state2.map(|posts| {
+        len = posts.len() as i64;
+    });
+    iter;
+    len
+}
+pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64{
+    let mut len:i64=0;
+    let iter= shared_state2.map(|posts| {
+        len:i64= posts.iter().map(|count|{
+            count.count;
+        });
+    });
+    iter;
+    len
+}
+
+pub fn get_max(shared_state2: Result<Vec<Max>, Error>) -> i64{
+    let mut len2:i64 = 0;
+    let iters= shared_state2.map(|posts| {
+     let  len:i64 = posts.iter().map(|count|{
+            count.max;
+        }).collect();
+        len
+    });
+    iters;
+    len2
 }

@@ -6,6 +6,7 @@ use axum::{
     http::StatusCode,
     response::{Html, IntoResponse},
 };
+use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 
 pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
     println!("{}", page_number);
@@ -28,15 +29,12 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
     let s = get_posts_per_page(offset_start).await;
     let number_of_posts_vector = get_count_of_posts().await;
     let m = number_of_posts_vector;
-    let number_of_pages: i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
-        (m[0].count) / global_number_of_items_per_page_64()
+    let number_of_pages: i64 = if get_vec_len_of_count(m) % global_number_of_items_per_page_64() == 0 {
+        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
     } else {
-        (m[0].count) / global_number_of_items_per_page_64() + 1 //
+        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1 //
     };
-    println!(
-        "the number of pages are {} count of posts {}",
-        number_of_pages, m[0].count
-    );
+
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
@@ -94,25 +92,28 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     let s = get_posts_per_page(offset_start).await;
     let number_of_posts_vector = get_count_of_posts().await;
     let m = number_of_posts_vector;
-    let number_of_pages: i64 = if m[0].count % global_number_of_items_per_page_64() == 0 {
-        (m[0].count) / global_number_of_items_per_page_64()
+    let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await) % global_number_of_items_per_page_64() == 0 {
+        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
     } else {
-        (m[0].count) / global_number_of_items_per_page_64() + 1
+        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
     };
-    println!(
-        "the number of pages are {} count of posts {}",
-        number_of_pages, m[0].count
-    );
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
 
     plinks.clear();
-    let list_iter = s.iter();
-    for i in list_iter {
-        plinks.push(i.post_title.clone());
-        pid.push(i.post_id);
-    } //
+    let list_iter = s.clone().map(|posts| {
+        //plinks = posts.iter()
+        //.map(|post| {post.post_title.clone()}).collect();
+        let v: Vec<_> = posts.iter()
+            .map(|post| {post.post_title.clone()}).collect();
+        let v2: Vec<_> = posts.iter()
+            .map(|post| {post.post_id.clone()}).collect();
+
+        (v,v2)
+    });
+
+    (plinks,pid) = list_iter.unwrap_or_default();
 
     let template = HomeTemplate {
         index_id: &pid,
