@@ -1,21 +1,24 @@
+use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::global_number_of_items_per_page_64;
 use crate::model::models::{get_all_categories, get_count_of_posts, IndexTemplate, Post};
 use askama::Template;
 use axum::response::IntoResponse;
 use axum::{extract::State, http::StatusCode, response::Html};
-use std::sync::Arc;
 use sqlx::Error;
-use crate::controllers::posts_crud_controller::get_vec_len_of_count;
+use std::sync::Arc;
 
-pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl IntoResponse {
+pub async fn index(State(state): State<Arc<Result<Vec<Post>, Error>>>) -> impl IntoResponse {
     let mut psec: Vec<String> = Vec::new();
     psec.clear();
-    let mut m2:i64=0;
+    let mut m2: i64 = 0;
     let category_list = get_all_categories().await;
-    let list_iter = category_list.map(|categories|{
-        let v:Vec<_> = categories.iter().map(|category|{
-            psec.push(category.clone().category_name);
-        }).collect();
+    let list_iter = category_list.map(|categories| {
+        let v: Vec<_> = categories
+            .iter()
+            .map(|category| {
+                psec.push(category.clone().category_name);
+            })
+            .collect();
         v
     });
     drop(list_iter);
@@ -34,15 +37,13 @@ pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl In
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-    println!("number of pages {}",m2.clone());
+    println!("number of pages {}", m2.clone());
     let temp = s.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v2: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
+        let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
+        let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
 
-        (v,v2)
+        (v, v2)
     });
 
     let (plinks, pids) = list_iter.unwrap_or_default();

@@ -1,7 +1,11 @@
 use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{Blog, Count, get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, UpdateCategory, UpdateCategoryTemplate};
+use crate::model::models::{
+    get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category,
+    get_max_id_of_post, Blog, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate,
+    UpdateCategory, UpdateCategoryTemplate,
+};
 use crate::{global_number_of_items_per_page_64, CreateCategory, CreatePost, UpdatePost};
 use askama::Template;
 use axum::extract::Path;
@@ -12,12 +16,11 @@ use sqlx::postgres::PgPoolOptions;
 use sqlx::{Error, Pool, Postgres};
 
 pub async fn get_connection_for_crud() -> Pool<Postgres> {
-   PgPoolOptions::new()
+    PgPoolOptions::new()
         .max_connections(5)
         .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
         .await
         .expect("failed to connect")
-
 }
 
 pub async fn create_posts_form_ui() -> impl IntoResponse {
@@ -108,7 +111,10 @@ pub async fn home_gui() -> impl IntoResponse {
     let mut pnav: Vec<String> = Vec::new();
     let number_of_posts_vector = get_count_of_posts().await;
     let _m = number_of_posts_vector;
-    let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await) % global_number_of_items_per_page_64() == 0 {
+    let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await)
+        % global_number_of_items_per_page_64()
+        == 0
+    {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
     } else {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
@@ -119,15 +125,13 @@ pub async fn home_gui() -> impl IntoResponse {
     let list_iter = s.map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v2: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
+        let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
+        let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
 
-        (v,v2)
+        (v, v2)
     });
 
-    (plinks,pids) = list_iter.unwrap_or_default();
+    (plinks, pids) = list_iter.unwrap_or_default();
 
     let template = HomeTemplate {
         index_id: &pids,
@@ -152,7 +156,7 @@ pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) 
     let pool = get_connection_for_crud().await;
     let m = get_max_id_of_category().await;
     let m2 = get_max(m);
-    let category_id =m2+1;
+    let category_id = m2 + 1;
     let res =
         sqlx::query("insert into category_post(category_id,category_name) values (($1),($2))")
             .bind(category_id) // category id
@@ -196,7 +200,9 @@ pub async fn create_category_form_ui() -> impl IntoResponse {
 }
 
 pub async fn update_category_form_ui(Path(category_id): Path<String>) -> impl IntoResponse {
-    let template = UpdateCategoryTemplate { index_sec: category_id };
+    let template = UpdateCategoryTemplate {
+        index_sec: category_id,
+    };
 
     match template.render() {
         Ok(html) => Html(html).into_response(),
@@ -208,9 +214,12 @@ pub async fn update_category_form_ui(Path(category_id): Path<String>) -> impl In
     }
 }
 
-pub async fn update_category_form(Path(category_id): Path<String>,Form(update_category): Form<UpdateCategory>,) -> Redirect {
+pub async fn update_category_form(
+    Path(category_id): Path<String>,
+    Form(update_category): Form<UpdateCategory>,
+) -> Redirect {
     let pool = get_connection_for_crud().await;
-    println!("category {} {}",category_id,update_category.category_name);
+    println!("category {} {}", category_id, update_category.category_name);
     let res =
         sqlx::query("update category_post set category_name = ($1) where category_name = ($2)")
             .bind(update_category.category_name)
@@ -222,31 +231,25 @@ pub async fn update_category_form(Path(category_id): Path<String>,Form(update_ca
     Redirect::to("/posts")
 }
 
-
-pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64{
+pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64 {
     let temp = shared_state2.as_ref().as_ref();
-    let mut len:i64=0;
+    let mut len: i64 = 0;
     let _iter = temp.map(|posts| {
         len = posts.len() as i64;
     });
     len
 }
-pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64{
-    let mut len1:i64=15;
+pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64 {
+    let mut len1: i64 = 15;
     let temp = shared_state2.as_ref();
-    let _iter= temp.map(|posts| {
-        posts.iter().map(|count| {
-            len1= count.count
-        })
-
-    });
+    let _iter = temp.map(|posts| posts.iter().map(|count| len1 = count.count));
     len1
 }
 
-pub fn get_max(shared_state2: Result<Vec<Max>, Error>) -> i32{
-    let mut len2:i32 = 0;
-    let iters= shared_state2.map(|posts| {
-        let _ = posts.iter().map( |count| {
+pub fn get_max(shared_state2: Result<Vec<Max>, Error>) -> i32 {
+    let mut len2: i32 = 0;
+    let iters = shared_state2.map(|posts| {
+        let _ = posts.iter().map(|count| {
             len2 = count.max;
         });
         len2

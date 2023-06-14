@@ -2,8 +2,8 @@ use crate::global_number_of_items_per_page;
 use askama::Template;
 use axum_login::axum_sessions::async_session::serde::Deserialize;
 
-use sqlx::*;
 use crate::controllers::posts_crud_controller::get_connection_for_crud;
+use sqlx::*;
 
 mod filters {
     pub fn rmdashes(title: &str) -> askama::Result<String> {
@@ -77,16 +77,15 @@ pub struct HomeTemplate<'a> {
 
 #[derive(Template)]
 #[template(path = "new_post.html")]
-pub struct NewPostTemplate<> {}
+pub struct NewPostTemplate {}
 
 #[derive(Template)]
 #[template(path = "new_category.html")]
-pub struct NewCategoryTemplate<> {
-}
+pub struct NewCategoryTemplate {}
 
 #[derive(Template)]
 #[template(path = "update_category.html")]
-pub struct UpdateCategoryTemplate<> {
+pub struct UpdateCategoryTemplate {
     pub index_sec: String,
 }
 
@@ -140,15 +139,14 @@ pub struct IndexTemplate<'a> {
 pub async fn get_connection() -> std::result::Result<Vec<Post>, Error> {
     let pool = get_connection_for_crud().await;
 
-      sqlx::query_as::<_, Post>(
+    sqlx::query_as::<_, Post>(
         "select post_id,post_title, post_body, post_description from posts limit 3 offset 0",
-      )
-
+    )
     .fetch_all(&pool)
-          .await
+    .await
 }
 
-pub async fn get_posts_per_page(offset_value: i32) -> std::result::Result<Vec<Post>,Error> {
+pub async fn get_posts_per_page(offset_value: i32) -> std::result::Result<Vec<Post>, Error> {
     let pool = get_connection_for_crud().await;
     sqlx::query_as::<_, Post>(
         "select post_id, post_title, post_body, post_description from posts limit ($1) offset ($2)",
@@ -159,7 +157,7 @@ pub async fn get_posts_per_page(offset_value: i32) -> std::result::Result<Vec<Po
     .await
 }
 
-pub async fn get_all_categories() -> std::result::Result<Vec<Category>,Error> {
+pub async fn get_all_categories() -> std::result::Result<Vec<Category>, Error> {
     let pool = get_connection_for_crud().await;
 
     sqlx::query_as::<_, Category>("select * from category_post")
@@ -167,7 +165,7 @@ pub async fn get_all_categories() -> std::result::Result<Vec<Category>,Error> {
         .await
 }
 
-pub async fn get_details_of_post(post_name: String) -> std::result::Result<Vec<Post>,Error> {
+pub async fn get_details_of_post(post_name: String) -> std::result::Result<Vec<Post>, Error> {
     let pool = get_connection_for_crud().await;
 
     sqlx::query_as::<_, Post>("select post_id, post_title, post_body, post_description from posts where post_title = ($1)")
@@ -176,7 +174,7 @@ pub async fn get_details_of_post(post_name: String) -> std::result::Result<Vec<P
         .await
 }
 
-pub async fn get_max_id_of_post() -> std::result::Result<Vec<Max>,Error> {
+pub async fn get_max_id_of_post() -> std::result::Result<Vec<Max>, Error> {
     let pool = get_connection_for_crud().await;
 
     sqlx::query_as::<_, Max>("select max(post_id) from posts;")
@@ -184,7 +182,7 @@ pub async fn get_max_id_of_post() -> std::result::Result<Vec<Max>,Error> {
         .await
 }
 
-pub async fn get_max_id_of_category() -> std::result::Result<Vec<Max>,Error> {
+pub async fn get_max_id_of_category() -> std::result::Result<Vec<Max>, Error> {
     let pool = get_connection_for_crud().await;
 
     sqlx::query_as::<_, Max>("select max(category_id) from category_post;")
@@ -192,7 +190,7 @@ pub async fn get_max_id_of_category() -> std::result::Result<Vec<Max>,Error> {
         .await
 }
 
-pub async fn get_count_of_posts() -> std::result::Result<Vec<Count>,Error> {
+pub async fn get_count_of_posts() -> std::result::Result<Vec<Count>, Error> {
     let pool = get_connection_for_crud().await;
 
     sqlx::query_as::<_, Count>("select count(*) from posts;")
@@ -200,8 +198,10 @@ pub async fn get_count_of_posts() -> std::result::Result<Vec<Count>,Error> {
         .await
 }
 
-
-pub async fn get_filtered_from_database(final_category: String, page_number: i32) -> std::result::Result<Vec<Blog>, Error> {
+pub async fn get_filtered_from_database(
+    final_category: String,
+    page_number: i32,
+) -> std::result::Result<Vec<Blog>, Error> {
     let pool = get_connection_for_crud().await;
 
     sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1) limit 3 offset ($2)")
@@ -211,7 +211,9 @@ pub async fn get_filtered_from_database(final_category: String, page_number: i32
         .await
 }
 
-pub async fn get_filtered_from_database_by_category(final_category: String) -> std::result::Result<Vec<Blog>, Error> {
+pub async fn get_filtered_from_database_by_category(
+    final_category: String,
+) -> std::result::Result<Vec<Blog>, Error> {
     let pool = get_connection_for_crud().await;
 
     sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1)")

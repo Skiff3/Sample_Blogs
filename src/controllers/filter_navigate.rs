@@ -8,9 +8,7 @@ use axum::{
 };
 use std::sync::Arc;
 
-
 use crate::controllers::posts_crud_controller::get_vec_len;
-
 
 pub async fn admin_blog_pagination(
     Path((category, page_number)): Path<(String, String)>,
@@ -42,19 +40,27 @@ pub async fn admin_blog_pagination(
     let _tmp2 = shared_state2.as_ref();
     let list_iter = shared_state2.iter().map(|posts| {
         let mut _v: Vec<_> = vec![];
-        _v = posts.iter()
-            .map(|post| {plinks.push(post.post_title.clone())}).collect();
+        _v = posts
+            .iter()
+            .map(|post| plinks.push(post.post_title.clone()))
+            .collect();
         let mut _v1: Vec<_> = vec![];
-        _v1 = posts.iter()
-            .map(|post| {pids.push(post.post_id.clone())}).collect();
-        (_v,_v1)
+        _v1 = posts
+            .iter()
+            .map(|post| pids.push(post.post_id.clone()))
+            .collect();
+        (_v, _v1)
     });
 
     let list_iter = shared_state2.as_ref().iter().map(|posts| {
-         let _v: Vec<_> = posts.iter()
-             .map(|post| {plinks.push(post.post_title.clone())}).collect();
-         let _v2: Vec<_> = posts.iter()
-             .map(|post| {pids.push(post.post_id.clone())}).collect();
+        let _v: Vec<_> = posts
+            .iter()
+            .map(|post| plinks.push(post.post_title.clone()))
+            .collect();
+        let _v2: Vec<_> = posts
+            .iter()
+            .map(|post| pids.push(post.post_id.clone()))
+            .collect();
     });
 
     let template = BlogTemplate {
@@ -63,7 +69,7 @@ pub async fn admin_blog_pagination(
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
-        current_url_page: ".".to_string(),// change the format
+        current_url_page: ".".to_string(), // change the format
     };
 
     match template.render() {
@@ -96,7 +102,6 @@ pub async fn blog_pagination(
 
     let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await;
 
-
     let shared_state2 = Arc::new(posts2);
     let number_of_pages = get_vec_len(shared_state2.clone());
 
@@ -105,16 +110,13 @@ pub async fn blog_pagination(
     }
     let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v2: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
+        let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
+        let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
 
-        (v,v2)
+        (v, v2)
     });
 
-
-    (plinks,pids) = list_iter.unwrap_or_default();
+    (plinks, pids) = list_iter.unwrap_or_default();
 
     let template = HomeTemplate {
         index_id: &pids,

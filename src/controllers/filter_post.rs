@@ -8,7 +8,6 @@ use axum::{
 };
 use std::sync::Arc;
 
-
 use crate::controllers::posts_crud_controller::get_vec_len;
 
 pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
@@ -43,15 +42,12 @@ pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
     }
     let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v2: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
+        let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
+        let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
 
-        (v,v2)
+        (v, v2)
     });
     let (plinks, _pids) = list_iter.unwrap_or_default();
-
 
     let template = BlogTemplate {
         index_id: &vec![],
@@ -102,13 +98,10 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
 
     let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
+        let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
+        let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
 
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v2: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
-
-        (v,v2)
+        (v, v2)
     });
     let (plinks, _pids) = list_iter.unwrap_or_default();
 
@@ -121,9 +114,10 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
         current_url_page: current_url,
     };
 
-
-    template.render().map(
-        |html|Html(html)
-    )
-        .map_err(|err|(StatusCode::INTERNAL_SERVER_ERROR,format!("Failed to render {}",err)))
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to render {}", err),
+        )
+    })
 }
