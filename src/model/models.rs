@@ -72,7 +72,7 @@ pub struct HomeTemplate<'a> {
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
     pub page_nav_links: &'a Vec<String>,
-    pub current_url_page: String,// functional about
+    pub current_url_page: String,
 }
 
 #[derive(Template)]
@@ -149,9 +149,7 @@ pub async fn get_connection() -> std::result::Result<Vec<Post>, Error> {
 }
 
 pub async fn get_posts_per_page(offset_value: i32) -> std::result::Result<Vec<Post>,Error> {
-   // let mut t = get_connection().await;
     let pool = get_connection_for_crud().await;
-
     sqlx::query_as::<_, Post>(
         "select post_id, post_title, post_body, post_description from posts limit ($1) offset ($2)",
     )
@@ -202,20 +200,6 @@ pub async fn get_count_of_posts() -> std::result::Result<Vec<Count>,Error> {
         .await
 }
 
-// pub async fn get_count_of_posts_filtered_by_categories() -> Vec<Count> {
-//     let pool = PgPoolOptions::new()
-//         .max_connections(5)
-//         .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
-//         .await
-//         .expect("couldn't connect to the database");
-//
-//     let mut count = sqlx::query_as::<_, Count>("select p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_name = ($1)")
-//         .fetch_all(&pool)
-//         .await
-//         .unwrap();
-//
-//     count
-// }
 
 pub async fn get_filtered_from_database(final_category: String, page_number: i32) -> std::result::Result<Vec<Blog>, Error> {
     let pool = get_connection_for_crud().await;

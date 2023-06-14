@@ -37,8 +37,6 @@ pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl In
     println!("number of pages {}",m2.clone());
     let temp = s.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
-        //plinks = posts.iter()
-            //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter()
             .map(|post| {post.post_title.clone()}).collect();
         let v2: Vec<_> = posts.iter()
@@ -48,9 +46,6 @@ pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl In
     });
 
     let (plinks, pids) = list_iter.unwrap_or_default();
-    // let t = list_iter.unwrap_or_default();
-    // let plinks = t.0;
-    // let pids = t.1;
 
     let template = IndexTemplate {
         index_id: &pids,

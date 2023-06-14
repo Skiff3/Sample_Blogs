@@ -13,16 +13,13 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
     let mut plinks: Vec<String> = Vec::new();
     let mut psec: Vec<String> = Vec::new();
     let _pid: Vec<i32> = Vec::new();
-    let mut pnav: Vec<String> = Vec::new(); // let mut pnav: Vec<String> = Vec::new();
+    let mut pnav: Vec<String> = Vec::new();
     psec.clear();
-    //let mut psec: Vec<String> = Vec::new();
-    psec.push("Category A".to_string()); // psec.push("Category A")
+    psec.push("Category A".to_string());
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
-    psec.push("No Category".to_string());// no category to be replaced with "All";
+    psec.push("No Category".to_string());
 
-    // let page_number_integer:i32;
-    // let number_of_pages: i64;
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page(); // offset value.
     println!("page starts from {}", offset_start);
@@ -78,14 +75,12 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     let mut pid: Vec<i32> = Vec::new();
     let mut pnav: Vec<String> = Vec::new(); // let mut pnav: Vec<String> = Vec::new();
     psec.clear();
-    //let mut psec: Vec<String> = Vec::new();
+
     psec.push("Category A".to_string()); // psec.push("Category A")
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
     psec.push("No Category".to_string());
 
-    // let page_number_integer:i32;
-    // let number_of_pages: i64;
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page(); // offset value.
     println!("page starts from {}", offset_start);

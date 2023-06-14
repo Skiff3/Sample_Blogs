@@ -33,18 +33,6 @@ pub async fn show_post(
 
     });
     list_iter.unwrap_or_default();
-    // for i in 0..map_post.len() {
-    //     if post_name == map_post {
-    //         template = PostTemplate {
-    //             post_title: &i.post_title,
-    //             post_description: "",
-    //             post_body: &i.post_body,
-    //         };
-    //         break;
-    //     } else {
-    //         continue;
-    //     }
-    // }
 
     if template.post_title == "none" {
         return (StatusCode::NOT_FOUND, "404 not found").into_response();

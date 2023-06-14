@@ -116,16 +116,6 @@ pub async fn home_gui() -> impl IntoResponse {
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-
-   // let list_iter = s.iter();
-   //  let list_iter = s.iter();
-   //
-   //  for i in list_iter{
-   //      // plinks.push(i.);
-   //
-   //      // pids.push(s[i].post_id);
-   //      // println!("{}", s.len()) // prints the s length
-   //  }
     let list_iter = s.map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
@@ -138,13 +128,6 @@ pub async fn home_gui() -> impl IntoResponse {
     });
 
     (plinks,pids) = list_iter.unwrap_or_default();
-   //  s.iter().map(|a|{println!(a.len())});
-   //  for i in s.into_iter().map(|a|{}){
-   //
-   //  }
-   //  s.into_iter().map(|letter| for j in 0..letter.len(){plinks.push(letter[j].post_title.clone());
-   //      pids.push(letter[j].post_id);
-   //  });
 
     let template = HomeTemplate {
         index_id: &pids,
@@ -239,22 +222,6 @@ pub async fn update_category_form(Path(category_id): Path<String>,Form(update_ca
     Redirect::to("/posts")
 }
 
-// pub fn return_from_result(post: Vec<Post>) -> (Vec<String>,Vec<i32>){
-//     let mut v:Vec<_> = vec![];
-//     let mut v2:Vec<_> = vec![];
-//     let list_iter = post.iter().map(|posts| {
-//         //plinks = posts.iter()
-//         //.map(|post| {post.post_title.clone()}).collect();
-//         v.push(posts.clone().post_title);
-//            // .map(|post1| {post1.post_title.clone()}).collect();
-//         v2.push(posts.clone().post_id);
-//             //.map(|post1| {post1.post_id.clone()}).collect();
-//
-//         (v,v2)
-//     });
-//
-//     (v.clone(),v2.clone())
-// }
 
 pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64{
     let temp = shared_state2.as_ref().as_ref();
@@ -262,7 +229,6 @@ pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64{
     let _iter = temp.map(|posts| {
         len = posts.len() as i64;
     });
-   // iter;
     len
 }
 pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64{
@@ -274,7 +240,6 @@ pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64{
         })
 
     });
-    //iter;
     len1
 }
 
