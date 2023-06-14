@@ -1,7 +1,7 @@
 use crate::global_number_of_items_per_page;
 use askama::Template;
 use axum_login::axum_sessions::async_session::serde::Deserialize;
-use sqlx::postgres::PgPoolOptions;
+
 use sqlx::*;
 use crate::controllers::posts_crud_controller::get_connection_for_crud;
 

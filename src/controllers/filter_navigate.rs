@@ -7,7 +7,7 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::sync::Arc;
-use axum::response::Response;
+
 
 use crate::controllers::posts_crud_controller::get_vec_len;
 
@@ -74,7 +74,7 @@ pub async fn admin_blog_pagination(
         pnav.push(i.to_string())
     }
     //let tmp = shared_state2.clone();
-    let tmp2 = shared_state2.as_ref();
+    let _tmp2 = shared_state2.as_ref();
     let list_iter = shared_state2.iter().map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
@@ -107,9 +107,9 @@ pub async fn admin_blog_pagination(
         //.map(|post| {post.post_title.clone()}).collect();
         //plinks.push(posts.clone().post_title);
         //pids.push(posts.clone().post_id);
-         let v: Vec<_> = posts.iter()
+         let _v: Vec<_> = posts.iter()
              .map(|post| {plinks.push(post.post_title.clone())}).collect();
-         let v2: Vec<_> = posts.iter()
+         let _v2: Vec<_> = posts.iter()
              .map(|post| {pids.push(post.post_id.clone())}).collect();
         //
         // (v,v2)
@@ -178,7 +178,7 @@ pub async fn blog_pagination(
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-    let mut temp = shared_state2.as_ref().as_ref();
+    let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();

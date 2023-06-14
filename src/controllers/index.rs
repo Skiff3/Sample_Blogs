@@ -18,11 +18,11 @@ pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl In
         }).collect();
         v
     });
-    list_iter;
+    drop(list_iter);
     let s = state.clone();
     //let number_of_pages: i64;
-    let mut plinks: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new();
+    let _plinks: Vec<String> = Vec::new();
+    let _pids: Vec<i32> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
     let number_of_posts_vector = get_count_of_posts().await;
     m2 = get_vec_len_of_count(number_of_posts_vector);

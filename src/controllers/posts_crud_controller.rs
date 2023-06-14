@@ -1,7 +1,7 @@
 use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{Blog, Count, get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, Post, UpdateCategory, UpdateCategoryTemplate};
+use crate::model::models::{Blog, Count, get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, UpdateCategory, UpdateCategoryTemplate};
 use crate::{global_number_of_items_per_page_64, CreateCategory, CreatePost, UpdatePost};
 use askama::Template;
 use axum::extract::Path;
@@ -94,7 +94,7 @@ pub async fn home_gui() -> impl IntoResponse {
     psec.clear();
 
     let category_list = get_all_categories().await;
-    let list_iters = category_list.iter();
+    let _list_iters = category_list.iter();
     psec.clear();
     //let mut psec: Vec<String> = Vec::new();
     psec.push("Category A".to_string()); // psec.push("Category A")
@@ -107,7 +107,7 @@ pub async fn home_gui() -> impl IntoResponse {
     let mut pids: Vec<i32> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
     let number_of_posts_vector = get_count_of_posts().await;
-    let m = number_of_posts_vector;
+    let _m = number_of_posts_vector;
     let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await) % global_number_of_items_per_page_64() == 0 {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
     } else {
@@ -167,7 +167,7 @@ pub async fn home_gui() -> impl IntoResponse {
 
 pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) -> Redirect {
     let pool = get_connection_for_crud().await;
-    let mut m = get_max_id_of_category().await;
+    let m = get_max_id_of_category().await;
     let m2 = get_max(m);
     let category_id =m2+1;
     let res =
@@ -286,6 +286,6 @@ pub fn get_max(shared_state2: Result<Vec<Max>, Error>) -> i32{
         });
         len2
     });
-    iters;
+    drop(iters);
     len2
 }

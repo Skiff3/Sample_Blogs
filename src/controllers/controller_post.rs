@@ -9,7 +9,7 @@ use axum::{
 pub async fn show_post(
     Path(post_id): Path<String>
 ) -> impl IntoResponse {
-    let mut map_post:Vec<String>= Vec::new();
+    let _map_post:Vec<String>= Vec::new();
     println!("post name {}", post_id.clone());
     let post_name = post_id.clone();
     let s2 = get_details_of_post(post_id).await;
@@ -19,7 +19,7 @@ pub async fn show_post(
         post_body: "none",
     };
     let list_iter = s2.as_ref().map(|posts|{
-        let v1:Vec<_> = posts.into_iter().map(|post|{
+        let _v1:Vec<_> = posts.into_iter().map(|post|{
             if post_name == post.post_title {
                 template = PostTemplate {
                     post_title: &post.post_title,

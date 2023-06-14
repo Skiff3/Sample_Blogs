@@ -12,7 +12,7 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
     println!("{}", page_number);
     let mut plinks: Vec<String> = Vec::new();
     let mut psec: Vec<String> = Vec::new();
-    let mut pid: Vec<i32> = Vec::new();
+    let _pid: Vec<i32> = Vec::new();
     let mut pnav: Vec<String> = Vec::new(); // let mut pnav: Vec<String> = Vec::new();
     psec.clear();
     //let mut psec: Vec<String> = Vec::new();
@@ -91,7 +91,7 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     println!("page starts from {}", offset_start);
     let s = get_posts_per_page(offset_start).await;
     let number_of_posts_vector = get_count_of_posts().await;
-    let m = number_of_posts_vector;
+    let _m = number_of_posts_vector;
     let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await) % global_number_of_items_per_page_64() == 0 {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
     } else {

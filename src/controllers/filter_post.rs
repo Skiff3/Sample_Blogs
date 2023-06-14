@@ -7,8 +7,8 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::sync::Arc;
-use eframe::egui_glow::painter::clear;
-use tower_http::follow_redirect::policy::PolicyExt;
+
+
 use crate::controllers::posts_crud_controller::get_vec_len;
 
 pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
@@ -20,9 +20,9 @@ pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
     psec.push("Category C".to_string());
     psec.push("No Category".to_string());
     // let mut number_of_pages:i32;
-    let mut plinks: Vec<String> = Vec::new();
+    let _plinks: Vec<String> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new();
+    let _pids: Vec<i32> = Vec::new();
     let string_a: String = category.clone();
     let string_b: &str = "/pages";
     let current_url = string_a + string_b;
@@ -56,7 +56,7 @@ pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
 
         (v,v2)
     });
-    let (plinks, pids) = list_iter.unwrap_or_default();
+    let (plinks, _pids) = list_iter.unwrap_or_default();
 
     // if shared_state2.len() >= 3 {
     //     for i in 0..3 {
@@ -98,9 +98,9 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     psec.push("Category C".to_string());
     psec.push("No Category".to_string());
     // let mut number_of_pages:i32;
-    let mut plinks: Vec<String> = Vec::new();
+    let _plinks: Vec<String> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new();
+    let _pids: Vec<i32> = Vec::new();
     let string_a: String = category.clone();
     let string_b: &str = "/pages";
     let current_url = string_a + string_b;
@@ -135,7 +135,7 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
 
         (v,v2)
     });
-    let (plinks, pids) = list_iter.unwrap_or_default();
+    let (plinks, _pids) = list_iter.unwrap_or_default();
 
     // if shared_state2.len() >= 3 {
     //     for i in 0..3 {
