@@ -259,22 +259,22 @@ pub async fn update_category_form(Path(category_id): Path<String>,Form(update_ca
 pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64{
     let temp = shared_state2.as_ref().as_ref();
     let mut len:i64=0;
-    let iter = temp.map(|posts| {
+    let _iter = temp.map(|posts| {
         len = posts.len() as i64;
     });
-    iter;
+   // iter;
     len
 }
 pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64{
     let mut len1:i64=15;
     let temp = shared_state2.as_ref();
-    let iter= temp.map(|posts| {
+    let _iter= temp.map(|posts| {
         posts.iter().map(|count| {
             len1= count.count
         })
 
     });
-    iter;
+    //iter;
     len1
 }
 

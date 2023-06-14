@@ -79,15 +79,15 @@ pub async fn admin_blog_pagination(
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
 
-        let mut v: Vec<_> = vec![];
-        v = posts.iter()
+        let mut _v: Vec<_> = vec![];
+        _v = posts.iter()
             .map(|post| {plinks.push(post.post_title.clone())}).collect();
-        let mut v1: Vec<_> = vec![];
-        v1 = posts.iter()
+        let mut _v1: Vec<_> = vec![];
+        _v1 = posts.iter()
             .map(|post| {pids.push(post.post_id.clone())}).collect();
-        (v,v1)
+        (_v,_v1)
     });
-    list_iter;
+    //list_iter;
     //(plinks,pids) = list_iter
 
     //(plinks,pids) = list_iter;
@@ -116,7 +116,7 @@ pub async fn admin_blog_pagination(
     });
 
 
-    list_iter;
+    //list_iter;
     //let (plinks,pids) = list_iter;
 
     let template = BlogTemplate {
