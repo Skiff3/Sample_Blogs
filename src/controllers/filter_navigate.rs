@@ -7,7 +7,29 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::sync::Arc;
+use axum::response::Response;
+
 use crate::controllers::posts_crud_controller::get_vec_len;
+
+// impl<T, E> IntoResponse for Result<T, E>
+// where
+// T: IntoResponse,
+// E: IntoResponse,
+// {
+// fn into_response(self) -> Response {
+// match self {
+// Ok(value) => match template.render() {
+//     Ok(html) => Html(html).into_response(),
+//     Err(err) => (
+//         StatusCode::INTERNAL_SERVER_ERROR,
+//         format!("Failed to render template. Error {}", err),
+//     )
+//         .into_response(),
+// },
+// Err(err) => err.into_response(),
+//         }
+//     }
+// }
 
 pub async fn admin_blog_pagination(
     Path((category, page_number)): Path<(String, String)>,
@@ -28,7 +50,7 @@ pub async fn admin_blog_pagination(
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     println!("page starts from {}", offset_start);
 
-    let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await?;
+    let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await;
 
     // for post in &mut posts2 {
     //     post.post_title = post.post_title.replace("-", " ");
@@ -57,38 +79,45 @@ pub async fn admin_blog_pagination(
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
 
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v1: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
+        let mut v: Vec<_> = vec![];
+        v = posts.iter()
+            .map(|post| {plinks.push(post.post_title.clone())}).collect();
+        let mut v1: Vec<_> = vec![];
+        v1 = posts.iter()
+            .map(|post| {pids.push(post.post_id.clone())}).collect();
         (v,v1)
     });
+    list_iter;
+    //(plinks,pids) = list_iter
 
-    (plinks,pids) = list_iter.unwrap_or_default().clone();
+    //(plinks,pids) = list_iter;
     // for i in 0..shared_state2.len() {
     //     plinks.push(shared_state2[i].post_title.clone());
     //     pids.push(shared_state2[i].post_id);
     // }
-    pids.clear();
-    plinks.clear();
+    //pids.clear();
+    //plinks.clear();
 
     // for i in 0..shared_state2.len() {
     //     plinks.push(shared_state2[i].post_title.clone());
     //     pids.push(shared_state2[i].post_id);
     // }
-    let list_iter = shared_state2.as_ref().map(|posts| {
+    let list_iter = shared_state2.as_ref().iter().map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v2: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
-
-        (v,v2)
+        //plinks.push(posts.clone().post_title);
+        //pids.push(posts.clone().post_id);
+         let v: Vec<_> = posts.iter()
+             .map(|post| {plinks.push(post.post_title.clone())}).collect();
+         let v2: Vec<_> = posts.iter()
+             .map(|post| {pids.push(post.post_id.clone())}).collect();
+        //
+        // (v,v2)
     });
 
 
-    let (plinks,pids) = list_iter.unwrap_or_default();
+    list_iter;
+    //let (plinks,pids) = list_iter;
 
     let template = BlogTemplate {
         index_id: &pids,
@@ -135,7 +164,7 @@ pub async fn blog_pagination(
     // }
 
     let shared_state2 = Arc::new(posts2);
-    let number_of_pages = get_vec_len(shared_state2);
+    let number_of_pages = get_vec_len(shared_state2.clone());
     // if shared_state2.len()%3==0 {
     //     number_of_pages = shared_state2.len()/3;
     // }
@@ -149,7 +178,8 @@ pub async fn blog_pagination(
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-    let list_iter = shared_state2.clone().map(|posts| {
+    let mut temp = shared_state2.as_ref().as_ref();
+    let list_iter = temp.map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter()

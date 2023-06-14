@@ -8,6 +8,7 @@ use axum::{
 };
 use std::sync::Arc;
 use eframe::egui_glow::painter::clear;
+use tower_http::follow_redirect::policy::PolicyExt;
 use crate::controllers::posts_crud_controller::get_vec_len;
 
 pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
@@ -44,7 +45,8 @@ pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-    let list_iter = shared_state2.as_ref().map(|posts| {// apply if else here
+    let temp = shared_state2.as_ref().as_ref();
+    let list_iter = temp.map(|posts| {// apply if else here
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter()
@@ -113,7 +115,7 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     //println!("len {}", shared_state2.len());
 
     //number_of_pages = shared_state2.len();
-    let number_of_pages = if get_vec_len(shared_state2) % 3 == 0 {
+    let number_of_pages = if get_vec_len(shared_state2.clone()) % 3 == 0 {
         (get_vec_len(shared_state2.clone()) / 3) as i32
     } else {
         ((get_vec_len(shared_state2.clone()) / 3) + 1) as i32
@@ -122,7 +124,8 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
         pnav.push(i.to_string())
     }
 
-    let list_iter = shared_state2.clone().map(|posts| {// apply if else here
+    let temp = shared_state2.as_ref().as_ref();
+    let list_iter = temp.map(|posts| {// apply if else here
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter()

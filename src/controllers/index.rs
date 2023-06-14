@@ -34,7 +34,9 @@ pub async fn index(State(state): State<Arc<Result<Vec<Post>,Error>>>) -> impl In
     for i in 1..number_of_pages + 1 {
         pnav.push(i.to_string())
     }
-    let list_iter = s.map(|posts| {
+    println!("number of pages {}",m2.clone());
+    let temp = s.as_ref().as_ref();
+    let list_iter = temp.map(|posts| {
         //plinks = posts.iter()
             //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter()

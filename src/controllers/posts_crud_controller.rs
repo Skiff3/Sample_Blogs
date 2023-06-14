@@ -239,49 +239,52 @@ pub async fn update_category_form(Path(category_id): Path<String>,Form(update_ca
     Redirect::to("/posts")
 }
 
-pub fn return_from_result(post: Vec<Post>) -> (Vec<String>,Vec<i32>){
-    let mut v:Vec<_> = vec![];
-    let mut v2:Vec<_> = vec![];
-    let list_iter = post.iter().map(|posts| {
-        //plinks = posts.iter()
-        //.map(|post| {post.post_title.clone()}).collect();
-        v.push(posts.clone().post_title);
-           // .map(|post1| {post1.post_title.clone()}).collect();
-        v2.push(posts.clone().post_id);
-            //.map(|post1| {post1.post_id.clone()}).collect();
-
-        (v,v2)
-    });
-
-    (v.clone(),v2.clone())
-}
+// pub fn return_from_result(post: Vec<Post>) -> (Vec<String>,Vec<i32>){
+//     let mut v:Vec<_> = vec![];
+//     let mut v2:Vec<_> = vec![];
+//     let list_iter = post.iter().map(|posts| {
+//         //plinks = posts.iter()
+//         //.map(|post| {post.post_title.clone()}).collect();
+//         v.push(posts.clone().post_title);
+//            // .map(|post1| {post1.post_title.clone()}).collect();
+//         v2.push(posts.clone().post_id);
+//             //.map(|post1| {post1.post_id.clone()}).collect();
+//
+//         (v,v2)
+//     });
+//
+//     (v.clone(),v2.clone())
+// }
 
 pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64{
+    let temp = shared_state2.as_ref().as_ref();
     let mut len:i64=0;
-    let iter = shared_state2.map(|posts| {
+    let iter = temp.map(|posts| {
         len = posts.len() as i64;
     });
     iter;
     len
 }
 pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64{
-    let mut len:i64=0;
-    let iter= shared_state2.map(|posts| {
-        len:i64= posts.iter().map(|count|{
-            count.count;
-        });
+    let mut len1:i64=15;
+    let temp = shared_state2.as_ref();
+    let iter= temp.map(|posts| {
+        posts.iter().map(|count| {
+            len1= count.count
+        })
+
     });
     iter;
-    len
+    len1
 }
 
-pub fn get_max(shared_state2: Result<Vec<Max>, Error>) -> i64{
-    let mut len2:i64 = 0;
+pub fn get_max(shared_state2: Result<Vec<Max>, Error>) -> i32{
+    let mut len2:i32 = 0;
     let iters= shared_state2.map(|posts| {
-     let  len:i64 = posts.iter().map(|count|{
-            count.max;
-        }).collect();
-        len
+        let _ = posts.iter().map( |count| {
+            len2 = count.max;
+        });
+        len2
     });
     iters;
     len2

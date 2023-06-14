@@ -102,7 +102,8 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     }
 
     plinks.clear();
-    let list_iter = s.clone().map(|posts| {
+    let temp = s.as_ref();
+    let list_iter = temp.clone().map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter()
