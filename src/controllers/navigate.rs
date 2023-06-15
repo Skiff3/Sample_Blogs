@@ -18,7 +18,7 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
     psec.push("Category A".to_string());
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
-    psec.push("No Category".to_string());
+    psec.push("Category D".to_string());
 
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page(); // offset value.
@@ -34,9 +34,9 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
                 + 1 //
         };
 
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
 
     plinks.clear(); // return result
     let list_iter = s.map(|posts| {
@@ -79,7 +79,7 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     psec.push("Category A".to_string()); // psec.push("Category A")
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
-    psec.push("No Category".to_string());
+    psec.push("Category D".to_string());
 
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page(); // offset value.
@@ -95,10 +95,9 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     } else {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
     };
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
-
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
     plinks.clear();
     let temp = s.as_ref();
     let list_iter = temp.clone().map(|posts| {
@@ -114,7 +113,7 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
 
     let template = HomeTemplate {
         index_id: &pid,
-        index_title: String::from("Blogs"),
+        index_title: String::from("Posts"),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,

@@ -34,9 +34,9 @@ pub async fn index(State(state): State<Arc<Result<Vec<Post>, Error>>>) -> impl I
     } else {
         (m2) / global_number_of_items_per_page_64() + 1
     };
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
     println!("number of pages {}", m2.clone());
     let temp = s.as_ref().as_ref();
     let list_iter = temp.map(|posts| {

@@ -27,6 +27,7 @@ use axum_login::{
 };
 use rand::Rng;
 use serde::Deserialize;
+use sqlx::Error;
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;

@@ -23,7 +23,7 @@ pub async fn admin_blog_pagination(
     psec.push("Category A".to_string());
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
-    psec.push("No Category".to_string());
+    psec.push("Category D".to_string());
 
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
@@ -33,10 +33,9 @@ pub async fn admin_blog_pagination(
 
     let shared_state2 = Arc::new(posts2);
     let number_of_pages = 0;
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
-
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
     let _tmp2 = shared_state2.as_ref();
     let list_iter = shared_state2.iter().map(|posts| {
         let mut _v: Vec<_> = vec![];
@@ -65,7 +64,7 @@ pub async fn admin_blog_pagination(
 
     let template = BlogTemplate {
         index_id: &pids,
-        index_title: String::from("Blogs"),
+        index_title: String::from("Posts"),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
@@ -94,20 +93,19 @@ pub async fn blog_pagination(
     psec.push("Category A".to_string());
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
-    psec.push("No Category".to_string());
+    psec.push("Category D".to_string());
 
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    println!("page starts from {}", offset_start);
 
     let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await;
 
     let shared_state2 = Arc::new(posts2);
     let number_of_pages = get_vec_len(shared_state2.clone());
 
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
     let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
         let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
@@ -120,7 +118,7 @@ pub async fn blog_pagination(
 
     let template = HomeTemplate {
         index_id: &pids,
-        index_title: String::from("Blogs"),
+        index_title: String::from("Posts"),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,

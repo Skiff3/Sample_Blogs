@@ -36,10 +36,9 @@ pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
     } else {
         ((get_vec_len(shared_state2.clone()) / 3) + 1) as i32
     };
-
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
     let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
         let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
@@ -51,7 +50,7 @@ pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
 
     let template = BlogTemplate {
         index_id: &vec![],
-        index_title: String::from("Blogs"),
+        index_title: String::from("Posts"),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
@@ -75,7 +74,7 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     psec.push("Category A".to_string());
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
-    psec.push("No Category".to_string());
+    psec.push("All".to_string());
     // let mut number_of_pages:i32;
     let _plinks: Vec<String> = Vec::new();
     let mut pnav: Vec<String> = Vec::new();
@@ -92,10 +91,9 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     } else {
         ((get_vec_len(shared_state2.clone()) / 3) + 1) as i32
     };
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
-
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
     let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
         let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();

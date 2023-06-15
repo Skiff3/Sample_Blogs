@@ -103,7 +103,7 @@ pub async fn home_gui() -> impl IntoResponse {
     psec.push("Category A".to_string()); // psec.push("Category A")
     psec.push("Category B".to_string());
     psec.push("Category C".to_string());
-    psec.push("No Category".to_string());
+    psec.push("Category D".to_string());
     let s = get_connection().await;
     // let number_of_pages: i64;
     let mut plinks: Vec<String> = Vec::new();
@@ -119,9 +119,9 @@ pub async fn home_gui() -> impl IntoResponse {
     } else {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
     };
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
+    (1..number_of_pages)
+        .into_iter()
+        .for_each(|i| pnav.push(i.to_string()));
     let list_iter = s.map(|posts| {
         //plinks = posts.iter()
         //.map(|post| {post.post_title.clone()}).collect();
