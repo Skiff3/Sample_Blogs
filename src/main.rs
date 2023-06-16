@@ -10,7 +10,11 @@ use crate::controllers::filter_navigate::{admin_blog_pagination, blog_pagination
 use crate::controllers::filter_post::{admin_blogs, blogs};
 use crate::controllers::index::index;
 use crate::controllers::navigate::{page, pages};
-use crate::controllers::posts_crud_controller::{create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui, delete_categories_form, delete_posts_form, home_gui, update_category_form, update_category_form_ui, update_posts_form};
+use crate::controllers::posts_crud_controller::{
+    create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui,
+    delete_categories_form, delete_posts_form, home_gui, update_category_form,
+    update_category_form_ui, update_posts_form,
+};
 use crate::model::models::{get_connection, BlogTemplate, IndexTemplate};
 use axum::response::Redirect;
 use axum::routing::post;
@@ -23,6 +27,7 @@ use axum_login::{
 };
 use rand::Rng;
 use serde::Deserialize;
+use sqlx::Error;
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
@@ -123,7 +128,7 @@ async fn main() {
     let user_store = AuthMemoryStore::new(&store);
     let auth_layer = AuthLayer::new(user_store, &secret);
 
-    let mut user_vector: Vec<User> = Vec::new();
+    let mut user_vector: Vec<User> = vec![];
     let user1: User = User {
         id: 2,
         name: "Manny".to_string(),
@@ -160,11 +165,14 @@ async fn main() {
         .merge(admin_blog_routes)
         .route(
             "/post/new",
-            get(create_posts_form_ui).post(create_posts_form)
+            get(create_posts_form_ui).post(create_posts_form),
         )
         .route("/delete/:post_id", get(delete_posts_form))
         .route("/delete/category/:category_id", get(delete_categories_form))
-        .route("/category/update/:category_id", get(update_category_form_ui).post(update_category_form))
+        .route(
+            "/category/update/:category_id",
+            get(update_category_form_ui).post(update_category_form),
+        )
         .route("/update_post/:post_id", post(update_posts_form))
         .route(
             "/category/new",

@@ -7,28 +7,15 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/rust-toolchain" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/controllers/category_crud_controller.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/update_category.html" afterDir="false" />
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="iter instead of for loop.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/authentication/login.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/authentication/login.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bin/markd.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/markd.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/models.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/blogs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/blogs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/new_category.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_category.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/new_post.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_post.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +139,56 @@
       <option name="project" value="LOCAL" />
       <updated>1686014881401</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Removed all the unwrap and expect.">
+      <created>1686536716033</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1686536716033</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Using map and iter.">
+      <created>1686728291619</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1686728291619</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Using map and iter.">
+      <created>1686728327625</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1686728327625</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Using map and iter.">
+      <created>1686728880203</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1686728880203</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Using map and iter.">
+      <created>1686729333907</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1686729333907</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Using map and iter.">
+      <created>1686729374484</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1686729374484</updated>
+    </task>
+    <task id="LOCAL-00015" summary="iter instead of for loop.">
+      <created>1686810651729</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1686810651729</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -174,6 +210,9 @@
     <MESSAGE value="Clear warnings" />
     <MESSAGE value="Clear warnings." />
     <MESSAGE value=" Clear warnings and Clippy." />
-    <option name="LAST_COMMIT_MESSAGE" value=" Clear warnings and Clippy." />
+    <MESSAGE value="Removed all the unwrap and expect." />
+    <MESSAGE value="Using map and iter." />
+    <MESSAGE value="iter instead of for loop." />
+    <option name="LAST_COMMIT_MESSAGE" value="iter instead of for loop." />
   </component>
 </project>

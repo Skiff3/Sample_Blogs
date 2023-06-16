@@ -1,16 +1,12 @@
-use crate::model::models::{get_details_of_post, Post, PostTemplate};
+use crate::model::models::{get_details_of_post, PostTemplate};
 use askama::Template;
 use axum::{
-    extract::{Path, State},
+    extract::Path,
     http::StatusCode,
     response::{Html, IntoResponse},
 };
-use std::sync::Arc;
 
-pub async fn show_post(
-    Path(post_id): Path<String>
-) -> impl IntoResponse {
-    println!("post name {}", post_id.clone());
+pub async fn show_post(Path(post_id): Path<String>) -> impl IntoResponse {
     let post_name = post_id.clone();
     let s2 = get_details_of_post(post_id).await;
     let mut template = PostTemplate {
@@ -18,27 +14,23 @@ pub async fn show_post(
         post_description: "",
         post_body: "none",
     };
-    let list_iter = s2.iter();
-    for i in list_iter {
-        if post_name == i.post_title {
-            template = PostTemplate {
-                post_title: &i.post_title,
-                post_description: "",
-                post_body: &i.post_body,
-            };
-            break;
-        } else {
-            continue;
-        }
-    }
+    s2.iter().for_each(|posts| {
+        posts.into_iter().for_each(|post| {
+            if post_name == post.post_title {
+                template = PostTemplate {
+                    post_title: &post.post_title,
+                    post_description: " ",
+                    post_body: &post.post_body,
+                };
+            } else {
+            }
+        })
+    });
 
-    if template.post_title == "none" {
-        return (StatusCode::NOT_FOUND, "404 not found").into_response();
-    }
-    println!("{}", template);
-
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(_) => (StatusCode::INTERNAL_SERVER_ERROR, "try again later").into_response(),
-    }
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to render {}", err),
+        )
+    })
 }
