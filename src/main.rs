@@ -128,7 +128,7 @@ async fn main() {
     let user_store = AuthMemoryStore::new(&store);
     let auth_layer = AuthLayer::new(user_store, &secret);
 
-    let mut user_vector: Vec<User> = Vec::new();
+    let mut user_vector: Vec<User> = vec![];
     let user1: User = User {
         id: 2,
         name: "Manny".to_string(),

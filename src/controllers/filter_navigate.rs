@@ -13,17 +13,18 @@ use crate::controllers::posts_crud_controller::get_vec_len;
 pub async fn admin_blog_pagination(
     Path((category, page_number)): Path<(String, String)>,
 ) -> impl IntoResponse {
-    let mut plinks: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new(); // number_of_pages.
+    let mut plinks: Vec<String> = vec![];
+    let mut pids: Vec<i32> = vec![];
     let final_category = &category[0..category.len()];
-    let mut psec: Vec<String> = Vec::new();
-    let mut pnav: Vec<String> = Vec::new();
-    //let mut check_category:String = category;
-    psec.clear(); // psec.clear()
-    psec.push("Category A".to_string());
-    psec.push("Category B".to_string());
-    psec.push("Category C".to_string());
-    psec.push("Category D".to_string());
+    let mut psec: Vec<String> = vec![];
+    let mut pnav: Vec<String> = vec![];
+    psec.clear();
+    let psec = vec![
+        "Category A".to_string(),
+        "Category B".to_string(),
+        "Category C".to_string(),
+        "No Category".to_string(),
+    ];
 
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
@@ -37,29 +38,15 @@ pub async fn admin_blog_pagination(
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
     let _tmp2 = shared_state2.as_ref();
-    let list_iter = shared_state2.iter().map(|posts| {
-        let mut _v: Vec<_> = vec![];
-        _v = posts
-            .iter()
-            .map(|post| plinks.push(post.post_title.clone()))
-            .collect();
-        let mut _v1: Vec<_> = vec![];
-        _v1 = posts
-            .iter()
-            .map(|post| pids.push(post.post_id.clone()))
-            .collect();
-        (_v, _v1)
-    });
 
-    let list_iter = shared_state2.as_ref().iter().map(|posts| {
-        let _v: Vec<_> = posts
+    shared_state2.as_ref().iter().for_each(|posts| {
+        posts
             .iter()
-            .map(|post| plinks.push(post.post_title.clone()))
-            .collect();
-        let _v2: Vec<_> = posts
+            .for_each(|post| plinks.push(post.post_title.clone()));
+
+        posts
             .iter()
-            .map(|post| pids.push(post.post_id.clone()))
-            .collect();
+            .for_each(|post| pids.push(post.post_id.clone()));
     });
 
     let template = BlogTemplate {
@@ -68,7 +55,7 @@ pub async fn admin_blog_pagination(
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
-        current_url_page: ".".to_string(), // change the format
+        current_url_page: ".".to_string(),
     };
 
     match template.render() {
@@ -84,16 +71,18 @@ pub async fn admin_blog_pagination(
 pub async fn blog_pagination(
     Path((category, page_number)): Path<(String, String)>,
 ) -> impl IntoResponse {
-    let mut plinks: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new();
+    let mut plinks: Vec<String> = vec![];
+    let mut pids: Vec<i32> = vec![];
     let final_category = &category[0..category.len()];
-    let mut psec: Vec<String> = Vec::new();
-    let mut pnav: Vec<String> = Vec::new();
-    psec.clear(); // psec.clear()
-    psec.push("Category A".to_string());
-    psec.push("Category B".to_string());
-    psec.push("Category C".to_string());
-    psec.push("Category D".to_string());
+    let mut psec: Vec<String> = vec![]; // vec
+    let mut pnav: Vec<String> = vec![];
+    psec.clear();
+    let psec = vec![
+        "Category A".to_string(),
+        "Category B".to_string(),
+        "Category C".to_string(),
+        "No Category".to_string(),
+    ];
 
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
@@ -125,12 +114,10 @@ pub async fn blog_pagination(
         current_url_page: ".".to_string(),
     };
 
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
             StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to render template. Error {}", err),
+            format!("Failed to render {}", err),
         )
-            .into_response(),
-    }
+    })
 }

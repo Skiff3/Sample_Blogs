@@ -11,6 +11,7 @@ use askama::Template;
 use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect};
+use axum::routing::get;
 use axum::Form;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{Error, Pool, Postgres};
@@ -26,14 +27,12 @@ pub async fn get_connection_for_crud() -> Pool<Postgres> {
 pub async fn create_posts_form_ui() -> impl IntoResponse {
     let template = NewPostTemplate {};
 
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
             StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to render template. Error {}", err),
+            format!("Failed to render {}", err),
         )
-            .into_response(),
-    }
+    })
 }
 
 pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> impl IntoResponse {
@@ -43,9 +42,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> impl Into
     let category_id;
     if create_post.category_name.eq("Category A") {
         category_id = 1;
-    }
-    //
-    else if create_post.category_name.eq("Category B") {
+    } else if create_post.category_name.eq("Category B") {
         category_id = 2;
     } else if create_post.category_name.eq("Category C") {
         category_id = 3;
@@ -53,7 +50,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> impl Into
         category_id = 4;
     }
     let m = get_max_id_of_post().await;
-    let post_id = (get_max(m)) + 1; //insert into posts(post_id,post_title,post_body,category_id) values (16,'random','random',4);
+    let post_id = (get_max(m)) + 1;
     let res = sqlx::query("insert into posts(post_id,post_title,post_body,category_id,post_description) values (($1),($2),($3),($4),($5))")
         .bind(post_id)// the id of post
         .bind(create_post.post_title)
@@ -62,55 +59,42 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> impl Into
         .bind("none")
         .execute(&pool)
         .await;
-
-    println!("Success ---> row {:?}", &res);
     Redirect::to("/admin/page/1")
 }
 
 pub async fn delete_posts_form(Path(post_id): Path<String>) -> Redirect {
     let pool = get_connection_for_crud().await;
     println!("Form {}", post_id);
-    //let mut post_ids = post_id.clone().parse().u;
     let res = sqlx::query("delete from posts where post_title = ($1)")
         .bind(post_id)
         .execute(&pool)
         .await;
-
-    println!("Success ---> row {:?}", &res);
     Redirect::to("/admin/page/1")
 }
 
 pub async fn delete_categories_form(Path(category_id): Path<String>) -> Redirect {
     let pool = get_connection_for_crud().await;
-    //let mut post_ids = post_id.clone().parse().u;
     let res = sqlx::query("delete from category_post where category_name = ($1)")
         .bind(category_id)
         .execute(&pool)
         .await;
-
-    println!("Success ---> row {:?}", &res);
     Redirect::to("/admin/page/1")
 }
 
 pub async fn home_gui() -> impl IntoResponse {
-    let mut psec: Vec<String> = Vec::new();
+    let mut psec: Vec<String> = vec![];
     psec.clear();
-
-    let category_list = get_all_categories().await;
-    let _list_iters = category_list.iter();
-    psec.clear();
-    //let mut psec: Vec<String> = Vec::new();
-    psec.push("Category A".to_string()); // psec.push("Category A")
-    psec.push("Category B".to_string());
-    psec.push("Category C".to_string());
-    psec.push("Category D".to_string());
+    let psec = vec![
+        "Category A".to_string(),
+        "Category B".to_string(),
+        "Category C".to_string(),
+        "No Category".to_string(),
+    ];
     let s = get_connection().await;
-    // let number_of_pages: i64;
-    let mut plinks: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new();
-    let mut pnav: Vec<String> = Vec::new();
-    let number_of_posts_vector = get_count_of_posts().await;
-    let _m = number_of_posts_vector;
+
+    let mut plinks: Vec<String> = vec![];
+    let mut pids: Vec<i32> = vec![];
+    let mut pnav: Vec<String> = vec![];
     let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await)
         % global_number_of_items_per_page_64()
         == 0
@@ -123,11 +107,8 @@ pub async fn home_gui() -> impl IntoResponse {
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
     let list_iter = s.map(|posts| {
-        //plinks = posts.iter()
-        //.map(|post| {post.post_title.clone()}).collect();
         let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
         let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-
         (v, v2)
     });
 
@@ -135,36 +116,31 @@ pub async fn home_gui() -> impl IntoResponse {
 
     let template = HomeTemplate {
         index_id: &pids,
-        index_title: String::from("Blogs"),
+        index_title: String::from("Posts"),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
         current_url_page: ".".to_string(),
     };
 
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
             StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to render template. Error {}", err),
+            format!("Failed to render {}", err),
         )
-            .into_response(),
-    }
+    })
 }
 
 pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) -> Redirect {
     let pool = get_connection_for_crud().await;
     let m = get_max_id_of_category().await;
-    let m2 = get_max(m);
-    let category_id = m2 + 1;
+    let category_id = get_max(m) + 1;
     let res =
         sqlx::query("insert into category_post(category_id,category_name) values (($1),($2))")
-            .bind(category_id) // category id
+            .bind(category_id)
             .bind(create_category.category_name)
             .execute(&pool)
             .await;
-
-    println!("Success ---> row {:?}", &res);
     Redirect::to("/admin/page/1")
 }
 
@@ -173,7 +149,6 @@ pub async fn update_posts_form(
     Form(update_post): Form<UpdatePost>,
 ) -> Redirect {
     let pool = get_connection_for_crud().await;
-
     println!("Form {}", update_post.post_title);
     let res =
         sqlx::query("update posts set post_title = ($1), post_body = ($2) where post_title = ($3)")
@@ -182,21 +157,17 @@ pub async fn update_posts_form(
             .bind(post_id)
             .execute(&pool)
             .await;
-
-    println!("Success ---> row {:?}", &res);
     Redirect::to("/posts")
 }
 
 pub async fn create_category_form_ui() -> impl IntoResponse {
     let template = NewCategoryTemplate {};
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
-            StatusCode::UNAUTHORIZED,
-            format!("Failed to render template. Error {}", err),
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to render {}", err),
         )
-            .into_response(),
-    }
+    })
 }
 
 pub async fn update_category_form_ui(Path(category_id): Path<String>) -> impl IntoResponse {
@@ -204,14 +175,12 @@ pub async fn update_category_form_ui(Path(category_id): Path<String>) -> impl In
         index_sec: category_id,
     };
 
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
-            StatusCode::UNAUTHORIZED,
-            format!("Failed to render template. Error {}", err),
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to render {}", err),
         )
-            .into_response(),
-    }
+    })
 }
 
 pub async fn update_category_form(
@@ -226,34 +195,32 @@ pub async fn update_category_form(
             .bind(category_id)
             .execute(&pool)
             .await;
-
-    println!("Success ---> row {:?}", &res);
     Redirect::to("/posts")
 }
 
 pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64 {
-    let temp = shared_state2.as_ref().as_ref();
+    println!("in fn");
+    let temp = shared_state2;
     let mut len: i64 = 0;
-    let _iter = temp.map(|posts| {
+    temp.iter().for_each(|posts| {
         len = posts.len() as i64;
     });
     len
 }
 pub fn get_vec_len_of_count(shared_state2: Result<Vec<Count>, Error>) -> i64 {
-    let mut len1: i64 = 15;
+    let mut len1: i64 = 0;
     let temp = shared_state2.as_ref();
-    let _iter = temp.map(|posts| posts.iter().map(|count| len1 = count.count));
+    temp.iter()
+        .for_each(|posts| posts.iter().for_each(|count| len1 = count.count));
     len1
 }
 
 pub fn get_max(shared_state2: Result<Vec<Max>, Error>) -> i32 {
     let mut len2: i32 = 0;
-    let iters = shared_state2.map(|posts| {
-        let _ = posts.iter().map(|count| {
+    shared_state2.iter().for_each(|posts| {
+        posts.iter().for_each(|count| {
             len2 = count.max;
         });
-        len2
     });
-    drop(iters);
     len2
 }
