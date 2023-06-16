@@ -27,11 +27,6 @@ pub async fn show_post(Path(post_id): Path<String>) -> impl IntoResponse {
         })
     });
 
-    // if template.post_title == "none" {
-    //     return (StatusCode::NOT_FOUND, "404 not found").into_response();
-    // }
-    println!("{}", template);
-
     template.render().map(|html| Html(html)).map_err(|err| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,

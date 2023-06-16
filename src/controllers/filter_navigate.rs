@@ -58,14 +58,12 @@ pub async fn admin_blog_pagination(
         current_url_page: ".".to_string(),
     };
 
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
             StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to render template. Error {}", err),
+            format!("Failed to render {}", err),
         )
-            .into_response(),
-    }
+    })
 }
 
 pub async fn blog_pagination(
@@ -74,7 +72,7 @@ pub async fn blog_pagination(
     let mut plinks: Vec<String> = vec![];
     let mut pids: Vec<i32> = vec![];
     let final_category = &category[0..category.len()];
-    let mut psec: Vec<String> = vec![]; // vec
+    let mut psec: Vec<String> = vec![];
     let mut pnav: Vec<String> = vec![];
     psec.clear();
     let psec = vec![

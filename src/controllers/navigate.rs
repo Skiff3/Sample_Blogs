@@ -55,14 +55,12 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
         page_nav_links: &pnav,
     };
 
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
             StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to render template. Error {}", err),
+            format!("Failed to render {}", err),
         )
-            .into_response(),
-    }
+    })
 }
 
 pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
