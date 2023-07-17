@@ -27,7 +27,7 @@ pub async fn login_user(
     };
     auth.login(&user_cred).await.unwrap();
     println!("Logged in {:?}", &auth.current_user);
-    Redirect::to("/admins")
+    Redirect::to("/posts")
 }
 
 pub async fn login_user_ui() -> impl IntoResponse {

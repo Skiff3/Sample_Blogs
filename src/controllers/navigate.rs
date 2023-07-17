@@ -1,5 +1,5 @@
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
-use crate::model::models::{get_count_of_posts, get_posts_per_page, HomeTemplate};
+use crate::model::models::{get_all_categories, get_count_of_posts, get_posts_per_page, HomeTemplate};
 use crate::{global_number_of_items_per_page, global_number_of_items_per_page_64, IndexTemplate};
 use askama::Template;
 use axum::{
@@ -14,15 +14,17 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
     let mut psec: Vec<String> = vec![];
     let mut pnav: Vec<String> = vec![];
     psec.clear();
-    let psec = vec![
-        "Category A".to_string(),
-        "Category B".to_string(),
-        "Category C".to_string(),
-        "No Category".to_string(),
-    ];
+    let category_list = get_all_categories().await;
+    let mut psec: Vec<String> = vec![];
+    category_list.iter().for_each(|categories| {
+        categories.iter().for_each(|category| {
+            psec.push(category.clone().category_name);
+        })
+    });
+
+    let page_number_inter: i64 = page_number.parse().unwrap();
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    println!("page starts from {}", offset_start);
     let s = get_posts_per_page(offset_start).await;
     let number_of_posts_vector = get_count_of_posts().await;
     let m = number_of_posts_vector;
@@ -34,9 +36,11 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
     };
 
-    (1..number_of_pages)
+    (1..number_of_pages+1)
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
+
+
 
     plinks.clear();
     let list_iter = s.map(|posts| {
@@ -49,7 +53,7 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
 
     let template = IndexTemplate {
         index_id: &pid,
-        index_title: String::from("Blogs"),
+        index_title: String::from("Posts"),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
@@ -63,18 +67,21 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
     })
 }
 
+
+
 pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     let mut plinks: Vec<String> = vec![];
     let mut psec: Vec<String> = vec![];
     let mut pid: Vec<i32> = vec![];
     let mut pnav: Vec<String> = vec![];
     psec.clear();
-    let psec = vec![
-        "Category A".to_string(),
-        "Category B".to_string(),
-        "Category C".to_string(),
-        "No Category".to_string(),
-    ];
+    let category_list = get_all_categories().await;
+    let mut psec: Vec<String> = vec![];
+    category_list.iter().for_each(|categories| {
+        categories.iter().for_each(|category| {
+            psec.push(category.clone().category_name);
+        })
+    });
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let s = get_posts_per_page(offset_start).await;
@@ -86,7 +93,7 @@ pub async fn pages(Path(page_number): Path<String>) -> impl IntoResponse {
     } else {
         get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
     };
-    (1..number_of_pages)
+    (1..number_of_pages+1)
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
     plinks.clear();

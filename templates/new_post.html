@@ -204,39 +204,27 @@ h4 {
     </div>
 
     <ul class="list-unstyled components">
-      <p>Manage Posts</p>
-      <li class="active">
-        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Posts</a>
-        <ul class="collapse list-unstyled" id="homeSubmenu">
-          <li>
-            <a href="post/new">Create New Post</a>
-          </li>
-          <li>
-            <a href="#">View All Posts</a>
-          </li>
-          <li>
-            <a href="category/new">Create New Category</a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a href="#">About</a>
-      </li>
-      <li>
-        <a href="#">Portfolio</a>
-      </li>
-      <li>
-        <a href="#">Contact</a>
-      </li>
-    </ul>
+      <p>Manage Posts and Categories</p>
 
-    <ul class="list-unstyled CTAs">
-      <li>
-        <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+      <li class="active">
+        <a href="http://0.0.0.0:4000/post/new">Create New Post</a>
       </li>
       <li>
-        <a href="/logout" class="article">Logout</a>
+        <a href="http://0.0.0.0:4000/posts">View All Posts</a>
       </li>
+
+      <li>
+        <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
+      </li>
+      <li>
+        <a href="http://0.0.0.0:4000/categories">View All Categories</a>
+      </li>
+      <ul class="list-unstyled CTAs">
+        <li>
+          <a href="/logout" class="article">Logout</a>
+        </li>
+      </ul>
+
     </ul>
   </nav>
 
@@ -247,13 +235,8 @@ h4 {
       <div class="container-fluid">
 
         <button type="button" id="sidebarCollapse" class="btn btn-info">
-          <i class="fas fa-align-left"></i>
-          <span>Show Menu</span>
+          <i class="fa fa-align-left"></i>
         </button>
-        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fas fa-align-justify"></i>
-        </button>
-
 
       </div>
     </nav>
@@ -275,12 +258,12 @@ h4 {
 
     <div class="mb-3">
     <label><b>Category</b></label><br/>
-    <select id="category_name" name="category_name">
-      <option id="category_name_gen_2">--Select--</option>
-      <option id="category_a">Category A</option>
-      <option id="category_b">Category B</option>
-      <option id="category_c">Category C</option>
-      <option id="category_no">Category D</option>
+        <select id="category" name="category_name" id="blog">
+      <option id="category_name_gen">--Select--</option>
+      {% let name = " " %}
+      {% for name in index_sec %}
+      <option id="category_name" name="category_name">{{ name }}</option>
+      {% endfor %}
     </select><br/><br/>
     </div>
 
@@ -293,4 +276,12 @@ h4 {
   </div>
 
 </body>
+<script>
+        function getval(sel){
+        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
+        let element  = document.getElementById("category");
+
+        element.value = sel.value;
+        }
+    </script>
 </html>

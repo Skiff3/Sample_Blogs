@@ -155,7 +155,7 @@ h1, h2, h3, h4, h5, h6 {
                 <a class="link-secondary" href="#" aria-label="Search">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img" viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
                 </a>
-                <a class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+                <a class="btn btn-sm btn-outline-secondary" href="/login">Login</a>
             </div>
         </div>
     </header>
@@ -181,7 +181,6 @@ h1, h2, h3, h4, h5, h6 {
                 <a class="p-2 link-secondary" href="#">Science</a>
                 <a class="p-2 link-secondary" href="#">Health</a>
                 <a class="p-2 link-secondary" href="#">Style</a>
-                <a class="p-2 link-secondary" href="/login">Login</a>
             </nav>
         </div>
 
@@ -218,7 +217,7 @@ h1, h2, h3, h4, h5, h6 {
                     <div class="col-md-6 px-0">
                         <h1 class="display-4 fst-italic"><i>{{item}}</i></h1>
                         <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
-                        <p class="lead mb-0"><a href="/post/{{item}}" class="text-white fw-bold">Continue reading...</a></p>
+                        <p class="lead mb-0"><a href="/posts/{{item}}" class="text-white fw-bold">Continue reading...</a></p>
                     </div>
                 </div>
                 {% endfor %}
@@ -287,7 +286,7 @@ h1, h2, h3, h4, h5, h6 {
             <ul class="pagination">
                 {% for i in page_nav_links %}
                 <li class="page-item">
-                    <a class="page-link" href="http://0.0.0.0:4000/{{current_url_page}}/page/{{ i }}" >{{ i }}</a>
+                    <a class="page-link" href="http://0.0.0.0:4000/page/{{ i }}" >{{ i }}</a>
                 </li><br/><br/>
                 {% endfor %}
             </ul>

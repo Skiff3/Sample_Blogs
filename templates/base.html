@@ -189,43 +189,26 @@ a.article:hover {
 		<!-- Sidebar  -->
 		<nav id="sidebar">
 			<div class="sidebar-header">
-				<h3>Blogs Admin Panel</h3>
+				<h3>Posts Admin Panel</h3>
 			</div>
 
 			<ul class="list-unstyled components">
-				<p>Manage Blogs</p>
-				<li class="active">
-					<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Blogs</a>
-					<ul class="collapse list-unstyled" id="homeSubmenu">
-						<li>
-							<a href="http://0.0.0.0:4000/post/new">Create New Blog</a>
-						</li>
-						<li>
-							<a href="http://0.0.0.0:4000/posts">View All Blogs</a>
-						</li>
-						<li>
-							<a href="http://0.0.0.0:4000/category/new">Create New Category</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="#">About</a>
-				</li>
-				<li>
-					<a href="#">Portfolio</a>
-				</li>
-				<li>
-					<a href="#">Contact</a>
-				</li>
-			</ul>
+				<p>Manage Posts and Categories</p>
 
-			<ul class="list-unstyled CTAs">
 				<li>
-					<a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+					<a href="http://0.0.0.0:4000/post/new">Create New Post</a>
+				</li>
+				<li class="active">
+					<a href="http://0.0.0.0:4000/posts">View All Posts</a>
+				</li>
+
+				<li>
+					<a href="http://0.0.0.0:4000/category/new">Create New Category</a>
 				</li>
 				<li>
-					<a href="/logout" class="article">Logout</a>
+					<a href="http://0.0.0.0:4000/categories">View All Categories</a>
 				</li>
+
 			</ul>
 		</nav>
 		<div id="content">
@@ -234,20 +217,15 @@ a.article:hover {
 				<div class="container-fluid">
 
 					<button type="button" id="sidebarCollapse" class="btn btn-info">
-						<i class="fas fa-align-left"></i>
-						<span>Show Menu</span>
+						<i class="fa fa-align-left"></i>
 					</button>
-					<button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<i class="fas fa-align-justify"></i>
-					</button>
-
 
 				</div>
 			</nav>
 
 		<div class="container">
 
-		<h2>Update the blog {{post_title}}</h2><br/><br/>
+		<h2>Update the post {{post_title}} {{post_ids}}</h2><br/><br/>
 <!--		<div id="Post">-->
 <!--		{% block post %}-->
 <!--		{% endblock %}-->
@@ -257,7 +235,7 @@ a.article:hover {
 <!--			<button type="submit">Delete Post</button>-->
 <!--		</form><br/><br/>-->
 <!--		<button type="submit" onclick="set_visible()" id="btn" >Update Post</button><br/><br/>-->
-		<form action="/update_post/{{ post_title }}" method="post" id="update_form">
+		<form action="/update_post/{{ post_ids }}" method="post" id="update_form">
 			<div class="mb-3">
 				<label><b>Post Title</b></label><br>
 				<input type="text" value="{{post_title}}" class="form-control" id="post_title"name="post_title" placeholder="Post Title">
@@ -270,10 +248,10 @@ a.article:hover {
 				<label><b>Category</b></label><br/>
 				<select id="category_name" name="category_name">
 					<option id="category_name_gen_2">--Select--</option>
-					<option id="category_a">Category A</option>
-					<option id="category_b">Category B</option>
-					<option id="category_c">Category C</option>
-					<option id="category_no">No Category</option>
+					{% let name = " " %}
+					{% for name in index_sec %}
+					<option id="sec">{{ name }}</option>
+					{% endfor %}
 				</select><br/><br/>
 			</div><br/><br/>
 			<button type="submit">Update Post</button>

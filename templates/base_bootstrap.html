@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>New Category</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
         rel="stylesheet"  type='text/css'>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <title>{{ post_title}}</title>
+  <link href="/assets/post.css" rel="stylesheet" type="text/css">
+
   <script>
     $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
@@ -52,7 +51,7 @@ a:focus {
 
 .navbar-btn {
     box-shadow: none;
-    outline: none;
+    outline: none !important;
     border: none;
 }
 
@@ -127,8 +126,8 @@ a[data-toggle="collapse"] {
 }
 
 ul ul a {
-    font-size: 0.9em ;
-    padding-left: 30px ;
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
     background: #6d7fcc;
 }
 
@@ -138,7 +137,7 @@ ul.CTAs {
 
 ul.CTAs a {
     text-align: center;
-    font-size: 0.9em;
+    font-size: 0.9em !important;
     display: block;
     border-radius: 5px;
     margin-bottom: 5px;
@@ -181,83 +180,121 @@ a.article:hover {
         display: none;
     }
 }
-.container {
-  padding: 2rem 0rem;
-}
-
-h4 {
-  margin: 2rem 0rem 1rem;
-}
-
-.table-image {
-  td, th {
-    vertical-align: middle;
-  }
-}
   </style>
 </head>
+
+
 <body>
 <div class="wrapper">
   <!-- Sidebar  -->
   <nav id="sidebar">
     <div class="sidebar-header">
-      <h3>Posts Admin Panel</h3>
+      <h3>Blogs Admin Panel</h3>
     </div>
 
     <ul class="list-unstyled components">
-      <p>Manage Posts and Categories</p>
-
-      <li>
-        <a href="http://0.0.0.0:4000/post/new">Create New Post</a>
-      </li>
+      <p>Manage Blogs</p>
       <li class="active">
-        <a href="http://0.0.0.0:4000/posts">View All Posts</a>
+        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Blogs</a>
+        <ul class="collapse list-unstyled" id="homeSubmenu">
+          <li>
+            <a href="http://0.0.0.0:4000/post/new">Create New Blog</a>
+          </li>
+          <li>
+            <a href="http://0.0.0.0:4000/posts">View All Blogs</a>
+          </li>
+          <li>
+            <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
+          </li>
+        </ul>
       </li>
-
       <li>
-        <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
+        <a href="#">Categories</a>
       </li>
       <li>
-        <a href="http://0.0.0.0:4000/categories">View All Categories</a>
+        <a href="#">Portfolio</a>
       </li>
+      <li>
+        <a href="#">Contact</a>
+      </li>
+    </ul>
 
+    <ul class="list-unstyled CTAs">
+      <li>
+        <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+      </li>
+      <li>
+        <a href="/logout" class="article">Logout</a>
+      </li>
     </ul>
   </nav>
-
-  <!-- Page Content  -->
   <div id="content">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
 
         <button type="button" id="sidebarCollapse" class="btn btn-info">
-          <i class="fa fa-align-left"></i>
+          <i class="fas fa-align-left"></i>
+          <span>Show Menu</span>
+        </button>
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-align-justify"></i>
         </button>
 
 
       </div>
     </nav>
+
     <div class="container">
-      <h2>Update Category</h2><br/><br/>
 
+      <h2>Update the blog {{post_title}}</h2><br/><br/>
+      <!--		<div id="Post">-->
+      <!--		{% block post %}-->
+      <!--		{% endblock %}-->
+      <!--		</div>-->
 
-      <!--			<label><b>Post Id</b></label>-->
-      <!--			<input type="number" placeholder="Enter Post Id" name="post_id">-->
-
-
-
-      <form action="/category/update/{{index_sec}}" method="post">
+      <!--		<form action="/delete_post/{{ post_title }}" method="get">-->
+      <!--			<button type="submit">Delete Post</button>-->
+      <!--		</form><br/><br/>-->
+      <!--		<button type="submit" onclick="set_visible()" id="btn" >Update Post</button><br/><br/>-->
+      <form action="/update_post/{{ post_title }}" method="post" id="update_form">
         <div class="mb-3">
-          <label><b>Category Name</b></label><br>
-          <input type="text" class="form-control" id="category_name"name="category_name" value="{{index_name}}" placeholder="Category Name">
+          <label><b>Post Title</b></label><br>
+          <input type="text" value="{{post_title}}" class="form-control" id="post_title"name="post_title" placeholder="Post Title">
         </div>
-
-        <button type="submit">Update Category</button><br/><br/><br/>
-
-
+        <div class="mb-3">
+          <label  class="form-label"><b>Post Body</b></label>
+          <textarea class="form-control" placeholder="{{post_body}}" id="post_body" name="post_body" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+          <label><b>Category</b></label><br/>
+          <select id="category_name" name="category_name">
+            <option id="category_name_gen_2">--Select--</option>
+            <option id="category_a">Category A</option>
+            <option id="category_b">Category B</option>
+            <option id="category_c">Category C</option>
+            <option id="category_no">No Category</option>
+          </select><br/><br/>
+        </div><br/><br/>
+        <button type="submit">Update Post</button>
       </form>
     </div>
   </div>
 </div>
 </body>
+<script>
+	function set_visible(){
+		const btn = document.getElementById('btn');
+
+		btn.addEventListener('click', () => {
+  		const form = document.getElementById('update_form');
+
+  		if (form.style.display === 'none') {
+    	form.style.display = 'block';
+  		} else {
+    			form.style.display = 'none';
+  		}
+	});
+}
+</script>
 </html>

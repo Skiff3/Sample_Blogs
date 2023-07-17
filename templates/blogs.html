@@ -5,6 +5,8 @@
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
+        rel="stylesheet"  type='text/css'>
   <title> {{ index_title }} </title>
   <script>
     $(document).ready(function () {
@@ -14,7 +16,7 @@
         });
   </script>
   <style>
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+    @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
@@ -47,7 +49,7 @@ a:focus {
 
 .navbar-btn {
     box-shadow: none;
-    outline: none !important;
+    outline: none;
     border: none;
 }
 
@@ -122,8 +124,8 @@ a[data-toggle="collapse"] {
 }
 
 ul ul a {
-    font-size: 0.9em
-    padding-left: 30px
+    font-size: 0.9em ;
+    padding-left: 30px ;
     background: #6d7fcc;
 }
 
@@ -133,10 +135,9 @@ ul.CTAs {
 
 ul.CTAs a {
     text-align: center;
-    font-size: 0.9em !important;
+    font-size: 0.9em;
     display: block;
     border-radius: 5px;
-
     margin-bottom: 5px;
 }
 
@@ -177,6 +178,48 @@ a.article:hover {
         display: none;
     }
 }
+.container {
+  padding: 2rem 0rem;
+}
+
+.table-image {
+  td, th {
+    vertical-align: middle;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
   </style>
 </head>
 
@@ -190,46 +233,24 @@ a.article:hover {
     </div>
 
     <ul class="list-unstyled components">
-      <p>Manage Posts</p>
-      <li class="active">
-        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Posts</a>
-        <ul class="collapse list-unstyled" id="homeSubmenu">
-          <li>
-            <a href="http://0.0.0.0:4000/posts">Create New Post</a>
-          </li>
-          <li>
-            <a href="http://0.0.0.0:4000/post/new">View All Posts</a>
-          </li>
-          <li>
-            <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a href="#">About</a>
-      </li>
-      <li>
-        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-        <ul class="collapse list-unstyled" id="pageSubmenu">
-          {% for i in page_nav_links %}
-          <li>
-            <a id="page_ids" onclick="go_to_pagination()" class="page-link" href="{{current_url_page}}/{{ i }}" >{{ i }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </li>
-      <li>
-        <a href="#">Portfolio</a>
-      </li>
-      <li>
-        <a href="#">Contact</a>
-      </li>
-    </ul>
+      <p>Manage Posts and Categories</p>
 
-    <ul class="list-unstyled CTAs">
       <li>
-        <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+        <a href="http://0.0.0.0:4000/post/new">Create New Post</a>
       </li>
+      <li class="active">
+        <a href="http://0.0.0.0:4000/posts">View All Posts</a>
+      </li>
+
+      <li>
+        <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
+      </li>
+      <li>
+        <a href="http://0.0.0.0:4000/categories">View All Categories</a>
+      </li>
+
+    </ul>
+    <ul class="list-unstyled CTAs">
       <li>
         <a href="/logout" class="article">Logout</a>
       </li>
@@ -244,17 +265,13 @@ a.article:hover {
 
         <button type="button" id="sidebarCollapse" class="btn btn-info">
           <i class="fa fa-align-left"></i>
-          <span>Show/Hide </span>
-        </button>
-        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fa fa-align-justify"></i>
         </button>
 
       </div>
     </nav>
 
-    <h2>Displaying all blogs</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <h2>Posts</h2>
+    <p>The posts belong to different categories such as Category A, Category B, Category C, Category D. A post belongs to a single category but a category can have more than one post.</p>
 
 <!--    <div class="line"></div>-->
 
@@ -276,6 +293,7 @@ a.article:hover {
 <form>
   <label for="blog">Choose a category:</label>
   <select onchange="getval(this);" id="category" name="blog" id="blog">
+    <option id="category_name_gen">All</option>
     {% let name = " " %}
     {% for name in index_sec %}
     <option id="sec">{{ name }}</option><br/>
@@ -285,68 +303,52 @@ a.article:hover {
 </form>
 <br><br>
 
+    <div>
+      <a href="http://0.0.0.0:4000/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
+    </div><br/>
+
 
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th scope="col">Post Title</th>
-              <th scope="col">Post Body</th>
-              <th scope="col">Timestamp</th>
-              <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for item in index_links %}
-            <tr>
-              <td><a href="/post/{{ item}}">{{item}}</a> </td>
-              <td>Description</td>
-              <td>20th May</td>
-              <td>
-                <a href="/post/{{ item}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                <a href="/delete/{{item}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-              </td>
-            </tr>
-            {% endfor %}
+          <div class="row">
+            <div class="column">
+              <table style="width:100%" class="table">
+                <thead>
+                <tr style="height:60px">
+                  <th scope="col">Post Title</th>
+                  <th scope="col">Post Body</th>
+                  <th scope="col">Timestamp</th>
+                </tr>
+                </thead>
+                <tr style="height:63px">
+                  {% for item in index_links %}
+                  <td style="height:63px"><a href="/post/{{ item}}">{{item}}</a> </td>
+                  <td style="height:63px">Description</td>
+                  <td style="height:63px">20th May</td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+            <div class="column">
+              <table class="table">
+                <tr style="height:60px">
+                  <th>Actions</th>
+                </tr>
+                <tr style="height:65px">
+                  {% for items in index_id %}
+                  <td>
+                    <a href="/post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                    <a href="#" type="button" class="btn btn-danger" onclick="confirm_delete(this)"><i class="fa fa-trash-o"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div><br/>
 
-            </tbody>
-          </table><br/><br/><br/>
-
-          <div>
-            <a href="http://0.0.0.0:4000/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
-          </div><br/><br/>
 
 
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th scope="col">Category Id</th>
-              <th scope="col">Category Title</th>
-              <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for items in index_sec%}
-            <tr>
-              <td><a href="#">{{items}}</a> </td>
-              <td>Description</td>
-              <td>20th May</td>
-              <td>
-                <a href="http://0.0.0.0:4000//post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                <a href="http://0.0.0.0:4000//delete/category/{{items}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-              </td>
-            </tr>
-            {% endfor %}
-
-            </tbody>
-          </table><br/><br/><br/>
-        </div>
-
-      </div>
-      <div>
-        <a href="http://0.0.0.0:4000/category/new" type="button" class="btn btn-primary">New Category<i class="fa fa-new"></i></a>
       </div><br/><br/>
     </div>
     <br/><br/><br/>
@@ -361,18 +363,29 @@ a.article:hover {
 </nav>
   </div>
 </div>
+</div>
 </body>
 
     <script>
         function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/posts/category/"+sel.value);
+        alert(sel.value);
+        if(sel.value === "Category A"){
+        alert("equal")
+      		}
+        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
         document.getElementById("page_id").href = newString;
         let element  = document.getElementById("category");
         element.value = sel.value;
         }
 
-        function go_to_pagination(val){
-
-        }
+         function confirm_delete(item){
+         alert("alert"+item)
+      		if(confirm("Confirm delete") == true){
+      		window.location.replace("http://0.0.0.0:4000/delete/"+item);
+      		}
+      		else{
+      		alert("Not deleted")
+      		}
+      		}
     </script>
 </html>

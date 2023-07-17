@@ -1,0 +1,2 @@
+-- Add migration script here
+create table blogs(blog_id serial primary key,post_id serial, category_id serial, foreign key(post_id) references posts, foreign key(category_id) references category_post);

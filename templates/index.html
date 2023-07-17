@@ -148,8 +148,8 @@ a.download {
 
 a.article,
 a.article:hover {
-    background: #6d7fcc !important;
-    color: #fff !important;
+    background: #6d7fcc
+    color: #fff
 }
 
 /* ---------------------------------------------------
@@ -191,6 +191,39 @@ h4 {
     vertical-align: middle;
   }
 }
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
   </style>
 	</head>
 
@@ -205,46 +238,24 @@ h4 {
 					</div>
 
 					<ul class="list-unstyled components">
-						<p>Manage Posts</p>
-						<li class="active">
-							<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Posts</a>
-							<ul class="collapse list-unstyled" id="homeSubmenu">
+						<p>Manage Posts and Categories</p>
+
 								<li>
 									<a href="http://0.0.0.0:4000/post/new">Create New Post</a>
 								</li>
-								<li>
+								<li class="active">
 									<a href="http://0.0.0.0:4000/posts">View All Posts</a>
 								</li>
-								<li>
-									<a href="http://0.0.0.0:4000/category/new">Create New Category</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="#">About</a>
-						</li>
-						<!--				<li>-->
-						<!--					<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>-->
-						<!--					<ul class="collapse list-unstyled" id="pageSubmenu">-->
-						<!--						{% for i in page_nav_links %}-->
-						<!--						<li>-->
-						<!--							<a id="page_ids" onclick="go_to_pagination()" class="page-link"  href="/page/{{ i }}" >Example Pages</a>-->
-						<!--						</li>-->
-						<!--						{% endfor %}-->
-						<!--					</ul>-->
-						<!--				</li>-->
-						<li>
-							<a href="#">Portfolio</a>
-						</li>
-						<li>
-							<a href="#">Contact</a>
-						</li>
-					</ul>
 
+							<li>
+								<a href="http://0.0.0.0:4000/category/new">Create New Category</a>
+							</li>
+							<li>
+								<a href="http://0.0.0.0:4000/categories">View All Categories</a>
+							</li>
+
+					</ul>
 					<ul class="list-unstyled CTAs">
-						<li>
-							<a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
-						</li>
 						<li>
 							<a href="/logout" class="article">Logout</a>
 						</li>
@@ -258,18 +269,14 @@ h4 {
 				<div class="container-fluid">
 
 					<button type="button" id="sidebarCollapse" class="btn btn-info">
-						<i class="fas fa-align-left"></i>
-						<span>Show/Hide Menu</span>
-					</button>
-					<button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<i class="fas fa-align-justify"></i>
+						<i class="fa fa-align-left"></i>
 					</button>
 
 				</div>
 			</nav>
 
 			<h2>Posts</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<p>The posts belong to different categories such as Category A, Category B, Category C, Category D. A post belongs to a single category but a category can have more than one post.</p>
 
 			<div class="container">
 
@@ -285,6 +292,10 @@ h4 {
 		</form>
 		<br><br>
 
+				<div>
+					<a href="http://0.0.0.0:4000/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
+				</div><br/>
+
 
 <!--		<div class="links">-->
 <!--			<ul>-->
@@ -297,62 +308,47 @@ h4 {
 				<div class="container">
 					<div class="row">
 						<div class="col-12">
-							<table class="table table-bordered">
-								<thead>
-								<tr>
-									<th scope="col">Post Title</th>
-									<th scope="col">Post Body</th>
-									<th scope="col">Timestamp</th>
-									<th scope="col">Actions</th>
-								</tr>
-								</thead>
-								<tbody>
-								{% for item in index_links %}
-								<tr>
-									<td><a href="/post/{{ item}}">{{item}}</a> </td>
-									<td>Description</td>
-									<td>20th May</td>
-									<td>
-										<a href="/post/{{ item}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-										<a href="/delete/{{item}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-									</td>
 
-								</tr>
-								{% endfor %}
+							<div class="row">
+								<div class="column">
+									<table style="width:100%" class="table">
+										<thead>
+										<tr style="height:60px">
+											<th scope="col">Post Title</th>
+											<th scope="col">Post Body</th>
+											<th scope="col">Timestamp</th>
+										</tr>
+										</thead>
+										<tr style="height:63px">
+											{% for item in index_links %}
+											<td style="height:63px"><a href="/post/{{ item}}">{{item}}</a> </td>
+											<td style="height:63px">Description</td>
+											<td style="height:63px">20th May</td>
+										</tr>
+										{% endfor %}
+									</table>
+								</div>
+								<div class="column">
+									<table class="table">
+										<tr style="height:60px">
+											<th>Actions</th>
+										</tr>
+										<tr style="height:65px">
+											{% for items in index_id %}
+											<td>
+												<a href="/post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete(this)"><i class="fa fa-trash-o"></i></a>
+											</td>
+										</tr>
+										{% endfor %}
+									</table>
+								</div>
+							</div>
 
-								</tbody>
-							</table><br/><br/><br/>
-
-							<div>
-								<a href="http://0.0.0.0:4000/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
-							</div><br/><br/>
 
 
-							<table class="table table-bordered">
-								<thead>
-								<tr>
-									<th scope="col">Category Id</th>
-									<th scope="col">Action</th>
-								</tr>
-								</thead>
-								<tbody>
-								{% for items in index_sec%}
-								<tr>
-									<td><a href="#">{{items}}</a> </td>
-									<td>
-										<a href="http://0.0.0.0:4000/category/update/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-										<a href="http://0.0.0.0:4000/delete/category/{{items}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-									</td>
-								</tr>
-								{% endfor %}
-
-								</tbody>
-							</table><br/><br/><br/>
 						</div>
 
-					</div>
-					<div>
-						<a href="http://0.0.0.0:4000/category/new" type="button" class="btn btn-primary">New Category<i class="fa fa-new"></i></a>
 					</div><br/><br/>
 				</div>
 	<br/><br/><br/>
@@ -411,14 +407,58 @@ h4 {
 </div>
 		</div>
 	</div>
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	</body>
 
 	<script>
         function getval(sel){
+        alert(sel.value);
+        if(sel.value === "Category A"){
+        let x= 1;
+      		}
+      		else if (sel.value === "Category B"){
+      		let x = 2;
+      		}
+      		else if (sel.value === "Category C"){
+      		let x = 3;
+      		}
+      		else if (sel.value === "Category D"){
+      		let x = 4;
+      		}
+      		else{
+      		let x = 5;
+      		}
         window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
         let element  = document.getElementById("category");
 
         element.value = sel.value;
+        }
+         function confirm_delete(item){
+         alert("alert")
+      		if(confirm("Confirm delete") == true){
+      		window.location.replace("http://0.0.0.0:4000/delete/"+item);
+      		}
+      		else{
+      		alert("Not deleted")
+      		}
         }
     </script>
 </html>

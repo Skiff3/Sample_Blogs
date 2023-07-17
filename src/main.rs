@@ -1,3 +1,5 @@
+extern crate core;
+
 mod authentication;
 mod controllers;
 mod model;
@@ -5,16 +7,12 @@ mod model;
 use crate::authentication::login::{
     admin_gui, login_user, login_user_ui, register_user, register_user_ui,
 };
-use crate::controllers::controller_post::show_post;
+use crate::controllers::controller_post::{show_post, show_posts};
 use crate::controllers::filter_navigate::{admin_blog_pagination, blog_pagination};
 use crate::controllers::filter_post::{admin_blogs, blogs};
 use crate::controllers::index::index;
 use crate::controllers::navigate::{page, pages};
-use crate::controllers::posts_crud_controller::{
-    create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui,
-    delete_categories_form, delete_posts_form, home_gui, update_category_form,
-    update_category_form_ui, update_posts_form,
-};
+use crate::controllers::posts_crud_controller::{create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui, delete_categories_form, delete_posts_form, home_gui, show_all_categories, show_all_categories_with_pagination, update_category_form, update_category_form_ui, update_posts_form};
 use crate::model::models::{get_connection, BlogTemplate, IndexTemplate};
 use axum::response::Redirect;
 use axum::routing::post;
@@ -31,12 +29,12 @@ use sqlx::Error;
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
+use sqlx::error::DatabaseError;
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 
 #[derive(Deserialize)]
 pub struct CreatePost {
-    // pub post_id: i32,
     pub post_title: String,
     pub post_body: String,
     pub category_name: String,
@@ -44,7 +42,6 @@ pub struct CreatePost {
 
 #[derive(Deserialize)]
 pub struct CreateCategory {
-    // pub post_id: i32,
     pub category_name: String,
 }
 
@@ -52,6 +49,7 @@ pub struct CreateCategory {
 pub struct UpdatePost {
     pub post_title: String,
     pub post_body: String,
+    pub category_name: String,
 }
 
 #[derive(Deserialize)]
@@ -110,7 +108,7 @@ enum Role {
 type AuthContext = axum_login::extractors::AuthContext<i64, User, AuthMemoryStore<i64, User>>;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> std::result::Result<(),sqlx::Error> {
     let secret = rand::thread_rng().gen::<[u8; 64]>();
 
     let session_store = SessionMemoryStore::new();
@@ -123,7 +121,6 @@ async fn main() {
 
     let user = User::get_rusty_user();
     store.write().await.insert(user.get_id(), user.clone());
-    println!("{}", user.name);
 
     let user_store = AuthMemoryStore::new(&store);
     let auth_layer = AuthLayer::new(user_store, &secret);
@@ -132,7 +129,7 @@ async fn main() {
     let user1: User = User {
         id: 2,
         name: "Manny".to_string(),
-        password_hash: "password".to_string(), // difference between template, layout and theme.
+        password_hash: "password".to_string(),
     };
     user_vector.push(user1);
     async fn logout_handler(mut auth: AuthContext) -> Redirect {
@@ -140,17 +137,14 @@ async fn main() {
         Redirect::to("/login")
     }
 
-    let posts = get_connection().await;
-    let shared_state = Arc::new(posts);
-
-    let admin_blog_routes = Router::new() // reg log in log out email pass user table - username, email, pass - encrypted.  crates.
+    let admin_blog_routes = Router::new()
         .route("/admin/posts/category/:category", get(admin_blogs))
         .route(
             "/admin/posts/category/:category/pages/:page_number",
             get(admin_blog_pagination),
         );
 
-    let blog_routes = Router::new() // reg log in log out email pass user table - username, email, pass - encrypted.  crates.
+    let blog_routes = Router::new()
         .route("/posts/category/:category", get(blogs))
         .route(
             "/posts/category/:category/pages/:page_number",
@@ -159,13 +153,14 @@ async fn main() {
 
     let app = Router::new()
         .route("/posts", get(index))
-        .with_state(shared_state)
+        .route("/categories", get(show_all_categories))
+        .route("/categories/:page_number", get(show_all_categories_with_pagination))
         .route("/post/:post_id", get(show_post))
         .route("/admin/page/:page_number", get(page))
         .merge(admin_blog_routes)
         .route(
             "/post/new",
-            get(create_posts_form_ui).post(create_posts_form),
+            get(create_posts_form_ui).post(create_posts_form)
         )
         .route("/delete/:post_id", get(delete_posts_form))
         .route("/delete/category/:category_id", get(delete_categories_form))
@@ -179,7 +174,7 @@ async fn main() {
             get(create_category_form_ui).post(create_catgories_form),
         )
         .route("/admins", get(admin_gui))
-        .route_layer(RequireAuthorizationLayer::<i64, User>::login())
+        //.route_layer(RequireAuthorizationLayer::<i64, User>::login())
         .route("/", get(home_gui))
         .route("/page/:page_number", get(pages))
         .merge(blog_routes)
@@ -187,6 +182,8 @@ async fn main() {
         .route("/register/new", get(register_user_ui))
         .route("/login", get(login_user_ui).post(login_user))
         .route("/logout", get(logout_handler))
+        .route("/posts/:post_id", get(show_posts))
+        //.route("/post/main", get(create_guest_post_ui))
         .layer(Extension(user.clone()))
         .layer(auth_layer)
         .layer(session_layer)
@@ -194,6 +191,7 @@ async fn main() {
 
     axum::Server::bind(&"0.0.0.0:4000".parse().unwrap())
         .serve(app.into_make_service())
-        .await
-        .unwrap();
+        .await;
+
+    Ok(())
 }
