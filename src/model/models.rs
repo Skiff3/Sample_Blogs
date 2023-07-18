@@ -156,6 +156,11 @@ pub struct Category_Id {
     pub category_id: i32,
 }
 
+#[derive(FromRow, Debug, Clone)]
+pub struct Category_Name {
+    pub category_name: String,
+}
+
 #[derive(Template)]
 #[template(path = "index.html")]
 pub struct IndexTemplate<'a> {
@@ -232,6 +237,16 @@ pub async fn get_category_id_by_name(category_name:String) -> Vec<Category_Id> {
 
     let res = sqlx::query_as::<_, Category_Id>("select category_id from category_post where category_name = ($1);")
         .bind(category_name)
+        .fetch_all(&pool)
+        .await;
+    res.unwrap()
+}
+
+pub async fn get_category_name_by_id(category_id:i32) -> Vec<Category_Name> {
+    let pool = get_connection_for_crud().await;
+
+    let res = sqlx::query_as::<_, Category_Name>("select category_name from category_post where category_id = ($1);")
+        .bind(category_id)
         .fetch_all(&pool)
         .await;
     res.unwrap()

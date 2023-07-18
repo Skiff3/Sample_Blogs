@@ -1,7 +1,7 @@
 use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, Blog, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, UpdateCategory, UpdateCategoryTemplate, CategoryTemplate, CategoryTemplatePagination, get_count_of_categories, get_categories_per_page, get_all_categories_with_limit, get_category_id_by_name};
+use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, Blog, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, UpdateCategory, UpdateCategoryTemplate, CategoryTemplate, CategoryTemplatePagination, get_count_of_categories, get_categories_per_page, get_all_categories_with_limit, get_category_id_by_name, get_category_name_by_id};
 use crate::{global_number_of_items_per_page_64, CreateCategory, CreatePost, UpdatePost, global_number_of_items_per_page};
 use askama::Template;
 use axum::extract::Path;
@@ -296,19 +296,25 @@ pub async fn show_all_categories_with_pagination(Path(page_number): Path<String>
 
 pub async fn update_category_form_ui(Path(category_id): Path<i32>) -> impl IntoResponse {
     let categoory_ids = category_id;
-    let mut category_names = "".to_string();
-    if categoory_ids == 1 {
-        category_names = "Category A".to_string();
+    let mut temp_category = " ".to_string();
+    let temp_string = get_category_name_by_id(category_id).await;
+    let iter = temp_string.iter();
+    for i in iter{
+        temp_category = i.category_name.clone();
     }
-    else if categoory_ids == 2 {
-        category_names = "Category B".to_string();
-    }
-    else if categoory_ids == 3 {
-        category_names = "Category C".to_string();
-    }
-    else  {
-        category_names = "Category D".to_string();
-    }
+    let mut category_names = temp_category;
+    // if categoory_ids == 1 {
+    //     category_names = "Category A".to_string();
+    // }
+    // else if categoory_ids == 2 {
+    //     category_names = "Category B".to_string();
+    // }
+    // else if categoory_ids == 3 {
+    //     category_names = "Category C".to_string();
+    // }
+    // else  {
+    //     category_names = "Category D".to_string();
+    // }
     let template = UpdateCategoryTemplate {
         index_name: category_names.to_string(),
         index_sec: category_id,
