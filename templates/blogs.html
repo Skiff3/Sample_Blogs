@@ -339,7 +339,7 @@ th, td {
                   {% for items in index_id %}
                   <td>
                     <a href="/post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                    <a href="#" type="button" class="btn btn-danger" onclick="confirm_delete(this)"><i class="fa fa-trash-o"></i></a>
+                    <a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>
                   </td>
                 </tr>
                 {% endfor %}

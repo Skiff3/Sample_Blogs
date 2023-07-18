@@ -57,7 +57,7 @@ pub async fn show_posts(Path(post_name): Path<String>) -> impl IntoResponse {
             psec.push(category.clone().category_name);
         })
     });
-    let mut template = GuestTemplate {
+    let template = GuestTemplate {
         post_title: &post_name,
         post_description: "Description of the post in detail",
         post_body: "Description of the post in detail",

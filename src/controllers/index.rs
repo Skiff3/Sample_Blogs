@@ -1,11 +1,11 @@
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::global_number_of_items_per_page_64;
-use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, IndexTemplate, Post};
+use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, IndexTemplate};
 use askama::Template;
 use axum::response::IntoResponse;
-use axum::{extract::State, http::StatusCode, response::Html};
-use sqlx::Error;
-use std::sync::Arc;
+use axum::{http::StatusCode, response::Html};
+
+
 use axum_macros::debug_handler;
 
 #[debug_handler]
@@ -43,14 +43,6 @@ pub async fn index() -> impl IntoResponse {
         page_nav_links: &pnav,
     };
 
-    // delete from category_post where category_id in
-    // (
-    //     select c.category_id from category_post c inner join
-    // blogs b on c.category_id = b.category_id
-    // inner join posts p
-    // on p.post_id = b.post_id
-    // where p.post_id = 1
-    // )
 
     template.render().map(|html| Html(html)).map_err(|err| {
         (

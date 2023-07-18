@@ -13,7 +13,7 @@ use crate::controllers::filter_post::{admin_blogs, blogs};
 use crate::controllers::index::index;
 use crate::controllers::navigate::{page, pages};
 use crate::controllers::posts_crud_controller::{create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui, delete_categories_form, delete_posts_form, home_gui, show_all_categories, show_all_categories_with_pagination, update_category_form, update_category_form_ui, update_posts_form};
-use crate::model::models::{get_connection, BlogTemplate, IndexTemplate};
+use crate::model::models::{BlogTemplate, IndexTemplate};
 use axum::response::Redirect;
 use axum::routing::post;
 use axum::{routing::get, Extension, Router};
@@ -21,15 +21,15 @@ use axum_login::{
     axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer},
     memory_store::MemoryStore as AuthMemoryStore,
     secrecy::SecretVec,
-    AuthLayer, AuthUser, RequireAuthorizationLayer,
+    AuthLayer, AuthUser,
 };
 use rand::Rng;
 use serde::Deserialize;
-use sqlx::Error;
+
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
-use sqlx::error::DatabaseError;
+
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 

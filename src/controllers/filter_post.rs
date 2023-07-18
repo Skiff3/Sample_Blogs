@@ -1,4 +1,4 @@
-use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_count_of_posts, get_filtered_from_database_by_category, HomeFilterTemplate, HomeTemplate};
+use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_filtered_from_database_by_category, HomeFilterTemplate};
 use crate::{BlogTemplate, global_number_of_items_per_page_64};
 use askama::Template;
 use axum::{
@@ -8,7 +8,7 @@ use axum::{
 };
 use std::sync::Arc;
 
-use crate::controllers::posts_crud_controller::{get_vec_len, get_vec_len_of_count};
+use crate::controllers::posts_crud_controller::{get_vec_len_of_count};
 
 pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
     let mut psec: Vec<String> = vec![];
@@ -25,7 +25,6 @@ pub async fn admin_blogs(Path(category): Path<String>) -> impl IntoResponse {
     let string_b: &str = "/pages";
     let current_url = string_a + string_b;
     let posts2 = get_filtered_from_database_by_category(category.clone()).await;
-    //let ted = count_of_get_filtered_from_database_by_category(category.clone()).await;
     let number_of_posts_vector = count_of_get_filtered_from_database_by_category(category).await;
     let shared_state2 = Arc::new(posts2);
     let m2 = get_vec_len_of_count(number_of_posts_vector);
@@ -87,7 +86,7 @@ pub async fn blogs(Path(category): Path<String>) -> impl IntoResponse {
     shared_state2
         .clone()
         .iter()
-        .for_each(|posts| posts.iter().for_each(|post| {}));
+        .for_each(|posts| posts.iter().for_each(|_post| {}));
     let temp = shared_state2.as_ref().as_ref();
     let list_iter = temp.map(|posts| {
         let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();

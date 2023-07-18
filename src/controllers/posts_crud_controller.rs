@@ -1,18 +1,18 @@
 use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, Blog, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, UpdateCategory, UpdateCategoryTemplate, CategoryTemplate, GuestTemplate, CategoryTemplatePagination, get_count_of_categories, get_categories_per_page, get_all_categories_with_limit, get_category_id_by_name};
+use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, Blog, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, UpdateCategory, UpdateCategoryTemplate, CategoryTemplate, CategoryTemplatePagination, get_count_of_categories, get_categories_per_page, get_all_categories_with_limit, get_category_id_by_name};
 use crate::{global_number_of_items_per_page_64, CreateCategory, CreatePost, UpdatePost, global_number_of_items_per_page};
 use askama::Template;
 use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect};
-use axum::routing::get;
+
 use axum::Form;
 use std::vec::Vec;
-use rand::Rng;
-use serde::de::Unexpected::Str;
-use sqlx::postgres::{PgPoolOptions, PgQueryResult};
+
+
+use sqlx::postgres::{PgPoolOptions};
 use sqlx::{Error, Pool, Postgres };
 use std::string::String;
 
@@ -53,7 +53,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> Redirect 
     }
     let m = get_max_id_of_post().await;
     let post_id = (get_max(m)) + 1;
-    let res= sqlx::query("insert into posts(post_id,post_title,post_body,post_description,category_id) values (($1),($2),($3),($4),($5))")
+    let _res= sqlx::query("insert into posts(post_id,post_title,post_body,post_description,category_id) values (($1),($2),($3),($4),($5))")
         .bind(post_id)
         .bind(create_post.post_title)
         .bind(create_post.post_body)
@@ -62,7 +62,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> Redirect 
         .execute(&pool)
         .await;
 
-    let res= sqlx::query("insert into blogs(blog_id,post_id,category_id) values (($1),($2),($3))")
+    let _res= sqlx::query("insert into blogs(blog_id,post_id,category_id) values (($1),($2),($3))")
         .bind(post_id+100)
         .bind(post_id.clone())
         .bind(category_id_from_vec)
@@ -75,7 +75,7 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> Redirect 
 pub async fn delete_posts_form(Path(post_id): Path<i32>) -> Redirect {
     let pool = get_connection_for_crud().await;
     println!("Form {}", post_id);
-    let res = sqlx::query("delete from posts where post_id = ($1)")
+    let _res = sqlx::query("delete from posts where post_id = ($1)")
         .bind(post_id)
         .execute(&pool)
         .await;
@@ -84,7 +84,7 @@ pub async fn delete_posts_form(Path(post_id): Path<i32>) -> Redirect {
 
 pub async fn delete_categories_form(Path(category_id): Path<i32>) -> Redirect {
     let pool = get_connection_for_crud().await;
-    let res = sqlx::query("delete from category_post where category_id = ($1)")
+    let _res = sqlx::query("delete from category_post where category_id = ($1)")
         .bind(category_id)
         .execute(&pool)
         .await;
@@ -106,14 +106,6 @@ pub async fn home_gui() -> impl IntoResponse {
     let mut plinks: Vec<String> = vec![];
     let mut pids: Vec<i32> = vec![];
     let mut pnav: Vec<String> = vec![];
-    // let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await)
-    //     % global_number_of_items_per_page_64()
-    //     == 0
-    // {
-    //     get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
-    // } else {
-    //     get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
-    // };
     let number_of_pages = (get_vec_len_of_count(get_count_of_posts().await) + 2)/ global_number_of_items_per_page_64();
     (1..number_of_pages+1)
         .into_iter()
@@ -147,7 +139,7 @@ pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) 
     let pool = get_connection_for_crud().await;
     let m = get_max_id_of_category().await;
     let category_id = get_max(m) + 1;
-    let res =
+    let _res =
         sqlx::query("insert into category_post(category_id,category_name) values (($1),($2))")
             .bind(category_id)
             .bind(create_category.category_name)
@@ -170,9 +162,7 @@ pub async fn update_posts_form(
     }
     let category = m1;
     println!("Form {}", update_post.post_title);
-    let res =
-    //update p set post_title=($1),, post_body = ($2), category_id=($3) from posts p inner join blogs b on p.post_id = b.post_id
-    // inner jpin category_post c on p.category_id = c.category_id where post_id = ($4);
+    let _res =
         sqlx::query("update posts set post_title=($1), post_body = ($2), category_id= ($3) where post_id = ($4) ;")
             .bind(update_post.post_title)
             .bind(update_post.post_body)
@@ -188,7 +178,7 @@ pub async fn update_posts_form(
     Redirect::to("/posts")
 }
 
-pub async fn update_posts_form2( //e
+pub async fn update_posts_form2(
     Path(post_id): Path<i32>,
     Form(update_post): Form<UpdatePost>,
 ) -> Redirect {
@@ -201,9 +191,7 @@ pub async fn update_posts_form2( //e
     }
     let category = m1;
     println!("Form {}", update_post.post_title);
-    let res =
-        //update p set post_title=($1),, post_body = ($2), category_id=($3) from posts p inner join blogs b on p.post_id = b.post_id
-        // inner jpin category_post c on p.category_id = c.category_id where post_id = ($4);
+    let _res =
         sqlx::query("  update posts set post_title=($1), post_body = ($2), category_id= ($3) from posts p inner join blogs b on p.post_id = b.post_id where p.post_id = ($4) ;")
             .bind(update_post.post_title)
             .bind(update_post.post_body)
@@ -223,16 +211,6 @@ pub async fn create_category_form_ui() -> impl IntoResponse {
         )
     })
 }
-//
-// pub async fn create_guest_post_ui() -> impl IntoResponse {
-//     let template = GuestTemplate {};
-//     template.render().map(|html| Html(html)).map_err(|err| {
-//         (
-//             StatusCode::INTERNAL_SERVER_ERROR,
-//             format!("Failed to render {}", err),
-//         )
-//     })
-// }
 
 pub async fn show_all_categories() -> impl IntoResponse {
     let mut psec = vec![];
@@ -280,7 +258,7 @@ pub async fn show_all_categories() -> impl IntoResponse {
 pub async fn show_all_categories_with_pagination(Path(page_number): Path<String>) -> impl IntoResponse {
     let mut psec = vec![];
     let mut category_ids = vec![];
-    let category_list = get_all_categories_with_limit().await;
+    let _category_list = get_all_categories_with_limit().await;
     //let s = get_connection().await;
     let mut pnav= vec![];
     let page_number_integer: i32 = page_number.parse().unwrap();
@@ -298,7 +276,7 @@ pub async fn show_all_categories_with_pagination(Path(page_number): Path<String>
     (1..number_of_pages+1)
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
-    let temp = s.as_ref();
+    let _temp = s.as_ref();
     let template = CategoryTemplatePagination {
         index_id: &vec![],
         category_id: &category_ids,
@@ -317,7 +295,7 @@ pub async fn show_all_categories_with_pagination(Path(page_number): Path<String>
 }
 
 pub async fn update_category_form_ui(Path(category_id): Path<i32>) -> impl IntoResponse {
-    let mut categoory_ids = category_id;
+    let categoory_ids = category_id;
     let mut category_names = "".to_string();
     if categoory_ids == 1 {
         category_names = "Category A".to_string();
@@ -349,15 +327,13 @@ pub async fn update_category_form(
     Form(update_category): Form<UpdateCategory>,
 ) -> Redirect {
     let pool = get_connection_for_crud().await;
-    let res =
+    let _res =
         sqlx::query("update category_post set category_name = ($1) where category_id = ($2)")
             .bind(update_category.category_name)
             .bind(category_id)
             .execute(&pool)
             .await;
     Redirect::to("/posts")
-   // Ok(Redirect::to("/posts"))
-    // Result<(),()>
 }
 
 pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64 {

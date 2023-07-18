@@ -4,7 +4,7 @@ use axum_login::axum_sessions::async_session::serde::Deserialize;
 
 use crate::controllers::posts_crud_controller::get_connection_for_crud;
 use sqlx::*;
-use tokio::select;
+
 
 mod filters {
     pub fn rmdashes(title: &str) -> askama::Result<String> {
@@ -230,7 +230,7 @@ pub async fn get_all_categories() -> std::result::Result<Vec<Category>, Error> {
 pub async fn get_category_id_by_name(category_name:String) -> Vec<Category_Id> {
     let pool = get_connection_for_crud().await;
 
-    let mut res = sqlx::query_as::<_, Category_Id>("select category_id from category_post where category_name = ($1);")
+    let res = sqlx::query_as::<_, Category_Id>("select category_id from category_post where category_name = ($1);")
         .bind(category_name)
         .fetch_all(&pool)
         .await;

@@ -1,4 +1,4 @@
-use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_count_of_posts, get_filtered_from_database, HomeFilterTemplate, HomeTemplate};
+use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_filtered_from_database, HomeFilterTemplate};
 use crate::{global_number_of_items_per_page, BlogTemplate, global_number_of_items_per_page_64};
 use askama::Template;
 use axum::{
@@ -7,10 +7,10 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::sync::Arc;
-use cookie::time::macros::date;
-use rand::thread_rng;
 
-use crate::controllers::posts_crud_controller::{get_vec_len, get_vec_len_of_count};
+
+
+use crate::controllers::posts_crud_controller::{get_vec_len_of_count};
 
 pub async fn admin_blog_pagination(
     Path((category, page_number)): Path<(String, String)>,

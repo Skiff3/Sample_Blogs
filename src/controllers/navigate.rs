@@ -22,7 +22,7 @@ pub async fn page(Path(page_number): Path<String>) -> impl IntoResponse {
         })
     });
 
-    let page_number_inter: i64 = page_number.parse().unwrap();
+    let _page_number_inter: i64 = page_number.parse().unwrap();
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let s = get_posts_per_page(offset_start).await;
