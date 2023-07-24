@@ -9,8 +9,25 @@
   <component name="ChangeListManager">
     <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Fully Tested.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/authentication/login.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/authentication/login.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/models.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/blogs.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/blogs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/categories.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/categories.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/category_pagination.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/category_pagination.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home_filter_navigation.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home_filter_navigation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/new_category.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_category.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/new_post.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/update_category.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/update_category.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,7 +230,14 @@
       <option name="project" value="LOCAL" />
       <updated>1689647624218</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Fully Tested.">
+      <created>1689658393937</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1689658393937</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

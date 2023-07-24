@@ -238,23 +238,20 @@ th, td {
         </div>
 
         <ul class="list-unstyled components">
-            <p>Manage Posts and Categories</p>
 
-            <li>
-                <a href="http://0.0.0.0:4000/post/new">Create New Post</a>
-            </li>
-            <li>
-                <a href="http://0.0.0.0:4000/posts">View All Posts</a>
-            </li>
 
-            <li>
-                <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
-            </li>
-            <li class="active">
-                <a href="http://0.0.0.0:4000/categories">View All Categories</a>
-            </li>
 
-        </ul>
+                <li>
+                    <a href="http://0.0.0.0:4000/admin/post/new">Create New Post</a>
+                </li>
+                <li>
+                    <a href="http://0.0.0.0:4000/admin">View All Posts</a>
+                </li>
+                <li class="active">
+                    <a href="http://0.0.0.0:4000/admin/categories">View All Categories</a>
+                </li>
+
+            </ul>
         <ul class="list-unstyled CTAs">
             <li>
                 <a href="/logout" class="article">Logout</a>
@@ -290,7 +287,7 @@ th, td {
             <!--		   </ul>-->
             <!--		</div>-->
             <div>
-                <a href="http://0.0.0.0:4000/category/new" type="button" class="btn btn-primary">New Category<i class="fa fa-new"></i></a>
+                <a href="http://0.0.0.0:4000/admin/category/new" type="button" class="btn btn-primary">New Category<i class="fa fa-new"></i></a>
             </div><br/><br/>
             <div class="container">
                 <div class="row">
@@ -318,7 +315,7 @@ th, td {
                                     <tr style="height:65px">
                                         {% for items in category_id %}
                                         <td>
-                                            <a href="/category/update/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                            <a href="/admin/category/update/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
                                             <a href="#" id="delete_button" type="button" class="btn btn-danger" onclick="confirm_msg({{items}});"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                     </tr>
@@ -334,7 +331,7 @@ th, td {
                 <ul class="pagination">
                     {% for i in page_nav_links %}
                     <li class="page-item">
-                        <a id="page_id" onclick="go_to_pagination()" class="page-link" href="http://0.0.0.0:4000/categories/{{ i }}" >{{ i }}</a>
+                        <a id="page_id" onclick="go_to_pagination()" class="page-link" href="http://0.0.0.0:4000/admin/categories/{{ i }}" >{{ i }}</a>
                     </li><br/><br/>
                     {% endfor %}
                 </ul>

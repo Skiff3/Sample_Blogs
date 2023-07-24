@@ -205,22 +205,24 @@ h4 {
     </div>
 
     <ul class="list-unstyled components">
-      <p>Manage Posts and Categories</p>
 
-      <li>
-        <a href="http://0.0.0.0:4000/post/new">Create New Post</a>
-      </li>
-      <li class="active">
-        <a href="http://0.0.0.0:4000/posts">View All Posts</a>
-      </li>
 
-      <li>
-        <a href="http://0.0.0.0:4000/category/new">Create New Category</a>
-      </li>
-      <li>
-        <a href="http://0.0.0.0:4000/categories">View All Categories</a>
-      </li>
 
+        <li>
+          <a href="http://0.0.0.0:4000/admin/post/new">Create New Post</a>
+        </li>
+        <li>
+          <a href="http://0.0.0.0:4000/admin">View All Posts</a>
+        </li>
+        <li class="active">
+          <a href="http://0.0.0.0:4000/admin/categories">View All Categories</a>
+        </li>
+
+      </ul>
+    <ul class="list-unstyled CTAs">
+      <li>
+        <a href="/logout" class="article">Logout</a>
+      </li>
     </ul>
   </nav>
 
@@ -246,7 +248,7 @@ h4 {
 
 
 
-      <form action="/category/update/{{index_sec}}" method="post">
+      <form action="/admin/category/update/{{index_sec}}" method="post">
         <div class="mb-3">
           <label><b>Category Name</b></label><br>
           <input type="text" class="form-control" id="category_name"name="category_name" value="{{index_name}}" placeholder="Category Name">

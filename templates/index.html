@@ -238,20 +238,16 @@ th, td {
 					</div>
 
 					<ul class="list-unstyled components">
-						<p>Manage Posts and Categories</p>
+
 
 								<li>
-									<a href="http://0.0.0.0:4000/post/new">Create New Post</a>
+									<a href="http://0.0.0.0:4000/admin/post/new">Create New Post</a>
 								</li>
 								<li class="active">
-									<a href="http://0.0.0.0:4000/posts">View All Posts</a>
+									<a href="http://0.0.0.0:4000/admin">View All Posts</a>
 								</li>
-
 							<li>
-								<a href="http://0.0.0.0:4000/category/new">Create New Category</a>
-							</li>
-							<li>
-								<a href="http://0.0.0.0:4000/categories">View All Categories</a>
+								<a href="http://0.0.0.0:4000/admin/categories">View All Categories</a>
 							</li>
 
 					</ul>
@@ -285,8 +281,8 @@ th, td {
 		<select onchange="getval(this);" id="category" name="blog" id="blog">
 			<option id="category_name_gen">All</option>
 			{% let name = " " %}
-			{% for name in index_sec %}
-			<option id="sec">{{ name }}</option>
+			{% for name in category_id_title %}
+			<option value={{name.0}}>{{ name.1 }}</option>
 			{% endfor %}
 		</select>
 		</form>
@@ -317,13 +313,18 @@ th, td {
 											<th scope="col">Post Title</th>
 											<th scope="col">Post Body</th>
 											<th scope="col">Timestamp</th>
+											<th>Actions</th>
 										</tr>
 										</thead>
 										<tr style="height:63px">
-											{% for item in index_links %}
-											<td style="height:63px"><a href="/post/{{ item}}">{{item}}</a> </td>
+											{% for item in post_id_title %}
+											<td style="height:63px"><a href="/post/{{ item }}">{{item.1}}</a> </td>
 											<td style="height:63px">Description</td>
 											<td style="height:63px">20th May</td>
+											<td>
+												<a href="/post/{{ items }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>
+											</td>
 										</tr>
 										{% endfor %}
 									</table>
@@ -336,7 +337,7 @@ th, td {
 										<tr style="height:65px">
 											{% for items in index_id %}
 											<td>
-												<a href="/post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+												<a href="/post/{{ items }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
 												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>
 											</td>
 										</tr>
@@ -430,26 +431,10 @@ th, td {
 
 	<script>
         function getval(sel){
-        alert(sel.value);
-        if(sel.value === "Category A"){
-        let x= 1;
-      		}
-      		else if (sel.value === "Category B"){
-      		let x = 2;
-      		}
-      		else if (sel.value === "Category C"){
-      		let x = 3;
-      		}
-      		else if (sel.value === "Category D"){
-      		let x = 4;
-      		}
-      		else{
-      		let x = 5;
-      		}
-        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
-        let element  = document.getElementById("category");
 
-        element.value = sel.value;
+		let selected_category = sel.value.toString();
+        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+selected_category);
+
         }
          function confirm_delete(item){
          alert("alert"+item)

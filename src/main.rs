@@ -12,17 +12,17 @@ use crate::controllers::filter_navigate::{admin_blog_pagination, blog_pagination
 use crate::controllers::filter_post::{admin_blogs, blogs};
 use crate::controllers::index::index;
 use crate::controllers::navigate::{page, pages};
-use crate::controllers::posts_crud_controller::{create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui, delete_categories_form, delete_posts_form, home_gui, show_all_categories, show_all_categories_with_pagination, update_category_form, update_category_form_ui, update_posts_form};
+use crate::controllers::posts_crud_controller::{
+    create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui,
+    delete_categories_form, delete_posts_form, home_gui, show_all_categories,
+    show_all_categories_with_pagination, update_category_form, update_category_form_ui,
+    update_posts_form,
+};
 use crate::model::models::{BlogTemplate, IndexTemplate};
 use axum::response::Redirect;
 use axum::routing::post;
 use axum::{routing::get, Extension, Router};
-use axum_login::{
-    axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer},
-    memory_store::MemoryStore as AuthMemoryStore,
-    secrecy::SecretVec,
-    AuthLayer, AuthUser,
-};
+use axum_login::{axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer}, memory_store::MemoryStore as AuthMemoryStore, secrecy::SecretVec, AuthLayer, AuthUser, RequireAuthorizationLayer};
 use rand::Rng;
 use serde::Deserialize;
 
@@ -32,7 +32,7 @@ use std::time::Duration;
 
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
-
+//todo category selection, single table, test
 #[derive(Deserialize)]
 pub struct CreatePost {
     pub post_title: String,
@@ -108,9 +108,8 @@ enum Role {
 type AuthContext = axum_login::extractors::AuthContext<i64, User, AuthMemoryStore<i64, User>>;
 
 #[tokio::main]
-async fn main() -> std::result::Result<(),sqlx::Error> {
+async fn main() -> std::result::Result<(), sqlx::Error> {
     let secret = rand::thread_rng().gen::<[u8; 64]>();
-
     let session_store = SessionMemoryStore::new();
     let session_timeout_duration = Some(Duration::new(600, 0));
     let session_layer = SessionLayer::new(session_store, &secret)
@@ -152,31 +151,34 @@ async fn main() -> std::result::Result<(),sqlx::Error> {
         );
 
     let app = Router::new()
-        .route("/posts", get(index))
-        .route("/categories", get(show_all_categories))
-        .route("/categories/:page_number", get(show_all_categories_with_pagination))
+        .route("/admin", get(index))
+        .route("/admin/categories", get(show_all_categories))
+        .route(
+            "/admin/categories/:page_number",
+            get(show_all_categories_with_pagination),
+        )
         .route("/post/:post_id", get(show_post))
         .route("/admin/page/:page_number", get(page))
         .merge(admin_blog_routes)
         .route(
-            "/post/new",
-            get(create_posts_form_ui).post(create_posts_form)
+            "/admin/post/new",
+            get(create_posts_form_ui).post(create_posts_form),
         )
         .route("/delete/:post_id", get(delete_posts_form))
         .route("/delete/category/:category_id", get(delete_categories_form))
         .route(
-            "/category/update/:category_id",
+            "/admin/category/update/:category_id",
             get(update_category_form_ui).post(update_category_form),
         )
-        .route("/update_post/:post_id", post(update_posts_form))
+        .route("/admin/update_post/:post_id", post(update_posts_form))
         .route(
-            "/category/new",
+            "/admin/category/new",
             get(create_category_form_ui).post(create_catgories_form),
         )
         .route("/admins", get(admin_gui))
-        //.route_layer(RequireAuthorizationLayer::<i64, User>::login())
+        .route_layer(RequireAuthorizationLayer::<i64, User>::login())
         .route("/", get(home_gui))
-        .route("/page/:page_number", get(pages))
+        .route("/posts/page/:page_number", get(pages))
         .merge(blog_routes)
         .route("/register", post(register_user))
         .route("/register/new", get(register_user_ui))
@@ -194,4 +196,12 @@ async fn main() -> std::result::Result<(),sqlx::Error> {
         .await;
 
     Ok(())
+    /*
+    change urls
+    database column to null
+    from name to id
+
+
+
+     */
 }

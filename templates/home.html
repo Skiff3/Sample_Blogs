@@ -193,30 +193,21 @@ h1, h2, h3, h4, h5, h6 {
                 <select onchange="getval(this);" id="category" name="blog" id="blog">
                     <option id="category_name_gen">All</option>
                     {% let name = " " %}
-                    {% for name in index_sec %}
-                    <option id="sec">{{ name }}</option>
+                    {% for name in category_id_title %}
+                    <option value={{name.0}}>{{ name.1 }}</option>
                     {% endfor %}
                 </select>
             </form>
             <br><br>
 
 
-            <!--		<div class="links">-->
-            <!--			<ul>-->
-            <!--			{% for item in index_links %}-->
-            <!--				<li><a href="/post/{{ item}}">{{ item }}</a></li><br/>-->
-            <!--				<p>Description ...</p>-->
-            <!--			{% endfor %}-->
-            <!--		   </ul>-->
-            <!--		</div>-->
-
             <main class="container">
-                {% for item in index_links %}
+                {% for item in post_id_title %}
                 <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
                     <div class="col-md-6 px-0">
-                        <h1 class="display-4 fst-italic"><i>{{item}}</i></h1>
+                        <h1 class="display-4 fst-italic"><i>{{item.1}}</i></h1>
                         <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
-                        <p class="lead mb-0"><a href="/posts/{{item}}" class="text-white fw-bold">Continue reading...</a></p>
+                        <p class="lead mb-0"><a href="/posts/{{item.0}}" class="text-white fw-bold">Continue reading...</a></p>
                     </div>
                 </div>
                 {% endfor %}
@@ -285,7 +276,7 @@ h1, h2, h3, h4, h5, h6 {
             <ul class="pagination">
                 {% for i in page_nav_links %}
                 <li class="page-item">
-                    <a class="page-link" href="http://0.0.0.0:4000/page/{{ i }}" >{{ i }}</a>
+                    <a class="page-link" href="http://0.0.0.0:4000/posts/page/{{ i }}" >{{ i }}</a>
                 </li><br/><br/>
                 {% endfor %}
             </ul>
@@ -339,10 +330,8 @@ h1, h2, h3, h4, h5, h6 {
 
 <script>
         function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/posts/category/"+sel.value);
-        let element  = document.getElementById("category");
-
-        element.value = sel.value;
+        let selected_category =  sel.value.toString();
+        window.location.replace("http://0.0.0.0:4000/posts/category/"+selected_category);
         }
     </script>
 </html>

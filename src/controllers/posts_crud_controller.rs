@@ -1,8 +1,18 @@
+use std::collections::HashMap;
 use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
-use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, get_max_id_of_category, get_max_id_of_post, Blog, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate, UpdateCategory, UpdateCategoryTemplate, CategoryTemplate, CategoryTemplatePagination, get_count_of_categories, get_categories_per_page, get_all_categories_with_limit, get_category_id_by_name, get_category_name_by_id};
-use crate::{global_number_of_items_per_page_64, CreateCategory, CreatePost, UpdatePost, global_number_of_items_per_page};
+use crate::model::models::{
+    get_all_categories, get_all_categories_with_limit, get_categories_per_page,
+    get_category_id_by_name, get_category_name_by_id, get_connection, get_count_of_categories,
+    get_count_of_posts, get_max_id_of_category, get_max_id_of_post, Blog, CategoryTemplate,
+    CategoryTemplatePagination, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate,
+    UpdateCategory, UpdateCategoryTemplate,
+};
+use crate::{
+    global_number_of_items_per_page, global_number_of_items_per_page_64, CreateCategory,
+    CreatePost, UpdatePost,
+};
 use askama::Template;
 use axum::extract::Path;
 use axum::http::StatusCode;
@@ -11,11 +21,9 @@ use axum::response::{Html, IntoResponse, Redirect};
 use axum::Form;
 use std::vec::Vec;
 
-
-use sqlx::postgres::{PgPoolOptions};
-use sqlx::{Error, Pool, Postgres };
+use sqlx::postgres::PgPoolOptions;
+use sqlx::{Error, Pool, Postgres};
 use std::string::String;
-
 
 pub async fn get_connection_for_crud() -> Pool<Postgres> {
     PgPoolOptions::new()
@@ -46,9 +54,9 @@ pub async fn create_posts_form_ui() -> impl IntoResponse {
 pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> Redirect {
     let pool = get_connection_for_crud().await;
     let mut category_id_from_vec = 0;
-    let category_id=  get_category_id_by_name(create_post.category_name).await;
+    let category_id = get_category_id_by_name(create_post.category_name).await;
     let iter = category_id.iter();
-    for i in iter{
+    for i in iter {
         category_id_from_vec = i.category_id;
     }
     let m = get_max_id_of_post().await;
@@ -62,14 +70,14 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> Redirect 
         .execute(&pool)
         .await;
 
-    let _res= sqlx::query("insert into blogs(blog_id,post_id,category_id) values (($1),($2),($3))")
-        .bind(post_id+100)
-        .bind(post_id.clone())
-        .bind(category_id_from_vec)
-        .execute(&pool)
-        .await;
+    let _res = sqlx::query("insert into blogs(blog_id,post_id,category_id) values (($1),($2),($3))")
+            .bind(post_id + 100)
+            .bind(post_id.clone())
+            .bind(category_id_from_vec)
+            .execute(&pool)
+            .await;
 
-    Redirect::to("/posts")
+    Redirect::to("/admin")
 }
 
 pub async fn delete_posts_form(Path(post_id): Path<i32>) -> Redirect {
@@ -88,37 +96,54 @@ pub async fn delete_categories_form(Path(category_id): Path<i32>) -> Redirect {
         .bind(category_id)
         .execute(&pool)
         .await;
-    Redirect::to("/admin/page/1")
+    let _res = sqlx::query("update posts set category_id = null where category_id = ($1)")
+        .bind(category_id)
+        .execute(&pool)
+        .await;
+    Redirect::to("/admin/categories")
 }
 
 pub async fn home_gui() -> impl IntoResponse {
     let mut psec: Vec<String> = vec![];
+    let mut post_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
     psec.clear();
     let category_list = get_all_categories().await;
     let mut psec: Vec<String> = vec![];
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
+            category_id_with_title.insert(category.category_id,category.category_name.clone());
             psec.push(category.clone().category_name);
         })
     });
-    let s = get_connection().await;
+    let posts = get_connection().await.unwrap();
 
     let mut plinks: Vec<String> = vec![];
     let mut pids: Vec<i32> = vec![];
     let mut pnav: Vec<String> = vec![];
-    let number_of_pages = (get_vec_len_of_count(get_count_of_posts().await) + 2)/ global_number_of_items_per_page_64();
-    (1..number_of_pages+1)
+    let number_of_pages = (get_vec_len_of_count(get_count_of_posts().await) + 2)
+        / global_number_of_items_per_page_64();
+    (1..number_of_pages + 1)
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
-    let list_iter = s.map(|posts| {
-        let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
-        let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-        (v, v2)
-    });
+    // let list_iter = s.map(|posts| {
+    //     let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
+    //     posts.iter().map(|post1| {post_id_with_title.insert(post1.post_id,post1.clone().post_title)});
+    //     let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
+    //     (v, v2)
+    // });
 
-    (plinks, pids) = list_iter.unwrap_or_default();
+    posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
+    //let list_iter = s.iter().map()
+    let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
+    let pids = posts.iter().map(|post1| post1.post_id.clone()).collect();
+    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
+    //(plinks, pids) = list_iter.unwrap_or_default();
+    println!("hashmap {:?}",post_id_with_title);
 
     let template = HomeTemplate {
+        post_id_title: post_id_with_title,
+        category_id_title:category_id_with_title,
         index_id: &pids,
         index_title: String::from("Posts"),
         index_links: &plinks,
@@ -146,7 +171,7 @@ pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) 
             .execute(&pool)
             .await;
 
-    Redirect::to("/posts")
+    Redirect::to("/admin")
 }
 
 pub async fn update_posts_form(
@@ -157,7 +182,7 @@ pub async fn update_posts_form(
     let mut m1 = 0;
     let category_id = get_category_id_by_name(update_post.category_name).await;
     let m = category_id.iter();
-    for i in m{
+    for i in m {
         m1 = i.category_id;
     }
     let category = m1;
@@ -174,8 +199,9 @@ pub async fn update_posts_form(
         .bind(category)
         .bind(post_id)
         .execute(&pool)
-        .await.expect("TODO: panic message");
-    Redirect::to("/posts")
+        .await
+        .expect("TODO: panic message");
+    Redirect::to("/admin")
 }
 
 pub async fn update_posts_form2(
@@ -186,7 +212,7 @@ pub async fn update_posts_form2(
     let mut m1 = 0;
     let category_id = get_category_id_by_name(update_post.category_name).await;
     let m = category_id.iter();
-    for i in m{
+    for i in m {
         m1 = i.category_id;
     }
     let category = m1;
@@ -223,11 +249,11 @@ pub async fn show_all_categories() -> impl IntoResponse {
         })
     });
     let s = get_connection().await;
-    let mut pnav= vec![];
+    let mut pnav = vec![];
     let number_of_posts_vector = get_count_of_categories().await;
     let m2 = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
-    (1..number_of_pages+1)
+    (1..number_of_pages + 1)
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
     let temp = s.as_ref();
@@ -255,12 +281,14 @@ pub async fn show_all_categories() -> impl IntoResponse {
     })
 }
 
-pub async fn show_all_categories_with_pagination(Path(page_number): Path<String>) -> impl IntoResponse {
+pub async fn show_all_categories_with_pagination(
+    Path(page_number): Path<String>,
+) -> impl IntoResponse {
     let mut psec = vec![];
     let mut category_ids = vec![];
     let _category_list = get_all_categories_with_limit().await;
     //let s = get_connection().await;
-    let mut pnav= vec![];
+    let mut pnav = vec![];
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let s = get_categories_per_page(offset_start).await;
@@ -273,7 +301,7 @@ pub async fn show_all_categories_with_pagination(Path(page_number): Path<String>
     let number_of_posts_vector = get_count_of_categories().await;
     let m2 = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
-    (1..number_of_pages+1)
+    (1..number_of_pages + 1)
         .into_iter()
         .for_each(|i| pnav.push(i.to_string()));
     let _temp = s.as_ref();
@@ -299,7 +327,7 @@ pub async fn update_category_form_ui(Path(category_id): Path<i32>) -> impl IntoR
     let mut temp_category = " ".to_string();
     let temp_string = get_category_name_by_id(category_id).await;
     let iter = temp_string.iter();
-    for i in iter{
+    for i in iter {
         temp_category = i.category_name.clone();
     }
     let mut category_names = temp_category;
@@ -339,7 +367,7 @@ pub async fn update_category_form(
             .bind(category_id)
             .execute(&pool)
             .await;
-    Redirect::to("/posts")
+    Redirect::to("/admin/categories")
 }
 
 pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64 {

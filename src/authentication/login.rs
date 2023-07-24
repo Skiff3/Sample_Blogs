@@ -13,6 +13,8 @@ fn get_password_hash_form(pass: String) -> SecretVec<u8> {
     SecretVec::new(pass.into())
 }
 
+fn get_password_hash_form2(pass: String) -> SecretVec<u8> { SecretVec::new(pass.into())}//
+
 type AuthContext = axum_login::extractors::AuthContext<i64, User, AuthMemoryStore<i64, User>>;
 
 pub async fn login_user(
@@ -25,9 +27,25 @@ pub async fn login_user(
         name: user.user_name,
         password_hash: user.password,
     };
-    auth.login(&user_cred).await.unwrap();
-    println!("Logged in {:?}", &auth.current_user);
-    Redirect::to("/posts")
+    // if auth.login(&user_cred).await.unwrap().eq(None) {
+    //     println!("Logged in {:?}", &auth.current_user);
+    //     Redirect::to("/posts")
+    // }
+    // else{
+    //     Redirect::to("/login")
+    // }
+    //if auth.login(&user_cred).await.unwrap().eq() { }
+    println!("err ");
+    match auth.login(&user_cred).await{
+        Ok(inner)=> {println!("inner"); Redirect::to("/admin")}
+        Err(_)=> {println!("error "); Redirect::to("/login")
+        }
+
+    }
+
+    // auth.login(&user_cred).await.unwrap();
+    // println!("Logged in {:?}", &user_cred);
+    // Redirect::to("/posts")
 }
 
 pub async fn login_user_ui() -> impl IntoResponse {
