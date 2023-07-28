@@ -217,7 +217,6 @@ a.article:hover {
 
 				</div>
 			</nav>
-
 		<div class="container">
 
 		<h2>Update the post {{post_title}}</h2><br/><br/>
@@ -230,7 +229,7 @@ a.article:hover {
 <!--			<button type="submit">Delete Post</button>-->
 <!--		</form><br/><br/>-->
 <!--		<button type="submit" onclick="set_visible()" id="btn" >Update Post</button><br/><br/>-->
-		<form action="/update_post/{{ post_ids }}" method="post" id="update_form">
+		<form action="/admin/update_post/{{ post_ids }}" method="post" id="update_form">
 			<div class="mb-3">
 				<label><b>Post Title</b></label><br>
 				<input type="text" value="{{post_title}}" class="form-control" id="post_title"name="post_title" placeholder="Post Title">

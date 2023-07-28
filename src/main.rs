@@ -25,11 +25,9 @@ use axum::{routing::get, Extension, Router};
 use axum_login::{axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer}, memory_store::MemoryStore as AuthMemoryStore, secrecy::SecretVec, AuthLayer, AuthUser, RequireAuthorizationLayer};
 use rand::Rng;
 use serde::Deserialize;
-
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
-
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 //todo category selection, single table, test
@@ -132,7 +130,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
     };
     user_vector.push(user1);
     async fn logout_handler(mut auth: AuthContext) -> Redirect {
-        auth.logout().await;
+        auth.logout().await;// auth context and redirect
         Redirect::to("/login")
     }
 
@@ -176,7 +174,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
             get(create_category_form_ui).post(create_catgories_form),
         )
         .route("/admins", get(admin_gui))
-        .route_layer(RequireAuthorizationLayer::<i64, User>::login())
+        //.route_layer(RequireAuthorizationLayer::<i64, User>::login())
         .route("/", get(home_gui))
         .route("/posts/page/:page_number", get(pages))
         .merge(blog_routes)
@@ -189,7 +187,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         .layer(Extension(user.clone()))
         .layer(auth_layer)
         .layer(session_layer)
-        .nest_service("/assets", ServeDir::new("assets/css"));
+        .nest_service("/assets", ServeDir::new("assets"));
 
     axum::Server::bind(&"0.0.0.0:4000".parse().unwrap())
         .serve(app.into_make_service())

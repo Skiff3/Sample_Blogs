@@ -92,11 +92,15 @@ pub async fn delete_posts_form(Path(post_id): Path<i32>) -> Redirect {
 
 pub async fn delete_categories_form(Path(category_id): Path<i32>) -> Redirect {
     let pool = get_connection_for_crud().await;
-    let _res = sqlx::query("delete from category_post where category_id = ($1)")
+    // let _res = sqlx::query("delete from category_post where category_id = ($1)")
+    //     .bind(category_id)
+    //     .execute(&pool)
+    //     .await;
+    let _res = sqlx::query("update posts set category_id = null where category_id = ($1)")
         .bind(category_id)
         .execute(&pool)
         .await;
-    let _res = sqlx::query("update posts set category_id = null where category_id = ($1)")
+    let _res = sqlx::query("delete from category_post where category_id = ($1)")
         .bind(category_id)
         .execute(&pool)
         .await;
@@ -120,12 +124,12 @@ pub async fn home_gui() -> impl IntoResponse {
 
     let mut plinks: Vec<String> = vec![];
     let mut pids: Vec<i32> = vec![];
-    let mut pnav: Vec<String> = vec![];
+    let mut pnav: Vec<i32> = vec![];
     let number_of_pages = (get_vec_len_of_count(get_count_of_posts().await) + 2)
         / global_number_of_items_per_page_64();
     (1..number_of_pages + 1)
         .into_iter()
-        .for_each(|i| pnav.push(i.to_string()));
+        .for_each(|i| pnav.push(i as i32));
     // let list_iter = s.map(|posts| {
     //     let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
     //     posts.iter().map(|post1| {post_id_with_title.insert(post1.post_id,post1.clone().post_title)});
@@ -146,6 +150,7 @@ pub async fn home_gui() -> impl IntoResponse {
         category_id_title:category_id_with_title,
         index_id: &pids,
         index_title: String::from("Posts"),
+        page_number: &1,
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
@@ -241,9 +246,11 @@ pub async fn create_category_form_ui() -> impl IntoResponse {
 pub async fn show_all_categories() -> impl IntoResponse {
     let mut psec = vec![];
     let mut category_ids = vec![];
+    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
     let category_list = get_all_categories_with_limit().await;
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
+            category_id_with_title.insert(category.category_id,category.category_name.clone());
             psec.push(category.clone().category_name);
             category_ids.push(category.clone().category_id);
         })
@@ -265,6 +272,7 @@ pub async fn show_all_categories() -> impl IntoResponse {
 
     let (plinks, pids) = list_iter.unwrap_or_default();
     let template = CategoryTemplate {
+        category_id_title: category_id_with_title,
         index_id: &pids,
         category_id: &category_ids,
         index_title: String::from("Posts"),
@@ -286,6 +294,7 @@ pub async fn show_all_categories_with_pagination(
 ) -> impl IntoResponse {
     let mut psec = vec![];
     let mut category_ids = vec![];
+    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
     let _category_list = get_all_categories_with_limit().await;
     //let s = get_connection().await;
     let mut pnav = vec![];
@@ -294,6 +303,7 @@ pub async fn show_all_categories_with_pagination(
     let s = get_categories_per_page(offset_start).await;
     s.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
+            category_id_with_title.insert(category.category_id,category.category_name.clone());
             psec.push(category.clone().category_name);
             category_ids.push(category.clone().category_id);
         })
@@ -306,6 +316,7 @@ pub async fn show_all_categories_with_pagination(
         .for_each(|i| pnav.push(i.to_string()));
     let _temp = s.as_ref();
     let template = CategoryTemplatePagination {
+        category_id_title: category_id_with_title,
         index_id: &vec![],
         category_id: &category_ids,
         index_title: String::from("Posts"),

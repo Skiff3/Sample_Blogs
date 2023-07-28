@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 	<head>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -7,6 +7,7 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 		<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
 				rel="stylesheet"  type='text/css'>
+		<link rel="stylesheet" type="text/css" href="assets/css/final_style.css">
 		<title> {{ index_title }} </title>
 		<script>
     $(document).ready(function () {
@@ -154,7 +155,7 @@ a.article:hover {
 
 /* ---------------------------------------------------
     CONTENT STYLE
------------------------------------------------------ */
+ ----------------------------------------------------- */
 
 #content {
     width: 100%;
@@ -165,7 +166,7 @@ a.article:hover {
 
 /* ---------------------------------------------------
     MEDIAQUERIES
------------------------------------------------------ */
+ ----------------------------------------------------- */
 
 @media (max-width: 768px) {
     #sidebar {
@@ -238,16 +239,11 @@ th, td {
 					</div>
 
 					<ul class="list-unstyled components">
-
-
-								<li>
-									<a href="http://0.0.0.0:4000/admin/post/new">Create New Post</a>
-								</li>
 								<li class="active">
-									<a href="http://0.0.0.0:4000/admin">View All Posts</a>
+									<a href="http://0.0.0.0:4000/admin">Posts</a>
 								</li>
 							<li>
-								<a href="http://0.0.0.0:4000/admin/categories">View All Categories</a>
+								<a href="http://0.0.0.0:4000/admin/categories">Categories</a>
 							</li>
 
 					</ul>
@@ -274,23 +270,7 @@ th, td {
 			<h2>Posts</h2>
 			<p>The posts belong to different categories such as Category A, Category B, Category C, Category D. A post belongs to a single category but a category can have more than one post.</p>
 
-			<div class="container">
-
-		<form>
-		<label for="blog">Filter by category:</label>
-		<select onchange="getval(this);" id="category" name="blog" id="blog">
-			<option id="category_name_gen">All</option>
-			{% let name = " " %}
-			{% for name in category_id_title %}
-			<option value={{name.0}}>{{ name.1 }}</option>
-			{% endfor %}
-		</select>
-		</form>
-		<br><br>
-
-				<div>
-					<a href="http://0.0.0.0:4000/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
-				</div><br/>
+			<div class="container-fluid">
 
 
 <!--		<div class="links">-->
@@ -301,13 +281,28 @@ th, td {
 <!--			{% endfor %}-->
 <!--		   </ul>-->
 <!--		</div>-->
-				<div class="container">
+				<div class="container-fluid">
+					<form>
+						<label for="blog">Filter by category:</label>
+						<select onchange="getval(this);" id="category" name="blog" id="blog">
+							<option id="category_name_gen">All</option>
+							{% let name = " " %}
+							{% for name in category_id_title %}
+							<option value={{name.0}}>{{ name.1 }}</option>
+							{% endfor %}
+						</select>
+					</form>
+					<br><br>
+
+					<div>
+						<a href="http://0.0.0.0:4000/admin/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
+					</div><br/>
 					<div class="row">
 						<div class="col-12">
 
 							<div class="row">
 								<div class="column">
-									<table style="width:100%" class="table">
+									<table style="width:200%" class="table">
 										<thead>
 										<tr style="height:60px">
 											<th scope="col">Post Title</th>
@@ -318,34 +313,33 @@ th, td {
 										</thead>
 										<tr style="height:63px">
 											{% for item in post_id_title %}
-											<td style="height:63px"><a href="/post/{{ item }}">{{item.1}}</a> </td>
+											<td style="height:63px"><a href="/post/{{ item.0 }}">{{item.1}}</a> </td>
 											<td style="height:63px">Description</td>
 											<td style="height:63px">20th May</td>
 											<td>
-												<a href="/post/{{ items }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>
+												<a href="/post/{{ item.0 }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{item.0}})"><i class="fa fa-trash-o"></i></a>
 											</td>
 										</tr>
 										{% endfor %}
 									</table>
 								</div>
-								<div class="column">
-									<table class="table">
-										<tr style="height:60px">
-											<th>Actions</th>
-										</tr>
-										<tr style="height:65px">
-											{% for items in index_id %}
-											<td>
-												<a href="/post/{{ items }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>
-											</td>
-										</tr>
-										{% endfor %}
-									</table>
-								</div>
+<!--								<div class="column">-->
+<!--									<table class="table">-->
+<!--										<tr style="height:60px">-->
+<!--											<th>Actions</th>-->
+<!--										</tr>-->
+<!--										<tr style="height:65px">-->
+<!--											{% for items in index_id %}-->
+<!--											<td>-->
+<!--												<a href="/post/{{ items }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>-->
+<!--												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>-->
+<!--											</td>-->
+<!--										</tr>-->
+<!--										{% endfor %}-->
+<!--									</table>-->
+<!--								</div>-->
 							</div>
-
 
 
 						</div>
@@ -355,10 +349,21 @@ th, td {
 	<br/><br/><br/>
 	<br/><br/><nav aria-label="Page navigation">
 		<ul class="pagination">
+<!--			<li class="page-item active">-->
+<!--			<a id="page_nav_1"  class="page-link" href="/admin/page/{{ page_number }}" >{{ page_number }}</a>-->
+<!--			</li><br/><br/>-->
 			{% for i in page_nav_links %}
+			{% if i == page_number %}
+			<li class="page-item active">
+
+				<a id="page_nav1"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
+			</li><br/><br/><br/>
+			{% else if i != page_number %}
 			<li class="page-item">
-				<a class="page-link" href="/admin/page/{{ i }}" >{{ i }}</a>
-			</li><br/><br/>
+
+				<a id="page_nav"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
+			</li><br/><br/><br/>
+			{% endif %}
 			{% endfor %}
 		</ul>
 	</nav><br><br><br>
@@ -437,13 +442,29 @@ th, td {
 
         }
          function confirm_delete(item){
-         alert("alert"+item)
+
       		if(confirm("Confirm delete") == true){
       		window.location.replace("http://0.0.0.0:4000/delete/"+item);
       		}
       		else{
       		alert("Not deleted")
       		}
+        }
+
+        function set_active(item){
+        alert("in function"+item)
+        if(item == "0.0.0.0:4000/admin/page/1"){
+				alert("equal");
+        }
+        document.querySelectorAll(".page_nav").forEach((link) => {
+        	if(link.href == window.location.href){
+        	    alert(link);
+        		link.classList.add("active");
+        		link.setAttribute("aria-current","page")
+        	}else{
+        	  alert("in else"+link);
+        	}
+        });
         }
     </script>
 </html>

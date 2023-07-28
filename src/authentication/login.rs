@@ -13,7 +13,7 @@ fn get_password_hash_form(pass: String) -> SecretVec<u8> {
     SecretVec::new(pass.into())
 }
 
-fn get_password_hash_form2(pass: String) -> SecretVec<u8> { SecretVec::new(pass.into())}//
+fn get_password_hash_form2(pass: String) -> SecretVec<u8> { SecretVec::new(pass.into())}
 
 type AuthContext = axum_login::extractors::AuthContext<i64, User, AuthMemoryStore<i64, User>>;
 

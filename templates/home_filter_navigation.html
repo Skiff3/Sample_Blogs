@@ -285,9 +285,17 @@ h1, h2, h3, h4, h5, h6 {
       <nav aria-label="Page navigation">
         <ul class="pagination">
           {% for i in page_nav_links %}
+          {% if i == page_number %}
+          <li class="page-item active">
+
+            <a id="page_nav1"  class="page-link" href="/posts/page/{{ i }}" >{{i}}</a>
+          </li><br/><br/><br/>
+          {% else if i != page_number %}
           <li class="page-item">
-            <a class="page-link" href="{{current_url_page}}/{{ i }}" >{{ i }}</a>
-          </li><br/><br/>
+
+            <a id="page_nav"  class="page-link" href="/posts/page/{{ i }}" >{{i}}</a>
+          </li><br/><br/><br/>
+          {% endif %}
           {% endfor %}
         </ul>
       </nav><br><br><br>

@@ -297,31 +297,36 @@ th, td {
                                 <table style="width:100%" class="table">
                                     <thead>
                                     <tr style="height:60px">
-                                        <th scope="col">Category Id</th>
+                                        <th scope="col">Category Title</th>
+                                        <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tr style="height:63px">
-                                        {% for item in index_sec %}
-                                        <td style="height:63px"><a href="/post/{{ item}}">{{item}}</a> </td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                            <div class="column">
-                                <table class="table">
-                                    <tr style="height:60px">
-                                        <th>Actions</th>
-                                    </tr>
-                                    <tr style="height:65px">
-                                        {% for items in category_id %}
+                                        {% for item in category_id_title %}
+                                        <td style="height:63px"><a href="/post/{{ item.0}}">{{item.1}}</a> </td>
                                         <td>
-                                            <a href="/admin/category/update/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                                            <a href="#" id="delete_button" type="button" class="btn btn-danger" onclick="confirm_msg({{items}});"><i class="fa fa-trash-o"></i></a>
+                                            <a href="/admin/category/update/{{ item.0}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                            <a href="#" id="delete_button" type="button" class="btn btn-danger" onclick="confirm_msg({{item.0}});"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                     </tr>
                                     {% endfor %}
                                 </table>
-                            </div><br/>
+                            </div>
+<!--                            <div class="column">-->
+<!--                                <table class="table">-->
+<!--                                    <tr style="height:60px">-->
+<!--                                        <th>Actions</th>-->
+<!--                                    </tr>-->
+<!--                                    <tr style="height:65px">-->
+<!--                                        {% for items in category_id %}-->
+<!--                                        <td>-->
+<!--                                            <a href="/admin/category/update/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>-->
+<!--                                            <a href="#" id="delete_button" type="button" class="btn btn-danger" onclick="confirm_msg({{items}});"><i class="fa fa-trash-o"></i></a>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+<!--                                    {% endfor %}-->
+<!--                                </table>-->
+<!--                            </div><br/>-->
                     </div>
 
                 </div><br/><br/>

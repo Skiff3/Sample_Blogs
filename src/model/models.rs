@@ -34,7 +34,7 @@ pub struct Count {
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct Max {// pub struct Max { } pub struct Max { pub max: i32 }
+pub struct Max {
     pub max: i32,
 }
 
@@ -75,9 +75,10 @@ pub struct HomeTemplate<'a> {
     pub category_id_title: HashMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
+    pub page_number: &'a i32,
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
-    pub page_nav_links: &'a Vec<String>,
+    pub page_nav_links: &'a Vec<i32>,
     pub current_url_page: String,
 }
 
@@ -88,9 +89,10 @@ pub struct HomeFilterTemplate<'a> {
     pub category_id_title: HashMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
+    pub page_number: &'a i32,
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
-    pub page_nav_links: &'a Vec<String>,
+    pub page_nav_links: &'a Vec<i32>,
     pub current_url_page: String,
 }
 
@@ -144,9 +146,10 @@ pub struct BlogTemplate<'a> {
     pub category_id_title: HashMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
+    pub page_number: &'a i32,
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
-    pub page_nav_links: &'a Vec<String>,
+    pub page_nav_links: &'a Vec<i32>,
     pub current_url_page: String,
 }
 
@@ -180,14 +183,29 @@ pub struct IndexTemplate<'a> {
     pub category_id_title: HashMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
+    pub page_number: &'a i32,
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
-    pub page_nav_links: &'a Vec<String>,
+    pub page_nav_links: &'a Vec<i32>,
 }
+
+// #[derive(Template)]
+// #[template(path = "index.html")]
+// pub struct IndexTemplate2<'a> {
+//     pub post_id_title: HashMap<i32, String>,
+//     pub category_id_title: HashMap<i32, String>,
+//     pub index_id: &'a Vec<i32>,
+//     pub index_title: String,
+//     pub page_number: String,
+//     pub index_links: &'a Vec<String>,
+//     pub index_sec: &'a Vec<String>,
+//     pub page_nav_links: &'a Vec<String>,
+// }
 
 #[derive(Template)]
 #[template(path = "categories.html")]
 pub struct CategoryTemplate<'a> {
+    pub category_id_title: HashMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub category_id: &'a Vec<i32>,
     pub index_title: String,
@@ -199,6 +217,7 @@ pub struct CategoryTemplate<'a> {
 #[derive(Template)]
 #[template(path = "category_pagination.html")]
 pub struct CategoryTemplatePagination<'a> {
+    pub category_id_title: HashMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub category_id: &'a Vec<i32>,
     pub index_title: String,
@@ -231,7 +250,7 @@ pub async fn get_categories_per_page(
     offset_value: i32,
 ) -> std::result::Result<Vec<Category>, Error> {
     let pool = get_connection_for_crud().await;
-    sqlx::query_as::<_, Category>("select * from category_post limit ($1) offset ($2)")
+    sqlx::query_as::<_, Category>("select * from category_post limit ($1) offset ($2) ORDER BY category_id ASC")
         .bind(global_number_of_items_per_page())
         .bind(offset_value)
         .fetch_all(&pool)
@@ -241,14 +260,13 @@ pub async fn get_categories_per_page(
 pub async fn get_all_categories() -> std::result::Result<Vec<Category>, Error> {
     let pool = get_connection_for_crud().await;
 
-    sqlx::query_as::<_, Category>("select * from category_post")
+    sqlx::query_as::<_, Category>("select * from category_post ORDER BY category_id ASC")
         .fetch_all(&pool)
         .await
 }
 
 pub async fn get_category_id_by_name(category_name: String) -> Vec<Category_Id> {
     let pool = get_connection_for_crud().await;
-
     let res = sqlx::query_as::<_, Category_Id>(
         "select category_id from category_post where category_name = ($1);",
     )
@@ -260,7 +278,6 @@ pub async fn get_category_id_by_name(category_name: String) -> Vec<Category_Id> 
 
 pub async fn get_post_name_by_id(post_id: i32) -> Vec<Post_Name> {
     let pool = get_connection_for_crud().await;
-
     let res = sqlx::query_as::<_, Post_Name>(
         "select post_title from posts where post_id = ($1);",
     )
@@ -272,13 +289,23 @@ pub async fn get_post_name_by_id(post_id: i32) -> Vec<Post_Name> {
 
 pub async fn get_category_name_by_id(category_id: i32) -> Vec<Category_Name> {
     let pool = get_connection_for_crud().await;
-
     let res = sqlx::query_as::<_, Category_Name>(
         "select category_name from category_post where category_id = ($1);",
     )
     .bind(category_id)
     .fetch_all(&pool)
     .await;
+    res.unwrap()
+}
+
+pub async fn get_category_name_by_post_id(category_id: i32) -> Vec<Category_Name> {
+    let pool = get_connection_for_crud().await;
+    let res = sqlx::query_as::<_, Category_Name>(
+        "select category_name,category_id from category_post c,posts p where post_id = ($1);",
+    )
+        .bind(category_id)
+        .fetch_all(&pool)
+        .await;
     res.unwrap()
 }
 

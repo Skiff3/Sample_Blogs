@@ -13,7 +13,6 @@ pub async fn show_post(Path(post_id): Path<i32>) -> impl IntoResponse {
     let category_list = get_all_categories().await;
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
-
             psec.push(category.clone().category_name);
         })
     });

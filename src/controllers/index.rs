@@ -7,6 +7,8 @@ use axum::response::IntoResponse;
 use axum::{http::StatusCode, response::Html};
 
 use axum_macros::debug_handler;
+use egui::TextBuffer;
+use std::string::String;
 
 #[debug_handler]
 pub async fn index() -> impl IntoResponse {
@@ -22,14 +24,14 @@ pub async fn index() -> impl IntoResponse {
         })
     });
     let posts = get_connection().await.unwrap();
-    let mut pnav: Vec<String> = vec![];
+    let mut pnav: Vec<i32> = vec![];
     let number_of_posts_vector = get_count_of_posts().await;
     m2 = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
     println!("count {} and number {}", m2, number_of_pages);
     (1..number_of_pages + 1)
         .into_iter()
-        .for_each(|i| pnav.push(i.to_string()));
+        .for_each(|i| pnav.push(i as i32));
     posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
     //let list_iter = s.iter().map()
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
@@ -37,12 +39,25 @@ pub async fn index() -> impl IntoResponse {
     //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
     //(plinks, pids) = list_iter.unwrap_or_default();
     println!("hashmap {:?}",post_id_with_title);
+    let mut page_string = String::from("");
+
+    // for i in 0..1{
+    //     pagination_html = "{% for i in page_nav_links %}
+	// 		{% if i != \\"{{ page_number }}" %}
+	// 		<li class="page-item active">
+	// 			<a id="page_nav"  class="page-link" href="/admin/page/{{ i }}" >i</a>
+	// 		</li><br/><br/><br/>
+	// 		{% endif %}
+	// 		{% endfor %}";
+    // }
+
 
     let template = IndexTemplate {
         post_id_title:post_id_with_title,
         category_id_title:category_id_with_title,
         index_id: &pids,
         index_title: String::from("Posts"),
+        page_number: &1,
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
