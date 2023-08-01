@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::model::models::{get_all_categories, get_count_of_posts, get_posts_per_page, HomeTemplate};
 use crate::{global_number_of_items_per_page, global_number_of_items_per_page_64, IndexTemplate};
@@ -14,8 +14,8 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
     let mut plinks: Vec<String> = vec![];
     let mut psec: Vec<String> = vec![];
     let mut pnav: Vec<i32> = vec![];
-    let mut post_id_with_title: HashMap<i32, String> = HashMap::new();
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     psec.clear();
     let category_list = get_all_categories().await;
     let mut psec: Vec<String> = vec![];
@@ -60,6 +60,7 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
         index_id: &pids,
         index_title: String::from("Posts"),
         page_number: &page_number,
+        selected_category: &"Category A".to_string(),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
@@ -78,7 +79,7 @@ pub async fn pages(Path(page_number): Path<i32>) -> impl IntoResponse {
     let mut psec: Vec<String> = vec![];
     let mut pid: Vec<i32> = vec![];
     let mut pnav: Vec<i32> = vec![];
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     psec.clear();
     let category_list = get_all_categories().await;
     let mut psec: Vec<String> = vec![];
@@ -88,7 +89,7 @@ pub async fn pages(Path(page_number): Path<i32>) -> impl IntoResponse {
             psec.push(category.clone().category_name);
         })
     });
-    let mut post_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let page_number_integer: i32 = page_number;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let posts = get_posts_per_page(offset_start).await.unwrap();

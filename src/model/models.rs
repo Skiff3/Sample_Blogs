@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use crate::global_number_of_items_per_page;
 use askama::Template;
 use axum_login::axum_sessions::async_session::serde::Deserialize;
@@ -44,6 +44,7 @@ pub struct PostTemplate<'a> {
     pub post_ids: i32,
     pub index_sec: &'a Vec<String>,
     pub post_title: &'a str,
+    pub selected_category: &'a str,
     pub post_description: &'a str,
     pub post_body: &'a str,
 }
@@ -71,8 +72,8 @@ pub struct AdminTemplate {}
 #[derive(Template)]
 #[template(path = "home.html")]
 pub struct HomeTemplate<'a> {
-    pub post_id_title: HashMap<i32, String>,
-    pub category_id_title: HashMap<i32, String>,
+    pub post_id_title: BTreeMap<i32, String>,
+    pub category_id_title: BTreeMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
     pub page_number: &'a i32,
@@ -85,11 +86,12 @@ pub struct HomeTemplate<'a> {
 #[derive(Template)]
 #[template(path = "home_filter_navigation.html")]
 pub struct HomeFilterTemplate<'a> {
-    pub post_id_title: HashMap<i32, String>,
-    pub category_id_title: HashMap<i32, String>,
+    pub post_id_title: BTreeMap<i32, String>,
+    pub category_id_title: BTreeMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
     pub page_number: &'a i32,
+    pub category_name: &'a String,
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
     pub page_nav_links: &'a Vec<i32>,
@@ -142,11 +144,12 @@ pub struct RegisterUsers {
 #[derive(Template)]
 #[template(path = "blogs.html")]
 pub struct BlogTemplate<'a> {
-    pub post_id_title: HashMap<i32, String>,
-    pub category_id_title: HashMap<i32, String>,
+    pub post_id_title: BTreeMap<i32, String>,
+    pub category_id_title: BTreeMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
     pub page_number: &'a i32,
+    pub category_name: &'a String,
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
     pub page_nav_links: &'a Vec<i32>,
@@ -179,11 +182,12 @@ pub struct Category_Name {
 #[derive(Template)]
 #[template(path = "index.html")]
 pub struct IndexTemplate<'a> {
-    pub post_id_title: HashMap<i32, String>,
-    pub category_id_title: HashMap<i32, String>,
+    pub post_id_title: BTreeMap<i32, String>,
+    pub category_id_title: BTreeMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub index_title: String,
     pub page_number: &'a i32,
+    pub selected_category: &'a String,
     pub index_links: &'a Vec<String>,
     pub index_sec: &'a Vec<String>,
     pub page_nav_links: &'a Vec<i32>,
@@ -205,7 +209,7 @@ pub struct IndexTemplate<'a> {
 #[derive(Template)]
 #[template(path = "categories.html")]
 pub struct CategoryTemplate<'a> {
-    pub category_id_title: HashMap<i32, String>,
+    pub category_id_title: BTreeMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub category_id: &'a Vec<i32>,
     pub index_title: String,
@@ -217,7 +221,7 @@ pub struct CategoryTemplate<'a> {
 #[derive(Template)]
 #[template(path = "category_pagination.html")]
 pub struct CategoryTemplatePagination<'a> {
-    pub category_id_title: HashMap<i32, String>,
+    pub category_id_title: BTreeMap<i32, String>,
     pub index_id: &'a Vec<i32>,
     pub category_id: &'a Vec<i32>,
     pub index_title: String,
@@ -298,12 +302,12 @@ pub async fn get_category_name_by_id(category_id: i32) -> Vec<Category_Name> {
     res.unwrap()
 }
 
-pub async fn get_category_name_by_post_id(category_id: i32) -> Vec<Category_Name> {
+pub async fn get_category_name_by_post_id(post_name: String) -> Vec<Category_Name> {
     let pool = get_connection_for_crud().await;
     let res = sqlx::query_as::<_, Category_Name>(
-        "select category_name,category_id from category_post c,posts p where post_id = ($1);",
+        "select category_name from category_post c,posts p where c.category_id = p.category_id and post_title = ($1);",
     )
-        .bind(category_id)
+        .bind(post_name)
         .fetch_all(&pool)
         .await;
     res.unwrap()
@@ -365,7 +369,6 @@ pub async fn get_filtered_from_database(
     page_number: i32,
 ) -> std::result::Result<Vec<Blog>, Error> {
     let pool = get_connection_for_crud().await;
-
     sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_id = ($1) limit 3 offset ($2)")
         .bind(final_category)
         .bind(page_number)
@@ -382,7 +385,15 @@ pub async fn get_filtered_from_database_by_category(
         .fetch_all(&pool)
         .await
 }
+pub async fn get_filtered_from_database_by_category2(
 
+) -> std::result::Result<Vec<Blog>, Error> {
+    let pool = get_connection_for_crud().await;
+    sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id limit 3")
+
+        .fetch_all(&pool)
+        .await
+}
 pub async fn count_of_get_filtered_from_database_by_category(
     final_category: i32,
 ) -> std::result::Result<Vec<Count>, Error> {
@@ -392,3 +403,13 @@ pub async fn count_of_get_filtered_from_database_by_category(
         .fetch_all(&pool)
         .await
 }
+pub async fn count_of_get_filtered_from_database_by_category2(
+
+) -> std::result::Result<Vec<Count>, Error> {
+    let pool = get_connection_for_crud().await;
+    sqlx::query_as::<_, Count>("select count(p.post_id) from posts p; ")
+
+        .fetch_all(&pool)
+        .await
+}
+

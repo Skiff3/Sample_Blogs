@@ -1,8 +1,5 @@
-use std::collections::HashMap;
-use crate::model::models::{
-    count_of_get_filtered_from_database_by_category, get_all_categories,
-    get_filtered_from_database, HomeFilterTemplate,
-};
+use std::collections::{BTreeMap, HashMap};
+use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_filtered_from_database, HomeFilterTemplate};
 use crate::{global_number_of_items_per_page, global_number_of_items_per_page_64, BlogTemplate};
 use askama::Template;
 use axum::{
@@ -20,11 +17,17 @@ pub async fn admin_blog_pagination(
     let mut plinks: Vec<String> = vec![];
     let mut pids: Vec<i32> = vec![];
     let mut len = 0;
-    let mut post_id_with_title: HashMap<i32, String> = HashMap::new();
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let final_category = category;
     let mut psec: Vec<String> = vec![];
     let mut pnav: Vec<i32> = vec![];
+    let temps = get_category_name_by_id(category).await;
+    let iters = temps.iter();
+    let mut category_name = "".to_string();
+    for i in iters{
+        category_name = i.category_name.clone();
+    }
     psec.clear();
     let category_list = get_all_categories().await;
     let mut psec: Vec<String> = vec![];
@@ -62,6 +65,7 @@ pub async fn admin_blog_pagination(
         index_id: &pids,
         index_title: String::from("Posts"),
         page_number: &page_number,
+        category_name:&category_name,
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
@@ -81,11 +85,17 @@ pub async fn blog_pagination(
 ) -> impl IntoResponse {
     let mut plinks: Vec<String> = vec![];
     let mut pids: Vec<i32> = vec![];
-    let mut post_id_with_title: HashMap<i32, String> = HashMap::new();
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let final_category = category;
     let mut psec: Vec<String> = vec![];
     let mut pnav: Vec<i32> = vec![];
+    let temps = get_category_name_by_id(category).await;
+    let iters = temps.iter();
+    let mut category_name = "".to_string();
+    for i in iters{
+        category_name = i.category_name.clone();
+    }
     psec.clear();
     let category_list = get_all_categories().await;
     let mut psec: Vec<String> = vec![];
@@ -112,13 +122,13 @@ pub async fn blog_pagination(
     let plinks = posts2.iter().map(|post| post.post_title.clone()).collect();
     pids = posts2.iter().map(|post1| post1.post_id.clone()).collect();
     println!("hashmap {:?}",post_id_with_title);
-
     let template = HomeFilterTemplate {
         post_id_title: post_id_with_title,
         category_id_title: category_id_with_title,
         index_id: &pids,
         index_title: String::from("Posts"),
         page_number: &page_number,
+        category_name:&category_name,
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,

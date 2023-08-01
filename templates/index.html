@@ -68,6 +68,12 @@ a:focus {
     align-items: stretch;
 }
 
+<!--.wrapper {-->
+<!--	overflow: hidden;-->
+<!--	width: 100%;-->
+<!--	table-layout: fixed;-->
+<!--}-->
+
 #sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -257,18 +263,18 @@ th, td {
 				<!-- Page Content  -->
 				<div id="content">
 
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<div class="container-fluid">
+<!--			<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+<!--&lt;!&ndash;				<div class="container-fluid">&ndash;&gt;-->
 
-					<button type="button" id="sidebarCollapse" class="btn btn-info">
-						<i class="fa fa-align-left"></i>
-					</button>
+<!--					<button type="button" id="sidebarCollapse" class="btn btn-info">-->
+<!--						<i class="fa fa-align-left"></i>-->
+<!--					</button>-->
 
-				</div>
-			</nav>
+<!--&lt;!&ndash;				</div>&ndash;&gt;-->
+<!--			</nav>-->
 
 			<h2>Posts</h2>
-			<p>The posts belong to different categories such as Category A, Category B, Category C, Category D. A post belongs to a single category but a category can have more than one post.</p>
+			<p>The posts belong to different categories such as Category A, Category B, Category C, Category D. A post belongs to a single category but category can have more than one post.</p>
 
 			<div class="container-fluid">
 
@@ -281,11 +287,11 @@ th, td {
 <!--			{% endfor %}-->
 <!--		   </ul>-->
 <!--		</div>-->
-				<div class="container-fluid">
+<!--				<div class="container-fluid">-->
 					<form>
-						<label for="blog">Filter by category:</label>
+						<label for="blog">Choose a category:</label>
 						<select onchange="getval(this);" id="category" name="blog" id="blog">
-							<option id="category_name_gen">All</option>
+							<option id="category_name_gen" selected>--Select--</option>
 							{% let name = " " %}
 							{% for name in category_id_title %}
 							<option value={{name.0}}>{{ name.1 }}</option>
@@ -294,143 +300,81 @@ th, td {
 					</form>
 					<br><br>
 
-					<div>
-						<a href="http://0.0.0.0:4000/admin/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
-					</div><br/>
+					 <div>
+      <a style="float:right; margin-right:30px;" href="http://0.0.0.0:4000/admin/post/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Post</a>
+    </div><br/><br/><br/><br/>
+
+
+
+				<!--      <div class="row">-->
+				<div class="col-12">
 					<div class="row">
-						<div class="col-12">
-
-							<div class="row">
-								<div class="column">
-									<table style="width:200%" class="table">
-										<thead>
-										<tr style="height:60px">
-											<th scope="col">Post Title</th>
-											<th scope="col">Post Body</th>
-											<th scope="col">Timestamp</th>
-											<th>Actions</th>
-										</tr>
-										</thead>
-										<tr style="height:63px">
-											{% for item in post_id_title %}
-											<td style="height:63px"><a href="/post/{{ item.0 }}">{{item.1}}</a> </td>
-											<td style="height:63px">Description</td>
-											<td style="height:63px">20th May</td>
-											<td>
-												<a href="/post/{{ item.0 }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{item.0}})"><i class="fa fa-trash-o"></i></a>
-											</td>
-										</tr>
-										{% endfor %}
-									</table>
-								</div>
-<!--								<div class="column">-->
-<!--									<table class="table">-->
-<!--										<tr style="height:60px">-->
-<!--											<th>Actions</th>-->
-<!--										</tr>-->
-<!--										<tr style="height:65px">-->
-<!--											{% for items in index_id %}-->
-<!--											<td>-->
-<!--												<a href="/post/{{ items }}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>-->
-<!--												<a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>-->
-<!--											</td>-->
-<!--										</tr>-->
-<!--										{% endfor %}-->
-<!--									</table>-->
-<!--								</div>-->
-							</div>
-
-
+						<div class="column">
+							<table style="width:200%; margin-right:20px;" class="table">
+								<thead>
+								<tr style="height:60px">
+									<th scope="col">Title</th>
+									<th scope="col">Body</th>
+									<th scope="col">Timestamp</th>
+									<th>Actions</th>
+								</tr>
+								</thead>
+								<tr style="height:63px">
+									{% for item in post_id_title %}
+									<td style="height:63px"><a href="/post/{{ item.0}}">{{item.1}}</a> </td>
+									<td style="height:63px">Description</td>
+									<td style="height:63px">20th May</td>
+									<td>
+										<a href="/post/{{ item.0}}" title="Edit" type="button" class="btn btn-primary"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+										<a href="#" type="button" class="btn btn-danger" title="Delete" onclick="confirm_delete({{item.0}})"><i class="fa fa-trash-o"></i>&nbsp;Delete</a>
+									</td>
+								</tr>
+								{% endfor %}
+							</table>
 						</div>
-
-					</div><br/><br/>
-				</div>
-	<br/><br/><br/>
-	<br/><br/><nav aria-label="Page navigation">
-		<ul class="pagination">
-<!--			<li class="page-item active">-->
-<!--			<a id="page_nav_1"  class="page-link" href="/admin/page/{{ page_number }}" >{{ page_number }}</a>-->
-<!--			</li><br/><br/>-->
-			{% for i in page_nav_links %}
-			{% if i == page_number %}
-			<li class="page-item active">
-
-				<a id="page_nav1"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
-			</li><br/><br/><br/>
-			{% else if i != page_number %}
-			<li class="page-item">
-
-				<a id="page_nav"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
-			</li><br/><br/><br/>
-			{% endif %}
-			{% endfor %}
-		</ul>
-	</nav><br><br><br>
-	</div>
-
-	<br/><br/>
-<div class="container">
-<!--		<h2>Get Started, Create a Blog</h2><br/><br/>-->
-
-<!--		<form action="/create_post" method="post">-->
-<!--&lt;!&ndash;			<label><b>Post Id</b></label>&ndash;&gt;-->
-<!--&lt;!&ndash;			<input type="number" placeholder="Enter Post Id" name="post_id">&ndash;&gt;-->
-
-<!--			<label><b>Post Title</b></label>-->
-<!--			<input type="text" placeholder="Enter Post Title" name="post_title">-->
-
-<!--			<label><b>Post Body</b></label>-->
-<!--			<input type="text" placeholder="Enter Post Description" name="post_body">-->
-
-<!--			<select id="category_name" name="category_name">-->
-<!--				<option id="category_name_gen_2">&#45;&#45;Select&#45;&#45;</option>-->
-<!--				{% let name = " " %}-->
-<!--				{% for name in index_sec %}-->
-<!--				<option id="category_name_specific">{{ name }}</option>-->
-<!--				{% endfor %}-->
-<!--			</select>-->
-
-<!--			<button type="submit">Create Post</button><br/><br/><br/>-->
+						<!--            <div class="column">-->
+						<!--              <table class="table">-->
+						<!--                <tr style="height:60px">-->
+						<!--                  <th>Actions</th>-->
+						<!--                </tr>-->
+						<!--                <tr style="height:65px">-->
+						<!--                  {% for items in index_id %}-->
+						<!--                  <td>-->
+						<!--                    <a href="/post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>-->
+						<!--                    <a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>-->
+						<!--                  </td>-->
+						<!--                </tr>-->
+						<!--                {% endfor %}-->
+						<!--              </table>-->
+						<!--            </div>-->
+					</div><br/>
 
 
 
-<!--		</form>-->
+				</div><br/><br/>
+				<!--    </div>-->
+				<br/><br/><br/>
+				<br/><br/><nav aria-label="Page navigation">
+				<ul class="pagination">
 
-<!--	<h2>Or, Create a Category</h2><br/><br/>-->
+					{% for i in page_nav_links %}
+					{% if i == page_number %}
+					<li class="page-item active">
 
-<!--	<form action="/create_category" method="post">-->
+						<a id="page_nav1"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
+					</li><br/><br/><br/>
+					{% else if i != page_number %}
+					<li class="page-item">
 
-<!--	<label><b>Category Name</b></label>-->
-
-<!--	<input type="text" placeholder="Enter Category Name" name="category_name">-->
-
-<!--	<button type="submit">Create Category</button><br/><br/><br/>-->
-
-<!--	<a href="/show_categories">Show Categories</a><br/><br/><br/>-->
-
-<!--	</form>-->
-</div>
-		</div>
-	</div>
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					...
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
+						<a id="page_nav"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
+					</li><br/><br/><br/>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</nav>
+				<!--  </div>-->
 			</div>
-		</div>
+				</div>
 	</div>
 	</body>
 

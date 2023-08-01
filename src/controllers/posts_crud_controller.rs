@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
@@ -109,8 +109,8 @@ pub async fn delete_categories_form(Path(category_id): Path<i32>) -> Redirect {
 
 pub async fn home_gui() -> impl IntoResponse {
     let mut psec: Vec<String> = vec![];
-    let mut post_id_with_title: HashMap<i32, String> = HashMap::new();
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     psec.clear();
     let category_list = get_all_categories().await;
     let mut psec: Vec<String> = vec![];
@@ -246,7 +246,7 @@ pub async fn create_category_form_ui() -> impl IntoResponse {
 pub async fn show_all_categories() -> impl IntoResponse {
     let mut psec = vec![];
     let mut category_ids = vec![];
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let category_list = get_all_categories_with_limit().await;
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
@@ -294,7 +294,7 @@ pub async fn show_all_categories_with_pagination(
 ) -> impl IntoResponse {
     let mut psec = vec![];
     let mut category_ids = vec![];
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let _category_list = get_all_categories_with_limit().await;
     //let s = get_connection().await;
     let mut pnav = vec![];

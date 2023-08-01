@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::global_number_of_items_per_page_64;
 use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, IndexTemplate};
@@ -14,13 +14,13 @@ use std::string::String;
 pub async fn index() -> impl IntoResponse {
     let mut psec: Vec<String> = vec![];
     let mut m2: i64 = 0;
-    let mut post_id_with_title: HashMap<i32, String> = HashMap::new();
-    let mut category_id_with_title: HashMap<i32, String> = HashMap::new();
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> =BTreeMap::new();
     let category_list = get_all_categories().await;
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
             category_id_with_title.insert(category.category_id,category.category_name.clone());
-            psec.push(category.clone().category_name);
+            psec.push(category.clone().category_name); // category id
         })
     });
     let posts = get_connection().await.unwrap();
@@ -58,6 +58,7 @@ pub async fn index() -> impl IntoResponse {
         index_id: &pids,
         index_title: String::from("Posts"),
         page_number: &1,
+        selected_category: &"Not Selected".to_string(),
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,

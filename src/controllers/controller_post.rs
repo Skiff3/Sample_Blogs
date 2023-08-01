@@ -1,15 +1,28 @@
-use crate::model::models::{get_all_categories, get_details_of_post, get_post_name_by_id, GuestTemplate, PostTemplate};
+use crate::model::models::{get_all_categories, get_category_name_by_post_id, get_details_of_post, get_post_name_by_id, GuestTemplate, PostTemplate};
 use askama::Template;
 use axum::{
     extract::Path,
     http::StatusCode,
     response::{Html, IntoResponse},
 };
+use std::string::String;
 
 pub async fn show_post(Path(post_id): Path<i32>) -> impl IntoResponse {
     let post_name = post_id.clone();
     let mut psec: Vec<String> = vec![];
+    let mut p_name = String::from("");
+    let mut c_name = String::from("");
     let s2 = get_details_of_post(post_id).await;
+    let a = get_post_name_by_id(post_id).await;
+    let b = a.iter();
+    for i in b{
+        p_name = i.post_title.clone();
+    }
+    let c = get_category_name_by_post_id(p_name).await;
+    let d = c.iter();
+    for j in d{
+        c_name = j.category_name.clone();
+    }
     let category_list = get_all_categories().await;
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
@@ -20,6 +33,7 @@ pub async fn show_post(Path(post_id): Path<i32>) -> impl IntoResponse {
         post_ids: post_id,
         index_sec: &psec,
         post_title: "none",
+        selected_category: "",
         post_description: "",
         post_body: "none",
     };
@@ -31,6 +45,7 @@ pub async fn show_post(Path(post_id): Path<i32>) -> impl IntoResponse {
                     post_ids: post_id,
                     index_sec: &psec,
                     post_title: &post.post_title,
+                    selected_category: &c_name,
                     post_description: " ",
                     post_body: &post.post_body,
                 };

@@ -137,8 +137,8 @@ ul.CTAs {
 
 ul.CTAs a {
     text-align: center;
-    font-size: 0.9em !important;
-    display: block;
+
+
     border-radius: 5px;
     margin-bottom: 5px;
 }
@@ -150,7 +150,7 @@ a.download {
 
 a.article,
 a.article:hover {
-    background: #6d7fcc !important;
+
     color: #fff !important;
 }
 
@@ -194,32 +194,25 @@ a.article:hover {
 
 			<ul class="list-unstyled components">
 
-				<li>
-					<a href="http://0.0.0.0:4000/post/new">Create New Post</a>
-				</li>
-				<li class="active">
-					<a href="http://0.0.0.0:4000/posts">View All Posts</a>
-				</li>
-				<li>
-					<a href="http://0.0.0.0:4000/categories">View All Categories</a>
-				</li>
 
+				<li class="active">
+					<a href="http://0.0.0.0:4000/admin">Posts</a>
+				</li>
+				<li>
+					<a href="http://0.0.0.0:4000/admin/categories">Categories</a>
+				</li>
+			</ul>
+			<ul class="list-unstyled CTAs">
+				<li>
+					<a href="/logout" class="article">Logout</a>
+				</li>
 			</ul>
 		</nav>
 		<div id="content">
 
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<div class="container-fluid">
+		<div class="container-fluid">
 
-					<button type="button" id="sidebarCollapse" class="btn btn-info">
-						<i class="fa fa-align-left"></i>
-					</button>
-
-				</div>
-			</nav>
-		<div class="container">
-
-		<h2>Update the post {{post_title}}</h2><br/><br/>
+		<h2>Update</h2><br/><br/>
 <!--		<div id="Post">-->
 <!--		{% block post %}-->
 <!--		{% endblock %}-->
@@ -241,14 +234,16 @@ a.article:hover {
 			<div class="mb-3">
 				<label><b>Category</b></label><br/>
 				<select id="category_name" name="category_name">
-					<option id="category_name_gen_2">--Select--</option>
+					<option id="category_name_gen_2">{{ selected_category }}</option>
 					{% let name = " " %}
 					{% for name in index_sec %}
+					{% if name != selected_category %}
 					<option id="sec">{{ name }}</option>
+					{% endif %}
 					{% endfor %}
 				</select><br/><br/>
 			</div><br/><br/>
-			<button type="submit">Update Post</button>
+			<button type="submit">Update</button>
 		</form>
 		</div>
 		</div>
