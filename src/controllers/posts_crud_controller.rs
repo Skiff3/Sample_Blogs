@@ -43,7 +43,7 @@ pub async fn create_posts_form_ui() -> impl IntoResponse {
     });
     let template = NewPostTemplate { index_sec: &psec };
 
-    //
+
     template.render().map(|html| Html(html)).map_err(|err| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,

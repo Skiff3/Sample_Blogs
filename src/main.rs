@@ -30,7 +30,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
-//todo category selection, single table, test
+
 #[derive(Deserialize)]
 pub struct CreatePost {
     pub post_title: String,
@@ -39,7 +39,7 @@ pub struct CreatePost {
 }
 
 #[derive(Deserialize)]
-pub struct CreateCategory {
+pub struct CreateCategory { 
     pub category_name: String,
 }
 
@@ -130,7 +130,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
     };
     user_vector.push(user1);
     async fn logout_handler(mut auth: AuthContext) -> Redirect {
-        auth.logout().await;// auth context and redirect
+        auth.logout().await;
         Redirect::to("/login")
     }
 
@@ -152,13 +152,13 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         .route("/admin", get(index))
         .route("/admin/categories", get(show_all_categories))
         .route(
-            "/admin/categories/:page_number",
+            "/admin/categories/:page_number", //
             get(show_all_categories_with_pagination),
         )
         .route("/post/:post_id", get(show_post))
         .route("/admin/page/:page_number", get(page))
         .merge(admin_blog_routes)
-        .route(
+        .route( //
             "/admin/post/new",
             get(create_posts_form_ui).post(create_posts_form),
         )
@@ -170,7 +170,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         )
         .route("/admin/update_post/:post_id", post(update_posts_form))
         .route(
-            "/admin/category/new",
+            "/admin/category/new", // new create
             get(create_category_form_ui).post(create_catgories_form),
         )
         .route("/admins", get(admin_gui))
@@ -198,8 +198,5 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
     change urls
     database column to null
     from name to id
-
-
-
      */
 }

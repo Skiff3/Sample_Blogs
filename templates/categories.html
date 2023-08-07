@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -148,7 +148,7 @@ a.download {
 
 a.article,
 a.article:hover {
-    background: #6d7fcc !important;
+
     color: #fff !important;
 }
 
@@ -234,7 +234,7 @@ th, td {
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h3>Posts Admin Panel</h3>
+            <h3>Admin Panel</h3>
         </div>
 
         <ul class="list-unstyled components">
@@ -248,23 +248,23 @@ th, td {
                 <li class="active">
                     <a href="http://0.0.0.0:4000/admin/categories">Categories</a>
                 </li>
-
-            </ul>
-        <ul class="list-unstyled CTAs">
             <li>
                 <a href="/logout" class="article">Logout</a>
             </li>
-        </ul>
+
+            </ul>
+
     </nav>
 
     <!-- Page Content  -->
     <div id="content">
+        <div class="container-fluid">
 
 
-        <h2>Categories</h2>
-        <p>The posts belong to different categories such as Category A, Category B, Category C, Category D. A post belongs to a single category but a category can have more than one post.</p>
+        <h2>Categories</h2><br/><br/><br>
 
-        <div class="container">
+
+
 
 
             <!--		<div class="links">-->
@@ -276,11 +276,10 @@ th, td {
             <!--		   </ul>-->
             <!--		</div>-->
             <div>
-                <a style="float:right; margin-right:30px;" href="http://0.0.0.0:4000/admin/category/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Category</a>
-            </div><br/><br/>
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
+                <a style="float:right; margin-right:10px;" href="http://0.0.0.0:4000/admin/category/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Category</a>
+            </div><br/></br>
+
+                    <div>
                         <div class="row">
                             <div class="column">
                                 <table style="width:200%" class="table">
@@ -318,22 +317,22 @@ th, td {
 <!--                            </div><br/>-->
                     </div>
 
-                </div><br/><br/>
+                </div><br/>
+            <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% for i in page_nav_links %}
+                <li class="page-item">
+                    <a id="page_id" onclick="go_to_pagination()" class="page-link" href="http://0.0.0.0:4000/admin/categories/{{ i }}" >{{ i }}</a>
+                </li><br/><br/>
+                {% endfor %}
+            </ul>
+        </nav>
             </div>
-            <br/><br/><br/>
-                <br/><br/><nav aria-label="Page navigation">
-                <ul class="pagination">
-                    {% for i in page_nav_links %}
-                    <li class="page-item">
-                        <a id="page_id" onclick="go_to_pagination()" class="page-link" href="http://0.0.0.0:4000/admin/categories/{{ i }}" >{{ i }}</a>
-                    </li><br/><br/>
-                    {% endfor %}
-                </ul>
-            </nav>
+
         </div>
 
         <br/><br/>
-        <div class="container">
+
             <!--		<h2>Get Started, Create a Blog</h2><br/><br/>-->
 
             <!--		<form action="/create_post" method="post">-->
@@ -373,7 +372,7 @@ th, td {
             <!--	<a href="/show_categories">Show Categories</a><br/><br/><br/>-->
 
             <!--	</form>-->
-        </div>
+
     </div>
 </div>
 </div>

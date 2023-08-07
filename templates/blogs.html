@@ -229,7 +229,7 @@ th, td {
   <!-- Sidebar  -->
   <nav id="sidebar">
     <div class="sidebar-header">
-      <h3>Posts Admin Panel</h3>
+      <h3>Admin Panel</h3>
     </div>
 
     <ul class="list-unstyled components">
@@ -243,19 +243,16 @@ th, td {
           <a href="http://0.0.0.0:4000/admin/categories">Categories</a>
         </li>
 
-      </ul>
 
-    </ul>
-    <ul class="list-unstyled CTAs">
       <li>
-        <a href="/logout" class="article">Logout</a>
+        <a href="/logout">Logout</a>
       </li>
     </ul>
   </nav>
 
   <!-- Page Content  -->
   <div id="content">
-
+      <div class="container-fluid">
 <!--    <nav class="navbar navbar-expand-lg navbar-light bg-light">-->
 <!--      <div class="container-fluid">-->
 
@@ -266,9 +263,7 @@ th, td {
 <!--      </div>-->
 <!--    </nav>-->
 
-    <h2>Posts</h2>
-    <p>The posts belong to different categories such as Category A, Category B, Category C, Category D. A post belongs to a single category but category can have more than one post.</p>
-
+    <h2>Posts</h2><br><br>
 <!--    <div class="line"></div>-->
 
 <!--    <h2>Lorem Ipsum Dolor</h2>-->
@@ -285,7 +280,7 @@ th, td {
 <!--    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>-->
 <!--  </div>-->
 <!--</div>-->
-      <div class="container-fluid">
+
 
 <form>
   <label for="blog">Choose a category:</label>
@@ -303,16 +298,16 @@ th, td {
 <br><br>
 
     <div>
-      <a style="float:right; margin-right:30px;" href="http://0.0.0.0:4000/admin/post/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Post</a>
-    </div><br/><br/><br/><br/>
+      <a style="float:right; margin-right:10px;" href="http://0.0.0.0:4000/admin/post/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Post</a>
+    </div><br/><br/>
 
 
 <!--    <div class="container">-->
 <!--      <div class="row">-->
-        <div class="col-12">
+        <div>
           <div class="row">
             <div class="column">
-              <table style="width:200%; margin-right:20px;" class="table">
+              <table style="width:200%; margin-right:20px;" class="table table-fixed">
                 <thead>
                 <tr style="height:60px">
                   <th scope="col">Title</th>
@@ -323,10 +318,10 @@ th, td {
                 </thead>
                 <tr style="height:63px">
                   {% for item in post_id_title %}
-                  <td style="height:63px"><a href="/post/{{ item.0}}">{{item.1}}</a> </td>
-                  <td style="height:63px">Description</td>
-                  <td style="height:63px">20th May</td>
-                  <td>
+                  <td style="height:63px" class="col-3"><a href="/post/{{ item.0}}">{{item.1}}</a> </td>
+                  <td style="height:63px" class="col-3">Description</td>
+                  <td style="height:63px" class="col-3">20th May</td>
+                  <td class="col-3">
                     <a href="/post/{{ item.0}}" title="Edit" type="button" class="btn btn-primary"><i class="fa fa-edit"></i>&nbsp;Edit</a>
                     <a href="#" type="button" class="btn btn-danger" title="Delete" onclick="confirm_delete({{item.0}})"><i class="fa fa-trash-o"></i>&nbsp;Delete</a>
                   </td>
@@ -349,14 +344,14 @@ th, td {
 <!--                {% endfor %}-->
 <!--              </table>-->
 <!--            </div>-->
-          </div><br/>
+          </div>
 
 
 
-      </div><br/><br/>
+      </div><br/>
 <!--    </div>-->
-    <br/><br/><br/>
-<br/><br/><nav aria-label="Page navigation">
+
+<nav aria-label="Page navigation">
   <ul class="pagination">
 <!--    {% for i in page_nav_links %}-->
 <!--    <li class="page-item">-->
