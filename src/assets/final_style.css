@@ -1,25 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>New Category</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
-        rel="stylesheet"  type='text/css'>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <script>
-    $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-            });
-        });
-  </script>
-  <style>
-@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+  @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
@@ -185,68 +164,40 @@ a.article:hover {
   padding: 2rem 0rem;
 }
 
-h4 {
-  margin: 2rem 0rem 1rem;
-}
-
 .table-image {
   td, th {
     vertical-align: middle;
   }
 }
-  </style>
-</head>
-<body>
-<div class="wrapper">
-  <!-- Sidebar  -->
-  <nav id="sidebar">
-    <div class="sidebar-header">
-      <h3>Admin Panel</h3>
-    </div>
+* {
+  box-sizing: border-box;
+}
 
-    <ul class="list-unstyled components">
+.row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
 
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
 
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
 
-        <li>
-          <a href="http://0.0.0.0:4000/admin">Posts</a>
-        </li>
-        <li class="active">
-          <a href="http://0.0.0.0:4000/admin/categories">Categories</a>
-        </li>
+  border: 1px solid #ddd;
+}
 
-      <li>
-        <a href="/logout">Logout</a>
-      </li>
-    </ul>
-  </nav>
-
-  <!-- Page Content  -->
-  <div id="content">
-
-
-    <div class="container">
-      <h2>Update Category</h2><br/><br/>
-
-
-      <!--			<label><b>Post Id</b></label>-->
-      <!--			<input type="number" placeholder="Enter Post Id" name="post_id">-->
-
-
-
-      <form action="/admin/category/update/{{index_sec}}" method="post">
-        <div class="mb-3">
-          <label><b>Category Name</b></label><br>
-          <input type="text" class="form-control" id="category_name"name="category_name" value="{{index_name}}" placeholder="Category Name">
-        </div>
-
-        <button type="submit">Update Category</button><br/><br/><br/>
-
-
-      </form>
-    </div>
-  </div>
-</div>
-</body>
-</html>
+th, td {
+  text-align: left;
+  padding: 16px;

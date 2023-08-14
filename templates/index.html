@@ -1,20 +1,20 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 	<head>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-		<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
-				rel="stylesheet"  type='text/css'>
+		<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"  type='text/css'>
+		<link rel="stylesheet" type="text/css" href="assets/final_style.css">
 		<title> {{ index_title }} </title>
 		<script>
-    $(document).ready(function () {
+    		$(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
-        });
-  </script>
+        	});
+  		</script>
 		<style>
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 body {
@@ -66,6 +66,12 @@ a:focus {
     width: 100%;
     align-items: stretch;
 }
+
+<!--.wrapper {-->
+<!--	overflow: hidden;-->
+<!--	width: 100%;-->
+<!--	table-layout: fixed;-->
+<!--}-->
 
 #sidebar {
     min-width: 250px;
@@ -148,13 +154,13 @@ a.download {
 
 a.article,
 a.article:hover {
-    background: #6d7fcc !important;
-    color: #fff !important;
+    background: #6d7fcc
+    color: #fff
 }
 
 /* ---------------------------------------------------
     CONTENT STYLE
------------------------------------------------------ */
+ ----------------------------------------------------- */
 
 #content {
     width: 100%;
@@ -165,7 +171,7 @@ a.article:hover {
 
 /* ---------------------------------------------------
     MEDIAQUERIES
------------------------------------------------------ */
+ ----------------------------------------------------- */
 
 @media (max-width: 768px) {
     #sidebar {
@@ -191,6 +197,39 @@ h4 {
     vertical-align: middle;
   }
 }
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
   </style>
 	</head>
 
@@ -201,52 +240,20 @@ h4 {
 				<!-- Sidebar  -->
 				<nav id="sidebar">
 					<div class="sidebar-header">
-						<h3>Blogs Admin Panel</h3>
+						<h3>Admin Panel</h3>
 					</div>
 
 					<ul class="list-unstyled components">
-						<p>Manage Blogs</p>
-						<li class="active">
-							<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Blogs</a>
-							<ul class="collapse list-unstyled" id="homeSubmenu">
-								<li>
-									<a href="http://0.0.0.0:4000/post/new">Create New Blog</a>
+								<li class="active">
+									<a href="http://0.0.0.0:4000/admin">Posts</a>
 								</li>
-								<li>
-									<a href="http://0.0.0.0:4000/posts">View All Blogs</a>
-								</li>
-								<li>
-									<a href="http://0.0.0.0:4000/category/new">Create New Category</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="#">About</a>
-						</li>
-						<!--				<li>-->
-						<!--					<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>-->
-						<!--					<ul class="collapse list-unstyled" id="pageSubmenu">-->
-						<!--						{% for i in page_nav_links %}-->
-						<!--						<li>-->
-						<!--							<a id="page_ids" onclick="go_to_pagination()" class="page-link"  href="/page/{{ i }}" >Example Pages</a>-->
-						<!--						</li>-->
-						<!--						{% endfor %}-->
-						<!--					</ul>-->
-						<!--				</li>-->
-						<li>
-							<a href="#">Portfolio</a>
-						</li>
-						<li>
-							<a href="#">Contact</a>
-						</li>
-					</ul>
+							<li>
+								<a href="http://0.0.0.0:4000/admin/categories">Categories</a>
+							</li>
 
-					<ul class="list-unstyled CTAs">
+
 						<li>
-							<a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
-						</li>
-						<li>
-							<a href="/logout" class="article">Logout</a>
+							<a href="/logout">Logout</a>
 						</li>
 					</ul>
 				</nav>
@@ -254,36 +261,21 @@ h4 {
 				<!-- Page Content  -->
 				<div id="content">
 
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<div class="container-fluid">
+<!--			<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+<!--&lt;!&ndash;				<div class="container-fluid">&ndash;&gt;-->
 
-					<button type="button" id="sidebarCollapse" class="btn btn-info">
-						<i class="fas fa-align-left"></i>
-						<span>Show Menu</span>
-					</button>
-					<button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<i class="fas fa-align-justify"></i>
-					</button>
+<!--					<button type="button" id="sidebarCollapse" class="btn btn-info">-->
+<!--						<i class="fa fa-align-left"></i>-->
+<!--					</button>-->
 
-				</div>
-			</nav>
+<!--&lt;!&ndash;				</div>&ndash;&gt;-->
+<!--			</nav>-->
+			<div class="container-fluid">
 
-			<h2>Displaying all blogs</h2>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<h2>Posts</h2><br/><br/>
 
-			<div class="container">
 
-		<form>
-		<label for="blog">Filter by category:</label>
-		<select onchange="getval(this);" id="category" name="blog" id="blog">
-			<option id="category_name_gen">All</option>
-			{% let name = " " %}
-			{% for name in index_sec %}
-			<option id="sec">{{ name }}</option>
-			{% endfor %}
-		</select>
-		</form>
-		<br><br>
+
 
 
 <!--		<div class="links">-->
@@ -294,131 +286,132 @@ h4 {
 <!--			{% endfor %}-->
 <!--		   </ul>-->
 <!--		</div>-->
-				<div class="container">
+<!--				<div class="container-fluid">-->
+					<form>
+						<label for="blog">Choose a category:</label>
+						<select onchange="getval(this);" id="category" name="blog" id="blog">
+
+							{% let name = " " %}
+							{% for name in category_id_title %}
+							{% if name.1 == "All" %}
+							<option value={{name.0}}  selected >{{ name.1 }}</option>
+							{% else %}
+							<option value={{name.0}}>{{ name.1 }}</option>
+							{% endif %}
+							{% endfor %}
+						</select>
+					</form>
+					<br><br>
+
+					 <div>
+      <a style="float:right; margin-right:10px;" href="http://0.0.0.0:4000/admin/post/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Post</a>
+    </div><br/><br/>
+
+
+
+				<!--      <div class="row">-->
+				<div>
 					<div class="row">
-						<div class="col-12">
-							<table class="table table-bordered">
+						<div class="column">
+							<table style="width:200%; margin-right:20px;" class="table table-fixed">
 								<thead>
-								<tr>
-									<th scope="col">Post Title</th>
-									<th scope="col">Post Body</th>
+								<tr style="height:60px">
+									<th scope="col">Title</th>
+									<th scope="col">Body</th>
 									<th scope="col">Timestamp</th>
-									<th scope="col">Actions</th>
+									<th>Actions</th>
 								</tr>
 								</thead>
-								<tbody>
-								{% for item in index_links %}
-								<tr>
-									<td><a href="/post/{{ item}}">{{item}}</a> </td>
-									<td>Description</td>
-									<td>20th May</td>
-									<td>
-										<a href="/post/{{ item}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-										<a href="/delete/{{item}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
-									</td>
-
-								</tr>
-								{% endfor %}
-
-								</tbody>
-							</table><br/><br/><br/>
-
-							<div>
-								<a href="http://0.0.0.0:4000/post/new" type="button" class="btn btn-primary">New Post<i class="fa fa-new"></i></a>
-							</div><br/><br/>
-
-
-							<table class="table table-bordered">
-								<thead>
-								<tr>
-									<th scope="col">Category Id</th>
-									<th scope="col">Action</th>
-								</tr>
-								</thead>
-								<tbody>
-								{% for items in index_sec%}
-								<tr>
-									<td><a href="#">{{items}}</a> </td>
-									<td>
-										<a href="http://0.0.0.0:4000/category/update/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-										<a href="http://0.0.0.0:4000/delete/category/{{items}}" type="button" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
+								<tr style="height:63px">
+									{% for item in post_id_title %}
+									<td style="height:63px"><a href="/post/{{ item.0}}" class="col-3">{{item.1}}</a> </td>
+									<td style="height:63px" class="col-3">Description</td>
+									<td style="height:63px" class="col-3">20th May</td>
+									<td class="col-3">
+										<a href="/post/{{ item.0}}" title="Edit" type="button" class="btn btn-primary"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+										<a href="#" type="button" class="btn btn-danger" title="Delete" onclick="confirm_delete({{item.0}})"><i class="fa fa-trash-o"></i>&nbsp;Delete</a>
 									</td>
 								</tr>
 								{% endfor %}
-
-								</tbody>
-							</table><br/><br/><br/>
+							</table>
 						</div>
+						<!--            <div class="column">-->
+						<!--              <table class="table">-->
+						<!--                <tr style="height:60px">-->
+						<!--                  <th>Actions</th>-->
+						<!--                </tr>-->
+						<!--                <tr style="height:65px">-->
+						<!--                  {% for items in index_id %}-->
+						<!--                  <td>-->
+						<!--                    <a href="/post/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>-->
+						<!--                    <a href="#" type="button" class="btn btn-danger" onclick="confirm_delete({{items}})"><i class="fa fa-trash-o"></i></a>-->
+						<!--                  </td>-->
+						<!--                </tr>-->
+						<!--                {% endfor %}-->
+						<!--              </table>-->
+						<!--            </div>-->
+					</div><br/>
 
-					</div>
-					<div>
-						<a href="http://0.0.0.0:4000/category/new" type="button" class="btn btn-primary">New Category<i class="fa fa-new"></i></a>
-					</div><br/><br/>
+
+
 				</div>
-	<br/><br/><br/>
-	<br/><br/><nav aria-label="Page navigation">
-		<ul class="pagination">
-			{% for i in page_nav_links %}
-			<li class="page-item">
-				<a class="page-link" href="/admin/page/{{ i }}" >{{ i }}</a>
-			</li><br/><br/>
-			{% endfor %}
-		</ul>
-	</nav><br><br><br>
-	</div>
+				<!--    </div>-->
 
-	<br/><br/>
-<div class="container">
-<!--		<h2>Get Started, Create a Blog</h2><br/><br/>-->
+				<nav aria-label="Page navigation">
+				<ul class="pagination">
 
-<!--		<form action="/create_post" method="post">-->
-<!--&lt;!&ndash;			<label><b>Post Id</b></label>&ndash;&gt;-->
-<!--&lt;!&ndash;			<input type="number" placeholder="Enter Post Id" name="post_id">&ndash;&gt;-->
+					{% for i in page_nav_links %}
+					{% if i == page_number %}
+					<li class="page-item active">
 
-<!--			<label><b>Post Title</b></label>-->
-<!--			<input type="text" placeholder="Enter Post Title" name="post_title">-->
+						<a id="page_nav1"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
+					</li><br/><br/><br/>
+					{% else if i != page_number %}
+					<li class="page-item">
 
-<!--			<label><b>Post Body</b></label>-->
-<!--			<input type="text" placeholder="Enter Post Description" name="post_body">-->
-
-<!--			<select id="category_name" name="category_name">-->
-<!--				<option id="category_name_gen_2">&#45;&#45;Select&#45;&#45;</option>-->
-<!--				{% let name = " " %}-->
-<!--				{% for name in index_sec %}-->
-<!--				<option id="category_name_specific">{{ name }}</option>-->
-<!--				{% endfor %}-->
-<!--			</select>-->
-
-<!--			<button type="submit">Create Post</button><br/><br/><br/>-->
-
-
-
-<!--		</form>-->
-
-<!--	<h2>Or, Create a Category</h2><br/><br/>-->
-
-<!--	<form action="/create_category" method="post">-->
-
-<!--	<label><b>Category Name</b></label>-->
-
-<!--	<input type="text" placeholder="Enter Category Name" name="category_name">-->
-
-<!--	<button type="submit">Create Category</button><br/><br/><br/>-->
-
-<!--	<a href="/show_categories">Show Categories</a><br/><br/><br/>-->
-
-<!--	</form>-->
-</div>
-		</div>
+						<a id="page_nav"  class="page-link" href="/admin/page/{{ i }}" >{{i}}</a>
+					</li><br/><br/><br/>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</nav>
+				<!--  </div>-->
+			</div>
+				</div>
 	</div>
 	</body>
 
 	<script>
         function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
-        let element  = document.getElementById("category");
 
-        element.value = sel.value;
+		let selected_category = sel.value.toString();
+        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+selected_category);
+
+        }
+         function confirm_delete(item){
+
+      		if(confirm("Confirm delete") == true){
+      		window.location.replace("http://0.0.0.0:4000/delete/"+item);
+      		}
+      		else{
+      		alert("Not deleted")
+      		}
+        }
+
+        function set_active(item){
+        alert("in function"+item)
+        if(item == "0.0.0.0:4000/admin/page/1"){
+				alert("equal");
+        }
+        document.querySelectorAll(".page_nav").forEach((link) => {
+        	if(link.href == window.location.href){
+        	    alert(link);
+        		link.classList.add("active");
+        		link.setAttribute("aria-current","page")
+        	}else{
+        	  alert("in else"+link);
+        	}
+        });
         }
     </script>
 </html>

@@ -1,5 +1,6 @@
-use crate::model::models::{get_filtered_from_database, HomeTemplate};
-use crate::{global_number_of_items_per_page, BlogTemplate};
+use std::collections::{BTreeMap, HashMap};
+use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_count_of_posts, get_filtered_from_database, HomeFilterTemplate};
+use crate::{global_number_of_items_per_page, global_number_of_items_per_page_64, BlogTemplate};
 use askama::Template;
 use axum::{
     extract::Path,
@@ -7,159 +8,147 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::sync::Arc;
+use crate::controllers::posts_crud_controller::get_vec_len_of_count;
+use paginate_web::{Page,Pages};
 
 pub async fn admin_blog_pagination(
-    Path((category, page_number)): Path<(String, String)>,
+    Path((category, page_number)): Path<(i32, i32)>,
 ) -> impl IntoResponse {
-    let mut plinks: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new(); // number_of_pages.
-    let final_category = &category[0..category.len()];
-    let mut psec: Vec<String> = Vec::new();
-    let mut pnav: Vec<String> = Vec::new();
-    //let mut check_category:String = category;
-    psec.clear(); // psec.clear()
-    psec.push("Category A".to_string());
-    psec.push("Category B".to_string());
-    psec.push("Category C".to_string());
-    psec.push("No Category".to_string());
-
-    let page_number_integer: i32 = page_number.parse().unwrap();
-    let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    println!("page starts from {}", offset_start);
-
-    let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await;
-
-    // for post in &mut posts2 {
-    //     post.post_title = post.post_title.replace("-", " ");
-    // }
-
-    let shared_state2 = Arc::new(posts2);
-    let number_of_pages = shared_state2.len();
-    // if shared_state2.len()%3==0 {
-    //     number_of_pages = shared_state2.len()/3;
-    // }
-    // else{
-    //     number_of_pages = (shared_state2.len()/3)+1;
-    // }
-    println!(
-        "total{} number of pages {}",
-        shared_state2.len(),
-        number_of_pages
-    );
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
+    let mut plinks: Vec<String> = vec![];
+    let mut pids: Vec<i32> = vec![];
+    let mut len = 0;
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let final_category = category;
+    let mut psec: Vec<String> = vec![];
+    let mut pnav: Vec<i32> = vec![];
+    let temps = get_category_name_by_id(category).await;
+    let iters = temps.iter();
+    let mut category_name = "".to_string();
+    for i in iters{
+        category_name = i.category_name.clone();
     }
-    for i in 0..shared_state2.len() {
-        plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id);
-    }
-    pids.clear();
-    plinks.clear();
-
-    // for i in 0..shared_state2.len() {
-    //     plinks.push(shared_state2[i].post_title.clone());
-    //     pids.push(shared_state2[i].post_id);
-    // }
-    let list_iter = shared_state2.map(|posts| {
-        //plinks = posts.iter()
-        //.map(|post| {post.post_title.clone()}).collect();
-        let v: Vec<_> = posts.iter()
-            .map(|post| {post.post_title.clone()}).collect();
-        let v2: Vec<_> = posts.iter()
-            .map(|post| {post.post_id.clone()}).collect();
-
-        (v,v2)
+    psec.clear();
+    let category_list = get_all_categories().await;
+    let mut psec: Vec<String> = vec![];
+    category_list.iter().for_each(|categories| {
+        categories.iter().for_each(|category| {
+            category_id_with_title.insert(category.category_id,category.category_name.clone());
+            psec.push(category.clone().category_name);
+        })
     });
 
-    let (plinks,pids) = list_iter.unwrap_or_default();
+    let page_number_integer: i32 = page_number;
+    let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
+
+    let posts2 = get_filtered_from_database(final_category.clone(), offset_start).await.unwrap();
+    let number_of_posts_vector =
+        count_of_get_filtered_from_database_by_category(final_category.clone()).await;
+    println!("len {}", len);
+    let m2 = get_vec_len_of_count(number_of_posts_vector);
+    let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
+    println!("number in filter navigate {}", number_of_pages);
+    (1..number_of_pages + 1)
+        .into_iter()
+        .for_each(|i| pnav.push(i as i32));
+    posts2.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
+    //let list_iter = s.iter().map()
+    let plinks = posts2.iter().map(|post| post.post_title.clone()).collect();
+    let pids = posts2.iter().map(|post1| post1.post_id.clone()).collect();
+    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
+    //(plinks, pids) = list_iter.unwrap_or_default();
+    println!("hashmap {:?}",post_id_with_title);
 
     let template = BlogTemplate {
+        post_id_title:post_id_with_title,
+        category_id_title: category_id_with_title,
         index_id: &pids,
-        index_title: String::from("Blogs"),
-        index_links: &plinks,
-        index_sec: &psec,
-        page_nav_links: &pnav,
-        current_url_page: ".".to_string(),// change the format
-    };
-
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to render template. Error {}", err),
-        )
-            .into_response(),
-    }
-}
-
-pub async fn blog_pagination(
-    Path((category, page_number)): Path<(String, String)>,
-) -> impl IntoResponse {
-    let mut plinks: Vec<String> = Vec::new();
-    let mut pids: Vec<i32> = Vec::new(); // number_of_pages.
-    let final_category = &category[0..category.len()];
-    let mut psec: Vec<String> = Vec::new();
-    let mut pnav: Vec<String> = Vec::new();
-    //let mut check_category:String = category;
-    psec.clear(); // psec.clear()
-    psec.push("Category A".to_string());
-    psec.push("Category B".to_string());
-    psec.push("Category C".to_string()); // auth steps: html, database(user_db), controller() -> link >
-    psec.push("No Category".to_string());
-
-    let page_number_integer: i32 = page_number.parse().unwrap();
-    let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    println!("page starts from {}", offset_start);
-
-    let posts2 = get_filtered_from_database(final_category.to_string(), offset_start).await;
-
-    // for post in &mut posts2 {
-    //     post.post_title = post.post_title.replace("-", " ");
-    // }
-
-    let shared_state2 = Arc::new(posts2);
-    let number_of_pages = shared_state2.len();
-    // if shared_state2.len()%3==0 {
-    //     number_of_pages = shared_state2.len()/3;
-    // }
-    // else{
-    //     number_of_pages = (shared_state2.len()/3)+1;
-    // }
-    println!(
-        "total{} number of pages {}",
-        shared_state2.len(),
-        number_of_pages
-    );
-    for i in 1..number_of_pages + 1 {
-        pnav.push(i.to_string())
-    }
-    for i in 0..shared_state2.len() {
-        plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id);
-    }
-    pids.clear();
-    plinks.clear();
-
-    for i in 0..shared_state2.len() {
-        plinks.push(shared_state2[i].post_title.clone());
-        pids.push(shared_state2[i].post_id);
-    }
-
-    let template = HomeTemplate {
-        index_id: &pids,
-        index_title: String::from("Blogs"),
+        index_title: String::from("Posts"),
+        page_number: &page_number,
+        category_name:&category_name,
         index_links: &plinks,
         index_sec: &psec,
         page_nav_links: &pnav,
         current_url_page: ".".to_string(),
     };
 
-    match template.render() {
-        Ok(html) => Html(html).into_response(),
-        Err(err) => (
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
             StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to render template. Error {}", err),
+            format!("Failed to render {}", err),
         )
-            .into_response(),
+    })
+}
+
+pub async fn blog_pagination(
+    Path((category, page_number)): Path<(i32, i32)>,
+) -> impl IntoResponse {
+    let mut plinks: Vec<String> = vec![];
+    let mut pids: Vec<i32> = vec![];
+    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
+    let final_category = category;
+    let mut psec: Vec<String> = vec![];
+    let mut pnav: Vec<i32> = vec![];
+    let temps = get_category_name_by_id(category).await;
+    let iters = temps.iter();
+    let mut category_name = "".to_string();
+    for i in iters{
+        category_name = i.category_name.clone();
     }
+    psec.clear();
+    let category_list = get_all_categories().await;
+    let mut psec: Vec<String> = vec![];
+    category_list.iter().for_each(|categories| {
+        categories.iter().for_each(|category| {
+            category_id_with_title.insert(category.category_id,category.category_name.clone());
+            psec.push(category.clone().category_name);
+        })
+    });
+
+    let page_number_integer: i32 = page_number;
+    let pages: Pages = Pages::new(
+        get_vec_len_of_count(get_count_of_posts().await)
+            .try_into()
+            .unwrap(),
+        global_number_of_items_per_page() as usize,
+        None,
+    );
+    let page = pages.with_offset(page_number as usize);
+    let mut no_of_pages = page.count_of_pages;
+
+    let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
+    let posts2 = get_filtered_from_database(final_category.clone(), page.begin as i32).await.unwrap();
+
+    let number_of_posts_vector =
+        count_of_get_filtered_from_database_by_category(final_category).await;
+    let m2 = get_vec_len_of_count(number_of_posts_vector);
+    let number_of_pages: i64 = no_of_pages as i64; //(m2 + 2) / global_number_of_items_per_page_64();
+
+    (1..number_of_pages + 1)
+        .into_iter()
+        .for_each(|i| pnav.push(i as i32));
+    posts2.clone().iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
+    let plinks = posts2.iter().map(|post| post.post_title.clone()).collect();
+    pids = posts2.iter().map(|post1| post1.post_id.clone()).collect();
+    println!("hashmap {:?}",post_id_with_title);
+    let template = HomeFilterTemplate {
+        post_id_title: post_id_with_title,
+        category_id_title: category_id_with_title,
+        index_id: &pids,
+        index_title: String::from("Posts"),
+        page_number: &page_number,
+        category_name:&category_name,
+        index_links: &plinks,
+        index_sec: &psec,
+        page_nav_links: &pnav,
+        current_url_page: ".".to_string(),
+    };
+
+    template.render().map(|html| Html(html)).map_err(|err| {
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to render {}", err),
+        )
+    })
 }
