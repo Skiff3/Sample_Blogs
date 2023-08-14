@@ -1,5 +1,5 @@
 use std::collections::{BTreeMap, HashMap};
-use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_filtered_from_database, HomeFilterTemplate};
+use crate::model::models::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_count_of_posts, get_filtered_from_database, HomeFilterTemplate};
 use crate::{global_number_of_items_per_page, global_number_of_items_per_page_64, BlogTemplate};
 use askama::Template;
 use axum::{
@@ -8,8 +8,8 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::sync::Arc;
-
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
+use paginate_web::{Page,Pages};
 
 pub async fn admin_blog_pagination(
     Path((category, page_number)): Path<(i32, i32)>,
@@ -107,13 +107,23 @@ pub async fn blog_pagination(
     });
 
     let page_number_integer: i32 = page_number;
+    let pages: Pages = Pages::new(
+        get_vec_len_of_count(get_count_of_posts().await)
+            .try_into()
+            .unwrap(),
+        global_number_of_items_per_page() as usize,
+        None,
+    );
+    let page = pages.with_offset(page_number as usize);
+    let mut no_of_pages = page.count_of_pages;
+
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    let posts2 = get_filtered_from_database(final_category.clone(), offset_start).await.unwrap();
+    let posts2 = get_filtered_from_database(final_category.clone(), page.begin as i32).await.unwrap();
 
     let number_of_posts_vector =
         count_of_get_filtered_from_database_by_category(final_category).await;
     let m2 = get_vec_len_of_count(number_of_posts_vector);
-    let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
+    let number_of_pages: i64 = no_of_pages as i64; //(m2 + 2) / global_number_of_items_per_page_64();
 
     (1..number_of_pages + 1)
         .into_iter()

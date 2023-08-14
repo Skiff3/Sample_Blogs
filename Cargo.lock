@@ -727,6 +727,7 @@ dependencies = [
  "eframe",
  "egui",
  "egui-dropdown",
+ "paginate-web",
  "paginator",
  "rand",
  "serde",
@@ -2806,6 +2807,11 @@ checksum = "e25e9fb15717794fae58ab55c26e044103aad13186fbb625893f9a3bbcc24228"
 dependencies = [
  "ttf-parser",
 ]
+
+[[package]]
+name = "paginate-web"
+version = "0.1.0"
+source = "git+https://github.com/Skiff3/another-paginate-web.git?branch=for_tests#28ebbc1959ecbad0b2343367b97d6cb6fee5de89"
 
 [[package]]
 name = "paginator"

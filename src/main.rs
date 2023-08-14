@@ -152,13 +152,13 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         .route("/admin", get(index))
         .route("/admin/categories", get(show_all_categories))
         .route(
-            "/admin/categories/:page_number", //
+            "/admin/categories/:page_number",
             get(show_all_categories_with_pagination),
         )
         .route("/post/:post_id", get(show_post))
         .route("/admin/page/:page_number", get(page))
         .merge(admin_blog_routes)
-        .route( //
+        .route(
             "/admin/post/new",
             get(create_posts_form_ui).post(create_posts_form),
         )
@@ -170,7 +170,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         )
         .route("/admin/update_post/:post_id", post(update_posts_form))
         .route(
-            "/admin/category/new", // new create
+            "/admin/category/new",
             get(create_category_form_ui).post(create_catgories_form),
         )
         .route("/admins", get(admin_gui))
@@ -186,7 +186,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         //.route("/post/main", get(create_guest_post_ui))
         .layer(Extension(user.clone()))
         .layer(auth_layer)
-        .layer(session_layer)
+        .layer(session_layer)// session body
         .nest_service("/assets", ServeDir::new("assets"));
 
     axum::Server::bind(&"0.0.0.0:4000".parse().unwrap())
