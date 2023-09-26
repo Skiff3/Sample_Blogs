@@ -9,8 +9,8 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
+
 pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
-    println!("{}", page_number);
     let mut plinks: Vec<String> = vec![];
     let mut psec: Vec<String> = vec![];
     let mut pnav: Vec<i32> = vec![];
@@ -25,13 +25,25 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
             psec.push(category.clone().category_name);
         })
     });
+    let mut length_posts = get_vec_len_of_count(get_count_of_posts().await) as usize;
+    let pages: Pages = Pages::new(
+        get_vec_len_of_count(get_count_of_posts().await)
+            .try_into()
+            .unwrap(),
+        global_number_of_items_per_page() as usize
+    );
+    let page = pages.to_page_number(page_number as usize);
+    let mut no_of_pages = page.unwrap_or_default();
+    println!("no of pages {}",no_of_pages.begin);
+    let mut html_from_crate = pages.generate_html(length_posts);
+    println!("count and html {},{}",page.begin,html_from_crate);
 
-    let _page_number_inter: i64 = page_number as i64;
+    let _page_number_inter: i64 = page_number as i64; // html from length posts
     let page_number_integer: i32 = page_number as i32;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    let posts = get_posts_per_page(offset_start).await.unwrap();
+    let posts = get_posts_per_page(page.begin as i32).await.unwrap();
     let number_of_posts_vector = get_count_of_posts().await;
-    let m = number_of_posts_vector;
+    let m = number_of_posts_vector;// global number of items per page
     let number_of_pages: i64 = if get_vec_len_of_count(m) % global_number_of_items_per_page_64()
         == 0
     {
@@ -44,16 +56,11 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
         .into_iter()
         .for_each(|i| pnav.push(i as i32));
 
+
     plinks.clear();
     posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
-    //let list_iter = s.iter().map()
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
     let pids = posts.iter().map(|post1| post1.post_id.clone()).collect();
-    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}",post_id_with_title);
-    let mut temp: i32 = page_number;
-
     let template = IndexTemplate {
         post_id_title: post_id_with_title,
         category_id_title:category_id_with_title,
@@ -104,22 +111,10 @@ pub async fn pages(Path(page_number): Path<i32>) -> impl IntoResponse {
     (1..number_of_pages + 1)
         .into_iter()
         .for_each(|i| pnav.push(i as i32));
-    plinks.clear();// plinks.clear();
-    // let temp = s.as_ref();
-    // let list_iter = temp.clone().map(|posts| {
-    //     let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
-    //     let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //     (v, v2)
-    // });
-    //(plinks, pid) = list_iter.unwrap_or_default();
+    plinks.clear();
     posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
-    //let list_iter = s.iter().map()
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
     pid = posts.iter().map(|post1| post1.post_id.clone()).collect();
-    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}",post_id_with_title);
-
     let template = HomeTemplate {
         post_id_title:post_id_with_title ,
         category_id_title: category_id_with_title,

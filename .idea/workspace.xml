@@ -7,18 +7,18 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Alignment and category order">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Added pagination crate">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rust-toolchain" beforeDir="false" afterPath="$PROJECT_DIR$/rust-toolchain" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/authentication/login.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/authentication/login.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bin/markd.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/markd.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bin/post.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/post.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/category_pagination.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/category_pagination.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/new_category.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_category.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/new_post.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_post.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/update_category.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/update_category.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/models.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +50,7 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/.cargo/git/checkouts/another-paginate-web-8e3eef5234d6e1e5/eb31449/src/lib.rs" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/axum-login-0.5.0/src/auth.rs" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.8.5/src/rng.rs" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/.cargo/registry/src/index.crates.io-6f17d22bba15001f/http-0.2.9/src/status.rs" root0="SKIP_INSPECTION" />
@@ -277,7 +278,14 @@
       <option name="project" value="LOCAL" />
       <updated>1691385968607</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Added pagination crate">
+      <created>1691992088268</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1691992088268</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -307,6 +315,7 @@
     <MESSAGE value="Fully Tested again." />
     <MESSAGE value="Active page status indicator in Pagination." />
     <MESSAGE value="Alignment and category order" />
-    <option name="LAST_COMMIT_MESSAGE" value="Alignment and category order" />
+    <MESSAGE value="Added pagination crate" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added pagination crate" />
   </component>
 </project>

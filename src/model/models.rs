@@ -46,7 +46,7 @@ pub struct PostTemplate<'a> {
     pub post_title: &'a str,
     pub selected_category: &'a str,
     pub post_description: &'a str,
-    pub post_body: &'a str,
+    pub post_body: &'a str,//
 }
 
 
@@ -192,19 +192,6 @@ pub struct IndexTemplate<'a> {
     pub index_sec: &'a Vec<String>,
     pub page_nav_links: &'a Vec<i32>,
 }
-
-// #[derive(Template)]
-// #[template(path = "index.html")]
-// pub struct IndexTemplate2<'a> {
-//     pub post_id_title: HashMap<i32, String>,
-//     pub category_id_title: HashMap<i32, String>,
-//     pub index_id: &'a Vec<i32>,
-//     pub index_title: String,
-//     pub page_number: String,
-//     pub index_links: &'a Vec<String>,
-//     pub index_sec: &'a Vec<String>,
-//     pub page_nav_links: &'a Vec<String>,
-// }
 
 #[derive(Template)]
 #[template(path = "categories.html")]

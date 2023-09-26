@@ -81,22 +81,18 @@ pub async fn create_posts_form(Form(create_post): Form<CreatePost>) -> Redirect 
     Redirect::to("/admin")
 }
 
-pub async fn delete_posts_form(Path(post_id): Path<i32>) -> Redirect {
+pub async fn delete_posts_form(Path(post_id): Path<i32>) -> std::result::Result<Redirect,Error> {
     let pool = get_connection_for_crud().await;
     println!("Form {}", post_id);
     let _res = sqlx::query("delete from posts where post_id = ($1)")
         .bind(post_id)
         .execute(&pool)
         .await;
-    Redirect::to("/admin/page/1")
+    Ok(Redirect::to("/admin/page/1"))
 }
 
-pub async fn delete_categories_form(Path(category_id): Path<i32>) -> Redirect {
+pub async fn delete_categories_form(Path(category_id): Path<i32>) -> std::result::Result<Redirect,Error> {
     let pool = get_connection_for_crud().await;
-    // let _res = sqlx::query("delete from category_post where category_id = ($1)")
-    //     .bind(category_id)
-    //     .execute(&pool)
-    //     .await;
     let _res = sqlx::query("update posts set category_id = null where category_id = ($1)")
         .bind(category_id)
         .execute(&pool)
@@ -105,7 +101,7 @@ pub async fn delete_categories_form(Path(category_id): Path<i32>) -> Redirect {
         .bind(category_id)
         .execute(&pool)
         .await;
-    Redirect::to("/admin/categories")
+    Ok(Redirect::to("/admin/categories"))
 }
 
 pub async fn home_gui() -> impl IntoResponse {
@@ -131,20 +127,9 @@ pub async fn home_gui() -> impl IntoResponse {
     (1..number_of_pages + 1)
         .into_iter()
         .for_each(|i| pnav.push(i as i32));
-    // let list_iter = s.map(|posts| {
-    //     let v: Vec<_> = posts.iter().map(|post| post.post_title.clone()).collect();
-    //     posts.iter().map(|post1| {post_id_with_title.insert(post1.post_id,post1.clone().post_title)});
-    //     let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //     (v, v2)
-    // });
-
     posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
-    //let list_iter = s.iter().map()
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
     let pids = posts.iter().map(|post1| post1.post_id.clone()).collect();
-    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}",post_id_with_title);
 
     let template = HomeTemplate {
         post_id_title: post_id_with_title,
@@ -166,7 +151,7 @@ pub async fn home_gui() -> impl IntoResponse {
     })
 }
 
-pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) -> Redirect {
+pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) -> std::result::Result<Redirect,Error> {
     let pool = get_connection_for_crud().await;
     let m = get_max_id_of_category().await;
     let category_id = get_max(m) + 1;
@@ -176,14 +161,13 @@ pub async fn create_catgories_form(Form(create_category): Form<CreateCategory>) 
             .bind(create_category.category_name)
             .execute(&pool)
             .await;
-
-    Redirect::to("/admin")
+    Ok(Redirect::to("/admin"))
 }
 
 pub async fn update_posts_form(
     Path(post_id): Path<i32>,
     Form(update_post): Form<UpdatePost>,
-) -> Redirect {
+) -> std::result::Result<Redirect,Error> {
     let pool = get_connection_for_crud().await;
     let mut m1 = 0;
     let category_id = get_category_id_by_name(update_post.category_name).await;
@@ -192,7 +176,6 @@ pub async fn update_posts_form(
         m1 = i.category_id;
     }
     let category = m1;
-    println!("Form {}", update_post.post_title);
     let _res =
         sqlx::query("update posts set post_title=($1), post_body = ($2), category_id= ($3) where post_id = ($4) ;")
             .bind(update_post.post_title)
@@ -207,22 +190,21 @@ pub async fn update_posts_form(
         .execute(&pool)
         .await
         .expect("TODO: panic message");
-    Redirect::to("/admin")
+    Ok(Redirect::to("/admin"))
 }
 
 pub async fn update_posts_form2(
     Path(post_id): Path<i32>,
     Form(update_post): Form<UpdatePost>,
-) -> Redirect {
+) -> std::result::Result<Redirect,Error> {
     let pool = get_connection_for_crud().await;
     let mut m1 = 0;
     let category_id = get_category_id_by_name(update_post.category_name).await;
     let m = category_id.iter();
     for i in m {
-        m1 = i.category_id;
+        m1 = i.category_id; // category id iter await
     }
     let category = m1;
-    println!("Form {}", update_post.post_title);
     let _res =
         sqlx::query("  update posts set post_title=($1), post_body = ($2), category_id= ($3) from posts p inner join blogs b on p.post_id = b.post_id where p.post_id = ($4) ;")
             .bind(update_post.post_title)
@@ -231,7 +213,7 @@ pub async fn update_posts_form2(
             .bind(post_id)
             .execute(&pool)
             .await;
-    Redirect::to("/posts")
+    Ok(Redirect::to("/posts"))
 }
 
 pub async fn create_category_form_ui() -> impl IntoResponse {
@@ -297,7 +279,6 @@ pub async fn show_all_categories_with_pagination(
     let mut category_ids = vec![];
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let _category_list = get_all_categories_with_limit().await;
-    //let s = get_connection().await;
     let mut pnav = vec![];
     let page_number_integer: i32 = page_number.parse().unwrap();
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
@@ -343,18 +324,6 @@ pub async fn update_category_form_ui(Path(category_id): Path<i32>) -> impl IntoR
         temp_category = i.category_name.clone();
     }
     let mut category_names = temp_category;
-    // if categoory_ids == 1 {
-    //     category_names = "Category A".to_string();
-    // }
-    // else if categoory_ids == 2 {
-    //     category_names = "Category B".to_string();
-    // }
-    // else if categoory_ids == 3 {
-    //     category_names = "Category C".to_string();
-    // }
-    // else  {
-    //     category_names = "Category D".to_string();
-    // }
     let template = UpdateCategoryTemplate {
         index_name: category_names.to_string(),
         index_sec: category_id,
@@ -371,7 +340,7 @@ pub async fn update_category_form_ui(Path(category_id): Path<i32>) -> impl IntoR
 pub async fn update_category_form(
     Path(category_id): Path<i32>,
     Form(update_category): Form<UpdateCategory>,
-) -> Redirect {
+) -> std::result::Result<Redirect, Error> {
     let pool = get_connection_for_crud().await;
     let _res =
         sqlx::query("update category_post set category_name = ($1) where category_id = ($2)")
@@ -379,7 +348,7 @@ pub async fn update_category_form(
             .bind(category_id)
             .execute(&pool)
             .await;
-    Redirect::to("/admin/categories")
+    Ok(Redirect::to("/admin/categories"))
 }
 
 pub fn get_vec_len(shared_state2: Arc<Result<Vec<Blog>, Error>>) -> i64 {
