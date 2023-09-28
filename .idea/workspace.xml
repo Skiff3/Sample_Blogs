@@ -7,18 +7,15 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Added pagination crate">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Explicit 'use'">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/authentication/login.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/authentication/login.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bin/markd.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/markd.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bin/post.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/post.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/models.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -285,7 +282,14 @@
       <option name="project" value="LOCAL" />
       <updated>1691992088268</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Explicit 'use'">
+      <created>1695721152870</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1695721152870</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -316,6 +320,7 @@
     <MESSAGE value="Active page status indicator in Pagination." />
     <MESSAGE value="Alignment and category order" />
     <MESSAGE value="Added pagination crate" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added pagination crate" />
+    <MESSAGE value="Explicit 'use'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Explicit 'use'" />
   </component>
 </project>

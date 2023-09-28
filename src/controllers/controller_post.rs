@@ -37,21 +37,33 @@ pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
         post_body: "none",
     };
 
-    post_details.iter().for_each(|posts| {
-        posts.into_iter().for_each(|post| {
-            if post_id == post.post_id {
-                template = PostTemplate {
-                    post_ids: post_id_tmp,
-                    index_sec: &category_in_template,
-                    post_title: &post.post_title,
-                    selected_category: &category_name,
-                    post_description: " ",
-                    post_body: &post.post_body,
-                };
-            } else {
-            }
-        })
+    post_details.iter().for_each(|posts|{
+       let mut post1 = posts.into_iter().find(|&x| post_id == x.post_id ).unwrap();
+        template = PostTemplate {
+            post_ids: post1.post_id ,
+            index_sec: &category_in_template,
+            post_title: &post1.post_title,
+            selected_category: &category_name,
+            post_description: " ",
+            post_body: &post1.post_body,
+        };
     });
+
+    // post_details.iter().for_each(|posts| {
+    //     posts.into_iter().for_each(|post| {
+    //         if post_id == post.post_id {
+    //             template = PostTemplate {
+    //                 post_ids: post_id_tmp,
+    //                 index_sec: &category_in_template,
+    //                 post_title: &post.post_title,
+    //                 selected_category: &category_name,
+    //                 post_description: " ",
+    //                 post_body: &post.post_body,
+    //             };
+    //         } else {
+    //         }
+    //     })
+    // });
 
     template.render().map(|html| Html(html)).map_err(|err| {
         (

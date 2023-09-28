@@ -38,3 +38,4 @@ tower-service = "0.3"
 axum-login = "0.5"
 cookie = { version = "0.17", features = ["percent-encode"] }
 cargo-watch = "8.4.0"
+do-paginate = "0.1.0"

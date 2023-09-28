@@ -45,7 +45,8 @@ pub async fn admin_blog_pagination(
     (1..number_of_pages + 1)
         .into_iter()
         .for_each(|index| page_navigation_numbers.push(index as i32));
-    posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id, post.post_title.clone());});
+    //posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id, post.post_title.clone());});
+    let post_id_with_title = posts.iter().map(|post| (post.post_id, post.post_title.clone())).collect::<BTreeMap<_, _>>();
     let post_name_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
     let post_id_in_template = posts.iter().map(|post| post.post_id.clone()).collect();
     let template = BlogTemplate {
@@ -100,7 +101,7 @@ pub async fn blog_pagination(
     let number_of_posts_vector =
         count_of_get_filtered_from_database_by_category(category).await;
     let count_of_posts = get_vec_len_of_count(number_of_posts_vector);
-    let number_of_pages: i64 = no_of_pages as i64;
+    let number_of_pages: i64 = count_of_posts as i64;
     (1..number_of_pages + 1)
         .into_iter()
         .for_each(|index| page_navigation_numbers.push(index as i32));

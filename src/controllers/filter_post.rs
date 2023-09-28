@@ -22,8 +22,8 @@ pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
     let temps = get_category_name_by_id(category).await;
     let iters = temps.iter();
     let mut category_name = "".to_string();
-    for i in iters{
-        category_name = i.category_name.clone();
+    for index in iters{
+        category_name = index.category_name.clone();
     }
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
@@ -93,7 +93,7 @@ pub async fn blogs(Path(category): Path<i32>) -> impl IntoResponse {
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
             category_id_with_title.insert(category.category_id,category.category_name.clone());
-            psec.push(category.clone().category_name); // 
+            psec.push(category.clone().category_name);
         })
     });
     let mut pnav: Vec<i32> = vec![];

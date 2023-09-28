@@ -724,6 +724,7 @@ dependencies = [
  "axum-macros",
  "cargo-watch",
  "cookie",
+ "do-paginate",
  "eframe",
  "egui",
  "egui-dropdown",
@@ -1315,6 +1316,12 @@ checksum = "ac1b7517328c04c2aa68422fc60a41b92208182142ed04a25879c26c8f878794"
 dependencies = [
  "libloading",
 ]
+
+[[package]]
+name = "do-paginate"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bba74d093cb0e233c2244a6cea9b07b7149ff7d3c8ecf2051acf985fc34258ed"
 
 [[package]]
 name = "dotenvy"

@@ -8,6 +8,7 @@ use axum::{
     http::StatusCode,
     response::{Html, IntoResponse},
 };
+use do_paginate::Pages;
 
 
 pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
@@ -35,13 +36,13 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
     let page = pages.to_page_number(page_number as usize);
     let mut no_of_pages = page.unwrap_or_default();
     println!("no of pages {}",no_of_pages.begin);
-    let mut html_from_crate = pages.generate_html(length_posts);
-    println!("count and html {},{}",page.begin,html_from_crate);
+    //let mut html_from_crate = pages.generate_html(length_posts);
+    println!("count and html {}",no_of_pages.begin);
 
     let _page_number_inter: i64 = page_number as i64; // html from length posts
     let page_number_integer: i32 = page_number as i32;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    let posts = get_posts_per_page(page.begin as i32).await.unwrap();
+    let posts = get_posts_per_page(no_of_pages.begin as i32).await.unwrap();
     let number_of_posts_vector = get_count_of_posts().await;
     let m = number_of_posts_vector;// global number of items per page
     let number_of_pages: i64 = if get_vec_len_of_count(m) % global_number_of_items_per_page_64()
