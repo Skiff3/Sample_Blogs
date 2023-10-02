@@ -87,6 +87,7 @@ pub async fn delete_posts_form(Path(post_id): Path<i32>) -> Redirect {
         .bind(post_id)
         .execute(&pool)
         .await;
+
     Redirect::to("/admin/page/1")
 }
 
@@ -100,6 +101,7 @@ pub async fn delete_categories_form(Path(category_id): Path<i32>) -> Redirect {
         .bind(category_id)
         .execute(&pool)
         .await;
+
     Redirect::to("/admin/categories")
 }
 
@@ -158,6 +160,7 @@ pub async fn create_categories_form(Form(create_category): Form<CreateCategory>)
             .bind(create_category.category_name)
             .execute(&pool)
             .await;
+
     Redirect::to("/admin")
 }
 
@@ -185,6 +188,7 @@ pub async fn update_posts_form(
         .execute(&pool)
         .await
         .expect("TODO: panic message");
+
     Redirect::to("/admin")
 }
 
@@ -193,13 +197,7 @@ pub async fn update_posts_form2(
     Form(update_post): Form<UpdatePost>,
 ) -> std::result::Result<Redirect, Error> {
     let pool = get_connection_for_crud().await;
-    let mut m1 = 0;
-    let category_id = get_category_id_by_name(update_post.category_name).await;
-    let m = category_id.iter();
-    for i in m {
-        m1 = i.category_id; // category id iter await
-    }
-    let category = m1;
+    let category = get_category_id_by_name(update_post.category_name).await.first().unwrap().clone().category_id;
     let _res =
         sqlx::query("  update posts set post_title=($1), post_body = ($2), category_id= ($3) from posts p inner join blogs b on p.post_id = b.post_id where p.post_id = ($4) ;")
             .bind(update_post.post_title)
@@ -208,6 +206,7 @@ pub async fn update_posts_form2(
             .bind(post_id)
             .execute(&pool)
             .await;
+
     Ok(Redirect::to("/posts"))
 }
 
@@ -339,6 +338,7 @@ pub async fn update_category_form(
             .bind(category_id)
             .execute(&pool)
             .await;
+
     Redirect::to("/admin/categories")
 }
 
@@ -348,6 +348,7 @@ pub fn get_vec_len(result_of_blog: Arc<Result<Vec<Blog>, Error>>) -> i64 {
     tmp.iter().for_each(|posts| {
         len = posts.len() as i64;
     });
+
     len
 }
 
@@ -356,6 +357,7 @@ pub fn get_vec_len_of_count(result_of_count: Result<Vec<Count>, Error>) -> i64 {
     let tmp = result_of_count.as_ref();
     tmp.iter()
         .for_each(|posts| posts.iter().for_each(|count| len = count.count));
+
     len
 }
 
@@ -366,5 +368,6 @@ pub fn get_max(result_of_max: Result<Vec<Max>, Error>) -> i32 {
             len = count.max;
         });
     });
+
     len
 }

@@ -371,10 +371,9 @@ pub async fn get_filtered_from_database_by_category(
         .fetch_all(&pool)
         .await
 }
-pub async fn get_filtered_from_database_by_category2() -> std::result::Result<Vec<Blog>, Error> {
+pub async fn num_get_filtered_from_database_by_category() -> std::result::Result<Vec<Blog>, Error> {
     let pool = get_connection_for_crud().await;
     sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id limit 3")
-
         .fetch_all(&pool)
         .await
 }
@@ -387,7 +386,7 @@ pub async fn count_of_get_filtered_from_database_by_category(
         .fetch_all(&pool)
         .await
 }
-pub async fn count_of_get_filtered_from_database_by_category2(
+pub async fn num_count_of_get_filtered_from_database_by_category(
 ) -> std::result::Result<Vec<Count>, Error> {
     let pool = get_connection_for_crud().await;
     sqlx::query_as::<_, Count>("select count(p.post_id) from posts p; ")

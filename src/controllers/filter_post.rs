@@ -1,9 +1,9 @@
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::model::models::{
     count_of_get_filtered_from_database_by_category,
-    count_of_get_filtered_from_database_by_category2, get_all_categories, get_category_name_by_id,
+    num_count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id,
     get_connection, get_filtered_from_database_by_category,
-    get_filtered_from_database_by_category2, Blog, HomeFilterTemplate,
+    num_get_filtered_from_database_by_category, Blog, HomeFilterTemplate,
 };
 use crate::{global_number_of_items_per_page_64, BlogTemplate};
 use askama::Template;
@@ -12,7 +12,6 @@ use axum::{
     http::StatusCode,
     response::{Html, IntoResponse},
 };
-use egui::TextBuffer;
 use std::collections::{BTreeMap, HashMap};
 use std::sync::Arc;
 
@@ -44,19 +43,19 @@ pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
             .await
             .unwrap();
     } else {
-        posts = get_filtered_from_database_by_category2().await.unwrap();
+        posts = num_get_filtered_from_database_by_category().await.unwrap();
     }
     if category != 0 {
         number_of_posts_vector = count_of_get_filtered_from_database_by_category(category).await;
     } else {
-        number_of_posts_vector = count_of_get_filtered_from_database_by_category2().await;
+        number_of_posts_vector = num_count_of_get_filtered_from_database_by_category().await;
     }
 
     let count_of_posts = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (count_of_posts + 2) / global_number_of_items_per_page_64();
     (1..number_of_pages + 1)
         .into_iter()
-        .for_each(|i| page_numbers_in_navigation.push(i as i32));
+        .for_each(|index| page_numbers_in_navigation.push(index as i32));
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
     });

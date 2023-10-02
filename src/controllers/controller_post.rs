@@ -50,23 +50,7 @@ pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
             post_description: " ",
             post_body: &post1.post_body,
         };
-    }); // p
-
-    // post_details.iter().for_each(|posts| {
-    //     posts.into_iter().for_each(|post| {
-    //         if post_id == post.post_id {
-    //             template = PostTemplate {
-    //                 post_ids: post_id_tmp,
-    //                 index_sec: &category_in_template,
-    //                 post_title: &post.post_title,
-    //                 selected_category: &category_name,
-    //                 post_description: " ",
-    //                 post_body: &post.post_body,
-    //             };
-    //         } else {
-    //         }
-    //     })
-    // });
+    });
 
     template.render().map(|html| Html(html)).map_err(|err| {
         (
