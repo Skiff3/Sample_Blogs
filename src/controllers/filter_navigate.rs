@@ -45,7 +45,6 @@ pub async fn admin_blog_pagination(
     (1..number_of_pages + 1)
         .into_iter()
         .for_each(|index| page_navigation_numbers.push(index as i32));
-    //posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id, post.post_title.clone());});
     let post_id_with_title = posts.iter().map(|post| (post.post_id, post.post_title.clone())).collect::<BTreeMap<_, _>>();
     let post_name_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
     let post_id_in_template = posts.iter().map(|post| post.post_id.clone()).collect();

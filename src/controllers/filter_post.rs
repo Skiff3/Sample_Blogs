@@ -80,12 +80,8 @@ pub async fn blogs(Path(category): Path<i32>) -> impl IntoResponse {
     let mut pids: Vec<i32> = vec![];
     let mut plinks: Vec<String> = vec![];
     let mut psec: Vec<String> = vec![];
-    let temps = get_category_name_by_id(category).await;
-    let iters = temps.iter();
-    let mut category_name = "".to_string();
-    for i in iters{
-        category_name = i.category_name.clone();
-    }
+    let tmp = get_category_name_by_id(category).await;
+    let mut category_name = tmp.first().unwrap().clone().category_name;
     psec.clear();
     let category_list = get_all_categories().await;
     let mut psec: Vec<String> = vec![];
@@ -114,7 +110,6 @@ pub async fn blogs(Path(category): Path<i32>) -> impl IntoResponse {
     posts2.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
     let plinks = posts2.iter().map(|post| post.post_title.clone()).collect();
     pids = posts2.iter().map(|post1| post1.post_id.clone()).collect();
-    println!("hashmap {:?}",post_id_with_title);
 
     let template = HomeFilterTemplate {
         post_id_title: post_id_with_title,

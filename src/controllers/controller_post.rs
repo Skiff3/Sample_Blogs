@@ -47,7 +47,7 @@ pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
             post_description: " ",
             post_body: &post1.post_body,
         };
-    });
+    });// p
 
     // post_details.iter().for_each(|posts| {
     //     posts.into_iter().for_each(|post| {
