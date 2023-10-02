@@ -16,7 +16,6 @@ use std::sync::Arc;
 pub async fn admin_blog_pagination(
     Path((category_in_url, page_number)): Path<(i32, i32)>,
 ) -> impl IntoResponse {
-    let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let category_id = category_in_url;
     let mut category_in_template: Vec<String> = vec![];

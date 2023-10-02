@@ -5,9 +5,7 @@ use askama::Template;
 use axum::response::IntoResponse;
 use axum::{http::StatusCode, response::Html};
 use std::collections::{BTreeMap, HashMap};
-
 use axum_macros::debug_handler;
-use egui::TextBuffer;
 use std::string::String;
 
 #[debug_handler]

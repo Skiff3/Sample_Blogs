@@ -46,7 +46,7 @@ pub struct PostTemplate<'a> {
     pub post_title: &'a str,
     pub selected_category: &'a str,
     pub post_description: &'a str,
-    pub post_body: &'a str, //
+    pub post_body: &'a str,
 }
 
 #[derive(Template)]
