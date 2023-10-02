@@ -7,11 +7,18 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Fixed the find()">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Assigning category name in one variable">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/authentication/login.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/authentication/login.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bin/markd.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/bin/markd.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/models.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,7 +299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1695875371172</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Assigning category name in one variable">
+      <created>1696209195335</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1696209195335</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -325,6 +339,7 @@
     <MESSAGE value="Added pagination crate" />
     <MESSAGE value="Explicit 'use'" />
     <MESSAGE value="Fixed the find()" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed the find()" />
+    <MESSAGE value="Assigning category name in one variable" />
+    <option name="LAST_COMMIT_MESSAGE" value="Assigning category name in one variable" />
   </component>
 </project>

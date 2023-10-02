@@ -1,7 +1,7 @@
-use std::collections::{BTreeMap, HashMap};
 use crate::global_number_of_items_per_page;
 use askama::Template;
 use axum_login::axum_sessions::async_session::serde::Deserialize;
+use std::collections::{BTreeMap, HashMap};
 
 use crate::controllers::posts_crud_controller::get_connection_for_crud;
 use sqlx::*;
@@ -46,9 +46,8 @@ pub struct PostTemplate<'a> {
     pub post_title: &'a str,
     pub selected_category: &'a str,
     pub post_description: &'a str,
-    pub post_body: &'a str,//
+    pub post_body: &'a str, //
 }
-
 
 #[derive(Template)]
 #[template(path = "login.html")]
@@ -241,11 +240,13 @@ pub async fn get_categories_per_page(
     offset_value: i32,
 ) -> std::result::Result<Vec<Category>, Error> {
     let pool = get_connection_for_crud().await;
-    sqlx::query_as::<_, Category>("select * from category_post limit ($1) offset ($2) ORDER BY category_id ASC")
-        .bind(global_number_of_items_per_page())
-        .bind(offset_value)
-        .fetch_all(&pool)
-        .await
+    sqlx::query_as::<_, Category>(
+        "select * from category_post limit ($1) offset ($2) ORDER BY category_id ASC",
+    )
+    .bind(global_number_of_items_per_page())
+    .bind(offset_value)
+    .fetch_all(&pool)
+    .await
 }
 
 pub async fn get_all_categories() -> std::result::Result<Vec<Category>, Error> {
@@ -269,9 +270,7 @@ pub async fn get_category_id_by_name(category_name: String) -> Vec<Category_Id> 
 
 pub async fn get_post_name_by_id(post_id: i32) -> Vec<Post_Name> {
     let pool = get_connection_for_crud().await;
-    let res = sqlx::query_as::<_, Post_Name>(
-        "select post_title from posts where post_id = ($1);",
-    )
+    let res = sqlx::query_as::<_, Post_Name>("select post_title from posts where post_id = ($1);")
         .bind(post_id)
         .fetch_all(&pool)
         .await;
@@ -372,9 +371,7 @@ pub async fn get_filtered_from_database_by_category(
         .fetch_all(&pool)
         .await
 }
-pub async fn get_filtered_from_database_by_category2(
-
-) -> std::result::Result<Vec<Blog>, Error> {
+pub async fn get_filtered_from_database_by_category2() -> std::result::Result<Vec<Blog>, Error> {
     let pool = get_connection_for_crud().await;
     sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id limit 3")
 
@@ -391,12 +388,9 @@ pub async fn count_of_get_filtered_from_database_by_category(
         .await
 }
 pub async fn count_of_get_filtered_from_database_by_category2(
-
 ) -> std::result::Result<Vec<Count>, Error> {
     let pool = get_connection_for_crud().await;
     sqlx::query_as::<_, Count>("select count(p.post_id) from posts p; ")
-
         .fetch_all(&pool)
         .await
 }
-

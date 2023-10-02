@@ -1,4 +1,7 @@
-use crate::model::models::{get_all_categories, get_category_name_by_post_id, get_details_of_post, get_post_name_by_id, GuestTemplate, PostTemplate};
+use crate::model::models::{
+    get_all_categories, get_category_name_by_post_id, get_details_of_post, get_post_name_by_id,
+    GuestTemplate, PostTemplate,
+};
 use askama::Template;
 use axum::{
     extract::Path,
@@ -19,7 +22,7 @@ pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
     }
     let category_name_vec = get_category_name_by_post_id(post_name).await;
     let category_name_iter = category_name_vec.iter();
-    for index in category_name_iter{
+    for index in category_name_iter {
         category_name = index.category_name.clone();
     }
     let category_list = get_all_categories().await;
@@ -37,17 +40,17 @@ pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
         post_body: "none",
     };
 
-    post_details.iter().for_each(|posts|{
-       let mut post1 = posts.into_iter().find(|&x| post_id == x.post_id ).unwrap();
+    post_details.iter().for_each(|posts| {
+        let mut post1 = posts.into_iter().find(|&x| post_id == x.post_id).unwrap();
         template = PostTemplate {
-            post_ids: post1.post_id ,
+            post_ids: post1.post_id,
             index_sec: &category_in_template,
             post_title: &post1.post_title,
             selected_category: &category_name,
             post_description: " ",
             post_body: &post1.post_body,
         };
-    });// p
+    }); // p
 
     // post_details.iter().for_each(|posts| {
     //     posts.into_iter().for_each(|post| {

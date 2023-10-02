@@ -23,5 +23,5 @@ async fn main() -> Result<(), sqlx::Error> {
         .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
         .await
         .expect("couldn't create pool");
-        Ok(())
+    Ok(())
 }

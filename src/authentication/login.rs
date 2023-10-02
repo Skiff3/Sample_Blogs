@@ -28,9 +28,14 @@ pub async fn login_user(
         name: user.user_name,
         password_hash: user.password,
     };
-    match auth.login(&user_cred).await{
-        Ok(inner)=> {println!("inner"); Redirect::to("/admin")}
-        Err(_)=> {println!("error "); Redirect::to("/login")
+    match auth.login(&user_cred).await {
+        Ok(inner) => {
+            println!("inner");
+            Redirect::to("/admin")
+        }
+        Err(_) => {
+            println!("error ");
+            Redirect::to("/login")
         }
     }
 }
@@ -63,7 +68,8 @@ pub async fn register_user_ui() -> impl IntoResponse {
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             format!("Failed to render template. Error {}", err),
-        ).into_response(),
+        )
+            .into_response(),
     }
 }
 
@@ -88,6 +94,7 @@ pub async fn admin_gui() -> impl IntoResponse {
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             format!("Failed to render template. Error {}", err),
-        ).into_response(),
+        )
+            .into_response(),
     }
 }
