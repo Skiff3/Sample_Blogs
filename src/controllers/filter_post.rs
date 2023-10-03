@@ -11,12 +11,12 @@ use axum::{
 };
 use std::collections::{BTreeMap, HashMap};
 use std::sync::Arc;
-use crate::controllers::base_controller::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_filtered_from_database_by_category, num_count_of_get_filtered_from_database_by_category, num_get_filtered_from_database_by_category};
+use crate::controllers::base_controller::{count_filtered_cat, get_all_categories, category_by_id, get_filtered_cat, count_of_postsdb, filtered_cat};
 
 pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
     let mut category_in_template: Vec<String> = vec![];
     let mut posts: Vec<Blog> = vec![];
-    let category_name = get_category_name_by_id(category)
+    let category_name = category_by_id(category)
         .await
         .first()
         .unwrap()
@@ -37,16 +37,16 @@ pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
     let number_of_posts_vector;
     let current_url = string_a + string_b;
     if category != 0 {
-        posts = get_filtered_from_database_by_category(category.clone())
+        posts = get_filtered_cat(category.clone())
             .await
             .unwrap();
     } else {
-        posts = num_get_filtered_from_database_by_category().await.unwrap();
+        posts = filtered_cat().await.unwrap();
     }
     if category != 0 {
-        number_of_posts_vector = count_of_get_filtered_from_database_by_category(category).await;
+        number_of_posts_vector = count_filtered_cat(category).await;
     } else {
-        number_of_posts_vector = num_count_of_get_filtered_from_database_by_category().await;
+        number_of_posts_vector = count_of_postsdb().await;
     }
 
     let count_of_posts = get_vec_len_of_count(number_of_posts_vector);
@@ -82,7 +82,7 @@ pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
 pub async fn blogs(Path(category): Path<i32>) -> impl IntoResponse {
     let mut post_id_in_template: Vec<i32> = vec![];
     let mut category_in_template: Vec<String> = vec![];
-    let tmp = get_category_name_by_id(category).await;
+    let tmp = category_by_id(category).await;
     let mut category_name = tmp.first().unwrap().clone().category_name;
     category_in_template.clear();
     let category_list = get_all_categories().await;
@@ -97,13 +97,13 @@ pub async fn blogs(Path(category): Path<i32>) -> impl IntoResponse {
     let string_a: String = category.clone().to_string();
     let string_b: &str = "/pages";
     let current_url = string_a + string_b;
-    let posts = get_filtered_from_database_by_category(category.clone())
+    let posts = get_filtered_cat(category.clone())
         .await
         .unwrap();
     let category_for_ref = category.clone();
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let number_of_posts_vector =
-        count_of_get_filtered_from_database_by_category(category_for_ref).await;
+        count_filtered_cat(category_for_ref).await;
     let count_of_posts = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (count_of_posts + 2) / global_number_of_items_per_page_64();
     (1..number_of_pages + 1)

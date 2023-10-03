@@ -3,7 +3,7 @@ use askama::Template;
 use axum_login::axum_sessions::async_session::serde::Deserialize;
 use std::collections::{BTreeMap, HashMap};
 
-use crate::controllers::base_controller::get_connection_for_crud;
+use crate::controllers::base_controller::pool_for_crud;
 use sqlx::*;
 
 mod filters {

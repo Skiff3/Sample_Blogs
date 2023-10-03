@@ -9,7 +9,7 @@ use axum::{
 };
 use do_paginate::Pages;
 use std::collections::{BTreeMap, HashMap};
-use crate::controllers::base_controller::{get_all_categories, get_count_of_posts, get_posts_per_page};
+use crate::controllers::base_controller::{get_all_categories, total_posts, posts_per_page};
 
 pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
     let mut category_in_template: Vec<String> = vec![];
@@ -25,23 +25,23 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
         })
     });
     let pages: Pages = Pages::new(
-        get_vec_len_of_count(get_count_of_posts().await)
+        get_vec_len_of_count(total_posts().await)
             .try_into()
             .unwrap(),
         global_number_of_items_per_page() as usize,
     );
     let page = pages.to_page_number(page_number as usize);
     let mut no_of_pages = page.unwrap_or_default();
-    let posts = get_posts_per_page(no_of_pages.begin as i32).await.unwrap();
-    let number_of_posts_vector = get_count_of_posts().await;
+    let posts = posts_per_page(no_of_pages.begin as i32).await.unwrap();
+    let number_of_posts_vector = total_posts().await;
     let global_no_of_posts_per_page = number_of_posts_vector;
     let number_of_pages: i64 = if get_vec_len_of_count(global_no_of_posts_per_page)
         % global_number_of_items_per_page_64()
         == 0
     {
-        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
+        get_vec_len_of_count(total_posts().await) / global_number_of_items_per_page_64()
     } else {
-        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
+        get_vec_len_of_count(total_posts().await) / global_number_of_items_per_page_64() + 1
     };
 
     (1..number_of_pages + 1)
@@ -88,14 +88,14 @@ pub async fn pages(Path(page_number): Path<i32>) -> impl IntoResponse {
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let page_number_integer: i32 = page_number;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    let posts = get_posts_per_page(offset_start).await.unwrap();
-    let number_of_pages: i64 = if get_vec_len_of_count(get_count_of_posts().await)
+    let posts = posts_per_page(offset_start).await.unwrap();
+    let number_of_pages: i64 = if get_vec_len_of_count(total_posts().await)
         % global_number_of_items_per_page_64()
         == 0
     {
-        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64()
+        get_vec_len_of_count(total_posts().await) / global_number_of_items_per_page_64()
     } else {
-        get_vec_len_of_count(get_count_of_posts().await) / global_number_of_items_per_page_64() + 1
+        get_vec_len_of_count(total_posts().await) / global_number_of_items_per_page_64() + 1
     };
     (1..number_of_pages + 1)
         .into_iter()

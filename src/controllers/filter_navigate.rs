@@ -11,7 +11,7 @@ use axum::{
 };
 use std::collections::{BTreeMap};
 use std::sync::Arc;
-use crate::controllers::base_controller::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_filtered_from_database};
+use crate::controllers::base_controller::{count_filtered_cat, get_all_categories, category_by_id, filtered_cat_database};
 
 pub async fn admin_blog_pagination(
     Path((category_in_url, page_number)): Path<(i32, i32)>,
@@ -20,7 +20,7 @@ pub async fn admin_blog_pagination(
     let category_id = category_in_url;
     let mut category_in_template: Vec<String> = vec![];
     let mut page_navigation_numbers: Vec<i32> = vec![];
-    let tmp = get_category_name_by_id(category_in_url).await;
+    let tmp = category_by_id(category_in_url).await;
     let category_name_iter = tmp.iter();
     let mut category_name = "".to_string();
     for index in category_name_iter {
@@ -36,11 +36,11 @@ pub async fn admin_blog_pagination(
     });
     let page_number_integer: i32 = page_number;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    let posts = get_filtered_from_database(category_id.clone(), offset_start)
+    let posts = filtered_cat_database(category_id.clone(), offset_start)
         .await
         .unwrap();
     let number_of_posts_vector =
-        count_of_get_filtered_from_database_by_category(category_id.clone()).await;
+        count_filtered_cat(category_id.clone()).await;
     let count_of_posts = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (count_of_posts + 2) / global_number_of_items_per_page_64();
     (1..number_of_pages + 1)
@@ -79,7 +79,7 @@ pub async fn blog_pagination(
     let category = category_in_url;
     let mut category_in_template: Vec<String> = vec![];
     let mut page_navigation_numbers: Vec<i32> = vec![];
-    let tmp = get_category_name_by_id(category_in_url).await;
+    let tmp = category_by_id(category_in_url).await;
     let category_name_iter = tmp.iter();
     let mut category_name = "".to_string();
     for index in category_name_iter {
@@ -95,10 +95,10 @@ pub async fn blog_pagination(
     });
     let page_number_integer: i32 = page_number;
     let _offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-    let posts = get_filtered_from_database(category.clone(), 0)
+    let posts = filtered_cat_database(category.clone(), 0)
         .await
         .unwrap();
-    let number_of_posts_vector = count_of_get_filtered_from_database_by_category(category).await;
+    let number_of_posts_vector = count_filtered_cat(category).await;
     let count_of_posts = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = count_of_posts as i64;
     (1..number_of_pages + 1)

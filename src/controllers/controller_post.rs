@@ -8,20 +8,20 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::string::String;
-use crate::controllers::base_controller::{get_all_categories, get_category_name_by_post_id, get_details_of_post, get_post_name_by_id};
+use crate::controllers::base_controller::{get_all_categories, category_by_post_id, details_of_post, post_by_id};
 
 pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
     let post_id = post_id_tmp.clone();
     let mut category_in_template: Vec<String> = vec![];
     let mut post_name = String::from("");
     let mut category_name = String::from("");
-    let post_details = get_details_of_post(post_id_tmp).await;
-    let post_name_vec = get_post_name_by_id(post_id_tmp).await;
+    let post_details = details_of_post(post_id_tmp).await;
+    let post_name_vec = post_by_id(post_id_tmp).await;
     let tmp = post_name_vec.iter();
     for index in tmp {
         post_name = index.post_title.clone();
     }
-    let category_name_vec = get_category_name_by_post_id(post_name).await;
+    let category_name_vec = category_by_post_id(post_name).await;
     let category_name_iter = category_name_vec.iter();
     for index in category_name_iter {
         category_name = index.category_name.clone();
@@ -63,7 +63,7 @@ pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
 
 pub async fn show_posts(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
     let post_id = post_id_tmp.clone();
-    let post_name_vec = get_post_name_by_id(post_id).await;
+    let post_name_vec = post_by_id(post_id).await;
     let post_name_iter = post_name_vec.iter();
     let mut post_name = " ".to_string();
     for index in post_name_iter {
