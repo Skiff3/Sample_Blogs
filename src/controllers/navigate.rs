@@ -18,12 +18,20 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     category_in_template.clear();
     let category_list = get_all_categories().await;
-    category_list.iter().for_each(|categories| {
-        categories.iter().for_each(|category| {
-            category_id_with_title.insert(category.category_id, category.category_name.clone());
-            category_in_template.push(category.clone().category_name);
-        })
-    }); // todo add flatten() here
+    // category_list.iter().for_each(|categories| {
+    //     categories.iter().for_each(|category| {
+    //         category_id_with_title.insert(category.category_id, category.category_name.clone());
+    //         category_in_template.push(category.clone().category_name);
+    //     })
+    // });
+    let tmp = category_list.into_iter()
+        .map(|x| x.into_iter().collect::<Vec<_>>())
+        .flatten()
+        .collect::<Vec<_>>();
+    tmp.iter().for_each(|category| {
+        category_id_with_title.insert(category.category_id, category.category_name.clone());
+        category_in_template.push(category.clone().category_name);
+    });
     let pages: Pages = Pages::new(
         get_vec_len_of_count(total_posts().await)
             .try_into()
@@ -49,7 +57,7 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
         .for_each(|index| page_numbers_in_navigation.push(index as i32));
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
-    }); // todo add flatten() here
+    });
     let post_title_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
     let post_ids_in_template = posts.iter().map(|post1| post1.post_id.clone()).collect();
     let template = IndexTemplate {
@@ -79,12 +87,20 @@ pub async fn pages(Path(page_number): Path<i32>) -> impl IntoResponse {
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     category_in_template.clear();
     let category_list = get_all_categories().await;
-    category_list.iter().for_each(|categories| {
-        categories.iter().for_each(|category| {
-            category_id_with_title.insert(category.category_id, category.category_name.clone());
-            category_in_template.push(category.clone().category_name);
-        })
-    }); // todo add flatten() here
+    // category_list.iter().for_each(|categories| {
+    //     categories.iter().for_each(|category| {
+    //         category_id_with_title.insert(category.category_id, category.category_name.clone());
+    //         category_in_template.push(category.clone().category_name);
+    //     })
+    // });
+    let tmp = category_list.into_iter()
+        .map(|x| x.into_iter().collect::<Vec<_>>())
+        .flatten()
+        .collect::<Vec<_>>();
+    tmp.iter().for_each(|category| {
+        category_id_with_title.insert(category.category_id, category.category_name.clone());
+        category_in_template.push(category.clone().category_name);
+    });
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let page_number_integer: i32 = page_number;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
@@ -103,7 +119,7 @@ pub async fn pages(Path(page_number): Path<i32>) -> impl IntoResponse {
     post_id_in_template.clear();
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
-    }); // todo add flatten here
+    });
     let post_title_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
     post_id_in_template = posts.iter().map(|post1| post1.post_id.clone()).collect();
     let template = HomeTemplate {

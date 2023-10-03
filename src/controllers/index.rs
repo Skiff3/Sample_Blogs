@@ -16,12 +16,20 @@ pub async fn index() -> impl IntoResponse {
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let category_list = get_all_categories().await;
-    category_list.iter().for_each(|categories| {
-        categories.iter().for_each(|category| {
-            category_id_with_title.insert(category.category_id, category.category_name.clone());
-            category_in_template.push(category.clone().category_name);
-        })
-    });// todo add flatten() here and make it more efficient
+    // category_list.iter().for_each(|categories| {
+    //     categories.iter().for_each(|category| {
+    //         category_id_with_title.insert(category.category_id, category.category_name.clone());
+    //         category_in_template.push(category.clone().category_name);
+    //     })
+    // });
+    let tmp = category_list.into_iter()
+        .map(|x| x.into_iter().collect::<Vec<_>>())
+        .flatten()
+        .collect::<Vec<_>>();
+    tmp.iter().for_each(|category| {
+        category_id_with_title.insert(category.category_id, category.category_name.clone());
+        category_in_template.push(category.clone().category_name);
+    });
     let posts = posts_limit_3().await.unwrap();
     let mut page_numbers_in_navigation: Vec<i32> = vec![];
     let number_of_posts_vector = total_posts().await;

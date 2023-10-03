@@ -123,7 +123,7 @@ pub async fn blog_pagination(
         .for_each(|index| page_navigation_numbers.push(index as i32));
     posts.clone().iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
-    });// todo add flatten() here
+    });
     let template = HomeFilterTemplate {
         post_id_title: post_id_with_title,
         category_id_title: category_id_with_title,

@@ -7,9 +7,8 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Changed function names in the base controller">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Replaced two for_each() with flatten()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/base_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/base_controller.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
@@ -337,7 +336,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696312576364</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Replaced two for_each() with flatten()">
+      <created>1696322186640</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1696322186640</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -376,6 +382,7 @@
     <MESSAGE value="Removed unused dependencies in Cargo.toml" />
     <MESSAGE value="Added functions used by all controllers to base controller" />
     <MESSAGE value="Changed function names in the base controller" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed function names in the base controller" />
+    <MESSAGE value="Replaced two for_each() with flatten()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced two for_each() with flatten()" />
   </component>
 </project>

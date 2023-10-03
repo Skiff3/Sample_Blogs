@@ -27,11 +27,18 @@ pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
         category_name = index.category_name.clone();
     }
     let category_list = get_all_categories().await;
-    category_list.iter().for_each(|categories| {
-        categories.iter().for_each(|category| {
-            category_in_template.push(category.clone().category_name);
-        })
-    });// todo add flatten() here
+    // category_list.iter().for_each(|categories| {
+    //     categories.iter().for_each(|category| {
+    //         category_in_template.push(category.clone().category_name);
+    //     })
+    // });//
+    let tmp = category_list.into_iter()
+        .map(|x| x.into_iter().collect::<Vec<_>>())
+        .flatten()
+        .collect::<Vec<_>>();
+    tmp.iter().for_each(|category| {
+        category_in_template.push(category.clone().category_name);
+    });
     let mut template = PostTemplate {
         post_ids: post_id_tmp,
         index_sec: &category_in_template,
@@ -75,7 +82,7 @@ pub async fn show_posts(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
     //     categories.iter().for_each(|category| {
     //         category_in_template.push(category.clone().category_name);
     //     })
-    // });// todo add flatten() here
+    // });//
     let tmp = category_list.into_iter()
         .map(|x| x.into_iter().collect::<Vec<_>>())
         .flatten()
