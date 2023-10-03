@@ -1,7 +1,5 @@
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
-use crate::model::models::{
-    get_all_categories, get_count_of_posts, get_posts_per_page, HomeTemplate,
-};
+use crate::model::models::{HomeTemplate};
 use crate::{global_number_of_items_per_page, global_number_of_items_per_page_64, IndexTemplate};
 use askama::Template;
 use axum::{
@@ -11,6 +9,7 @@ use axum::{
 };
 use do_paginate::Pages;
 use std::collections::{BTreeMap, HashMap};
+use crate::controllers::base_controller::{get_all_categories, get_count_of_posts, get_posts_per_page};
 
 pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
     let mut category_in_template: Vec<String> = vec![];

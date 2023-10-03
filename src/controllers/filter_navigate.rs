@@ -1,7 +1,6 @@
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::model::models::{
-    count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id,
-    get_count_of_posts, get_filtered_from_database, HomeFilterTemplate,
+     HomeFilterTemplate,
 };
 use crate::{global_number_of_items_per_page, global_number_of_items_per_page_64, BlogTemplate};
 use askama::Template;
@@ -10,8 +9,9 @@ use axum::{
     http::StatusCode,
     response::{Html, IntoResponse},
 };
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap};
 use std::sync::Arc;
+use crate::controllers::base_controller::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_filtered_from_database};
 
 pub async fn admin_blog_pagination(
     Path((category_in_url, page_number)): Path<(i32, i32)>,
@@ -34,10 +34,8 @@ pub async fn admin_blog_pagination(
             category_in_template.push(category.clone().category_name);
         })
     });
-
     let page_number_integer: i32 = page_number;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
-
     let posts = get_filtered_from_database(category_id.clone(), offset_start)
         .await
         .unwrap();
@@ -52,16 +50,14 @@ pub async fn admin_blog_pagination(
         .iter()
         .map(|post| (post.post_id, post.post_title.clone()))
         .collect::<BTreeMap<_, _>>();
-    let post_name_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
-    let post_id_in_template = posts.iter().map(|post| post.post_id.clone()).collect();
     let template = BlogTemplate {
         post_id_title: post_id_with_title,
         category_id_title: category_id_with_title,
-        index_id: &post_id_in_template,
+        index_id: &posts.iter().map(|post| post.post_id.clone()).collect(),
         index_title: String::from("Posts"),
         page_number: &page_number,
         category_name: &category_name,
-        index_links: &post_name_in_template,
+        index_links: &posts.iter().map(|post| post.post_title.clone()).collect(),
         index_sec: &category_in_template,
         page_nav_links: &page_navigation_numbers,
         current_url_page: ".".to_string(),
@@ -78,7 +74,6 @@ pub async fn admin_blog_pagination(
 pub async fn blog_pagination(
     Path((category_in_url, page_number)): Path<(i32, i32)>,
 ) -> impl IntoResponse {
-    let mut post_id_in_template: Vec<i32> = vec![];
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let category = category_in_url;
@@ -98,13 +93,11 @@ pub async fn blog_pagination(
             category_in_template.push(category.clone().category_name);
         })
     });
-
     let page_number_integer: i32 = page_number;
     let _offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let posts = get_filtered_from_database(category.clone(), 0)
         .await
         .unwrap();
-
     let number_of_posts_vector = count_of_get_filtered_from_database_by_category(category).await;
     let count_of_posts = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = count_of_posts as i64;
@@ -114,16 +107,14 @@ pub async fn blog_pagination(
     posts.clone().iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
     });
-    let post_name_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
-    post_id_in_template = posts.iter().map(|post1| post1.post_id.clone()).collect();
     let template = HomeFilterTemplate {
         post_id_title: post_id_with_title,
         category_id_title: category_id_with_title,
-        index_id: &post_id_in_template,
+        index_id: &posts.iter().map(|post1| post1.post_id.clone()).collect(),
         index_title: String::from("Posts"),
         page_number: &page_number,
         category_name: &category_name,
-        index_links: &post_name_in_template,
+        index_links: &posts.iter().map(|post| post.post_title.clone()).collect(),
         index_sec: &category_in_template,
         page_nav_links: &page_navigation_numbers,
         current_url_page: ".".to_string(),

@@ -3,9 +3,7 @@ use std::sync::Arc;
 // This controller contains the CRUD operations of posts
 // Create, Read, Update and Delete method for posts.
 use crate::model::models::{
-    get_all_categories, get_all_categories_with_limit, get_categories_per_page,
-    get_category_id_by_name, get_category_name_by_id, get_connection, get_count_of_categories,
-    get_count_of_posts, get_max_id_of_category, get_max_id_of_post, Blog, CategoryTemplate,
+    Blog, CategoryTemplate,
     CategoryTemplatePagination, Count, HomeTemplate, Max, NewCategoryTemplate, NewPostTemplate,
     UpdateCategory, UpdateCategoryTemplate,
 };
@@ -22,14 +20,7 @@ use sqlx::postgres::PgPoolOptions;
 use sqlx::{Error, Pool, Postgres};
 use std::string::String;
 use std::vec::Vec;
-
-pub async fn get_connection_for_crud() -> Pool<Postgres> {
-    PgPoolOptions::new()
-        .max_connections(5)
-        .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
-        .await
-        .expect("failed to connect")
-}
+use crate::controllers::base_controller::{get_all_categories, get_all_categories_with_limit, get_categories_per_page, get_category_id_by_name, get_category_name_by_id, get_connection, get_connection_for_crud, get_count_of_categories, get_count_of_posts, get_max_id_of_category, get_max_id_of_post};
 
 pub async fn create_posts_form_ui() -> impl IntoResponse {
     let category_list = get_all_categories().await;

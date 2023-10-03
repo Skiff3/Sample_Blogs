@@ -1,5 +1,4 @@
 use crate::model::models::{
-    get_all_categories, get_category_name_by_post_id, get_details_of_post, get_post_name_by_id,
     GuestTemplate, PostTemplate,
 };
 use askama::Template;
@@ -9,6 +8,8 @@ use axum::{
     response::{Html, IntoResponse},
 };
 use std::string::String;
+use crate::controllers::base_controller::{get_all_categories, get_category_name_by_post_id, get_details_of_post, get_post_name_by_id};
+
 pub async fn show_post(Path(post_id_tmp): Path<i32>) -> impl IntoResponse {
     let post_id = post_id_tmp.clone();
     let mut category_in_template: Vec<String> = vec![];

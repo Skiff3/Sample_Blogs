@@ -1,12 +1,13 @@
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::global_number_of_items_per_page_64;
-use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, IndexTemplate};
+use crate::model::models::{IndexTemplate};
 use askama::Template;
 use axum::response::IntoResponse;
 use axum::{http::StatusCode, response::Html};
 use std::collections::{BTreeMap, HashMap};
 use axum_macros::debug_handler;
 use std::string::String;
+use crate::controllers::base_controller::{get_all_categories, get_connection, get_count_of_posts};
 
 #[debug_handler]
 pub async fn index() -> impl IntoResponse {

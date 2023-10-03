@@ -1,9 +1,6 @@
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::model::models::{
-    count_of_get_filtered_from_database_by_category,
-    num_count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id,
-    get_connection, get_filtered_from_database_by_category,
-    num_get_filtered_from_database_by_category, Blog, HomeFilterTemplate,
+  Blog, HomeFilterTemplate,
 };
 use crate::{global_number_of_items_per_page_64, BlogTemplate};
 use askama::Template;
@@ -14,6 +11,7 @@ use axum::{
 };
 use std::collections::{BTreeMap, HashMap};
 use std::sync::Arc;
+use crate::controllers::base_controller::{count_of_get_filtered_from_database_by_category, get_all_categories, get_category_name_by_id, get_filtered_from_database_by_category, num_count_of_get_filtered_from_database_by_category, num_get_filtered_from_database_by_category};
 
 pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
     let mut category_in_template: Vec<String> = vec![];

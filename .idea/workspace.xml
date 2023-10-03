@@ -7,12 +7,15 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Adding a blank line to a return statement">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Removed unused dependencies in Cargo.toml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/base_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/base_controller.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/models.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -315,7 +318,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696230011337</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Removed unused dependencies in Cargo.toml">
+      <created>1696230365178</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1696230365178</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -351,6 +361,7 @@
     <MESSAGE value="Assigning category name in one variable" />
     <MESSAGE value="Changed variable names according to conventions." />
     <MESSAGE value="Adding a blank line to a return statement" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding a blank line to a return statement" />
+    <MESSAGE value="Removed unused dependencies in Cargo.toml" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed unused dependencies in Cargo.toml" />
   </component>
 </project>
