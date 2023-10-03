@@ -21,7 +21,7 @@ pub async fn index() -> impl IntoResponse {
             category_id_with_title.insert(category.category_id, category.category_name.clone());
             category_in_template.push(category.clone().category_name);
         })
-    });// todo add flatten() here
+    });// todo add flatten() here and make it more efficient
     let posts = posts_limit_3().await.unwrap();
     let mut page_numbers_in_navigation: Vec<i32> = vec![];
     let number_of_posts_vector = total_posts().await;
@@ -37,7 +37,7 @@ pub async fn index() -> impl IntoResponse {
     let post_id_in_template = posts.iter().map(|post1| post1.post_id.clone()).collect();
     let template = IndexTemplate {
         post_id_title: post_id_with_title,
-        category_id_title: category_id_with_title,
+        category_id_title: category_id_with_title,// map and post 1 collect
         index_id: &post_id_in_template,
         index_title: String::from("Posts"),
         page_number: &1,

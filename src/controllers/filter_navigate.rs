@@ -28,11 +28,20 @@ pub async fn admin_blog_pagination(
     }
     category_in_template.clear();
     let category_list = get_all_categories().await;
-    category_list.iter().for_each(|categories| {
-        categories.iter().for_each(|category| {
-            category_id_with_title.insert(category.category_id, category.category_name.clone());
-            category_in_template.push(category.clone().category_name);
-        })
+    // category_list.iter().for_each(|categories| {
+    //     categories.iter().for_each(|category| {
+    //         category_id_with_title.insert(category.category_id, category.category_name.clone());
+    //         category_in_template.push(category.clone().category_name);
+    //     })
+    // });
+    // // and add the flatten() to make it more efficient
+    let tmp = category_list.into_iter()
+        .map(|x| x.into_iter().collect::<Vec<_>>())
+        .flatten()
+        .collect::<Vec<_>>();
+    tmp.iter().for_each(|category| {
+        category_id_with_title.insert(category.category_id, category.category_name.clone());
+        category_in_template.push(category.clone().category_name);
     });
     let page_number_integer: i32 = page_number;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
@@ -87,11 +96,19 @@ pub async fn blog_pagination(
     }
     category_in_template.clear();
     let category_list = get_all_categories().await;
-    category_list.iter().for_each(|categories| {
-        categories.iter().for_each(|category| {
-            category_id_with_title.insert(category.category_id, category.category_name.clone());
-            category_in_template.push(category.clone().category_name);
-        })
+    // category_list.iter().for_each(|categories| {
+    //     categories.iter().for_each(|category| {
+    //         category_id_with_title.insert(category.category_id, category.category_name.clone());
+    //         category_in_template.push(category.clone().category_name);
+    //     })
+    // });
+    let tmp = category_list.into_iter()
+        .map(|x| x.into_iter().collect::<Vec<_>>())
+        .flatten()
+        .collect::<Vec<_>>();
+    tmp.iter().for_each(|category| {
+        category_id_with_title.insert(category.category_id, category.category_name.clone());
+        category_in_template.push(category.clone().category_name);
     });
     let page_number_integer: i32 = page_number;
     let _offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
@@ -106,7 +123,7 @@ pub async fn blog_pagination(
         .for_each(|index| page_navigation_numbers.push(index as i32));
     posts.clone().iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
-    });
+    });// todo add flatten() here
     let template = HomeFilterTemplate {
         post_id_title: post_id_with_title,
         category_id_title: category_id_with_title,

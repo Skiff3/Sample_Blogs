@@ -98,8 +98,7 @@ pub async fn category_by_post_id(post_name: String) -> Vec<Category_Name> {
 
 pub async fn categories_with_limit() -> std::result::Result<Vec<Category>, Error> {
     let pool = pool_for_crud().await;
-
-    sqlx::query_as::<_, Category>("select * from category_post limit 3")
+                 sqlx::query_as::<_, Category>("select * from category_post limit 3")
         .fetch_all(&pool)
         .await
 }

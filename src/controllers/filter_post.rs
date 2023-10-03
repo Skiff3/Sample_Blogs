@@ -30,7 +30,7 @@ pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
             category_id_with_title.insert(category.category_id, category.category_name.clone());
             category_in_template.push(category.clone().category_name);
         })
-    });
+    });// todo add flatten() here
     let mut page_numbers_in_navigation: Vec<i32> = vec![];
     let string_a: String = category.clone().to_string();
     let string_b: &str = "/pages";
@@ -56,7 +56,7 @@ pub async fn admin_blogs(Path(category): Path<i32>) -> impl IntoResponse {
         .for_each(|index| page_numbers_in_navigation.push(index as i32));
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
-    });
+    }); // todo add flatten() here
     let post_title_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
     let post_id_in_template = posts.iter().map(|post| post.post_id.clone()).collect();
     let template = BlogTemplate {
@@ -92,7 +92,7 @@ pub async fn blogs(Path(category): Path<i32>) -> impl IntoResponse {
             category_id_with_title.insert(category.category_id, category.category_name.clone());
             category_in_template.push(category.clone().category_name);
         })
-    });
+    });// todo add flatten() here
     let mut page_numbers_in_navigation: Vec<i32> = vec![];
     let string_a: String = category.clone().to_string();
     let string_b: &str = "/pages";
@@ -111,7 +111,7 @@ pub async fn blogs(Path(category): Path<i32>) -> impl IntoResponse {
         .for_each(|i| page_numbers_in_navigation.push(i as i32));
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
-    });
+    });// add flatten() here
     let post_title_in_template = posts.iter().map(|post| post.post_title.clone()).collect();
     post_id_in_template = posts.iter().map(|post1| post1.post_id.clone()).collect();
 
