@@ -13,7 +13,7 @@ use crate::controllers::index::index;
 use crate::controllers::navigate::{page, pages};
 use crate::controllers::posts_crud_controller::{
     create_category_form_ui, create_posts_form, create_posts_form_ui, delete_posts_form, home_gui,
-    show_all_categories_with_pagination,
+    categories_with_pagination,
     update_posts_form,
 };
 use crate::model::models::{BlogTemplate, IndexTemplate};
@@ -151,7 +151,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         .route("/admin/categories", get(show_all_categories))
         .route(
             "/admin/categories/:page_number",
-            get(show_all_categories_with_pagination),
+            get(categories_with_pagination),
         )
         .route("/post/:post_id", get(show_post))
         .route("/admin/page/:page_number", get(page))

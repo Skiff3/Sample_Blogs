@@ -256,7 +256,7 @@ pub async fn create_category_form_ui() -> impl IntoResponse {
 //     })
 // }
 
-pub async fn show_all_categories_with_pagination(
+pub async fn categories_with_pagination(
     Path(page_number): Path<String>,
 ) -> impl IntoResponse {
     let mut category_in_template = vec![];
