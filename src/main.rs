@@ -12,9 +12,8 @@ use crate::controllers::filter_post::{admin_blogs, blogs};
 use crate::controllers::index::index;
 use crate::controllers::navigate::{page, pages};
 use crate::controllers::posts_crud_controller::{
-    create_categories_form, create_category_form_ui, create_posts_form, create_posts_form_ui,
-    delete_categories_form, delete_posts_form, home_gui, show_all_categories,
-    show_all_categories_with_pagination, update_category_form, update_category_form_ui,
+    create_category_form_ui, create_posts_form, create_posts_form_ui, delete_posts_form, home_gui,
+    show_all_categories_with_pagination,
     update_posts_form,
 };
 use crate::model::models::{BlogTemplate, IndexTemplate};
@@ -34,6 +33,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
+use crate::controllers::category_crud_controller::{create_categories_form, delete_categories_form, show_all_categories, update_category_form, update_category_form_ui};
 
 #[derive(Deserialize)]
 pub struct CreatePost {

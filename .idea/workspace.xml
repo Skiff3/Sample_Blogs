@@ -7,13 +7,11 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Replaced two for_each() with flatten()">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Replaced two for_each() with flatten() in all files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/controller_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/controller_post.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/category_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/category_crud_controller.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -343,7 +341,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696322186640</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Replaced two for_each() with flatten() in all files">
+      <created>1696323180819</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1696323180819</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -358,7 +363,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Sample blog complete with pagination." />
     <MESSAGE value="Authentication." />
     <MESSAGE value="Authentication" />
     <MESSAGE value="Authentication Complete" />
@@ -383,6 +387,7 @@
     <MESSAGE value="Added functions used by all controllers to base controller" />
     <MESSAGE value="Changed function names in the base controller" />
     <MESSAGE value="Replaced two for_each() with flatten()" />
-    <option name="LAST_COMMIT_MESSAGE" value="Replaced two for_each() with flatten()" />
+    <MESSAGE value="Replaced two for_each() with flatten() in all files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Replaced two for_each() with flatten() in all files" />
   </component>
 </project>
