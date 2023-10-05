@@ -27,22 +27,12 @@ pub async fn admin_blog_pagination(
         category_name = index.category_name.clone();
     }
     category_in_template.clear();
-    let category_list = get_all_categories().await;
-    // category_list.iter().for_each(|categories| {
-    //     categories.iter().for_each(|category| {
-    //         category_id_with_title.insert(category.category_id, category.category_name.clone());
-    //         category_in_template.push(category.clone().category_name);
-    //     })
-    // });
-    // // and add the flatten() to make it more efficient
-    let tmp = category_list.into_iter()
-        .map(|x| x.into_iter().collect::<Vec<_>>())
-        .flatten()
+    category_in_template = get_all_categories()
+        .await
+        .unwrap()
+        .into_iter()
+        .map(|category| category.category_name)
         .collect::<Vec<_>>();
-    tmp.iter().for_each(|category| {
-        category_id_with_title.insert(category.category_id, category.category_name.clone());
-        category_in_template.push(category.clone().category_name);
-    });
     let page_number_integer: i32 = page_number;
     let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let posts = filtered_cat_database(category_id.clone(), offset_start)
@@ -95,21 +85,12 @@ pub async fn blog_pagination(
         category_name = index.category_name.clone();
     }
     category_in_template.clear();
-    let category_list = get_all_categories().await;
-    // category_list.iter().for_each(|categories| {
-    //     categories.iter().for_each(|category| {
-    //         category_id_with_title.insert(category.category_id, category.category_name.clone());
-    //         category_in_template.push(category.clone().category_name);
-    //     })
-    // });
-    let tmp = category_list.into_iter()
-        .map(|x| x.into_iter().collect::<Vec<_>>())
-        .flatten()
+    category_in_template = get_all_categories()
+        .await
+        .unwrap()
+        .into_iter()
+        .map(|category| category.category_name)
         .collect::<Vec<_>>();
-    tmp.iter().for_each(|category| {
-        category_id_with_title.insert(category.category_id, category.category_name.clone());
-        category_in_template.push(category.clone().category_name);
-    });
     let page_number_integer: i32 = page_number;
     let _offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let posts = filtered_cat_database(category.clone(), 0)

@@ -7,10 +7,13 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Created a seperate category crud controller">
+    <list default="true" id="c03496c8-8000-4666-985f-b23837f274a7" name="Changes" comment="Changes in the function names">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_navigate.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/filter_post.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/filter_post.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/index.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/navigate.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/navigate.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/posts_crud_controller.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -354,7 +357,14 @@
       <option name="project" value="LOCAL" />
       <updated>1696406616815</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Changes in the function names">
+      <created>1696407383630</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1696407383630</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -369,7 +379,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Authentication" />
     <MESSAGE value="Authentication Complete" />
     <MESSAGE value="Clear warnings" />
     <MESSAGE value="Clear warnings." />
@@ -394,6 +403,7 @@
     <MESSAGE value="Replaced two for_each() with flatten()" />
     <MESSAGE value="Replaced two for_each() with flatten() in all files" />
     <MESSAGE value="Created a seperate category crud controller" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created a seperate category crud controller" />
+    <MESSAGE value="Changes in the function names" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes in the function names" />
   </component>
 </project>
