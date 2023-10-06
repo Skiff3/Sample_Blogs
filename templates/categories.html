@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
+          rel="stylesheet"  type='text/css'>
+    <title> {{ index_title }} </title>
+    <script>
+    $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+  </script>
+    <style>
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.navbar {
+    padding: 15px 10px;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+}
+
+#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    font-size: 0.9em ;
+    padding-left: 30px ;
+    background: #6d7fcc;
+}
+
+ul.CTAs {
+    padding: 20px;
+}
+
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+a.download {
+    background: #fff;
+    color: #7386D5;
+}
+
+a.article,
+a.article:hover {
+
+    color: #fff !important;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+}
+.container {
+  padding: 2rem 0rem;
+}
+
+h4 {
+  margin: 2rem 0rem 1rem;
+}
+
+.table-image {
+  td, th {
+    vertical-align: middle;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  margin-left:-5px;
+  margin-right:-5px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+  </style>
+</head>
+
+<body>
+
+
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Admin Panel</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+
+
+
+
+                <li>
+                    <a href="http://0.0.0.0:4000/admin">Posts</a>
+                </li>
+                <li class="active">
+                    <a href="http://0.0.0.0:4000/admin/categories">Categories</a>
+                </li>
+            <li>
+                <a href="/logout" class="article">Logout</a>
+            </li>
+
+            </ul>
+
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content">
+        <div class="container-fluid">
+
+
+        <h2>Categories</h2><br/><br/><br>
+
+
+
+
+
+            <!--		<div class="links">-->
+            <!--			<ul>-->
+            <!--			{% for item in index_links %}-->
+            <!--				<li><a href="/post/{{ item}}">{{ item }}</a></li><br/>-->
+            <!--				<p>Description ...</p>-->
+            <!--			{% endfor %}-->
+            <!--		   </ul>-->
+            <!--		</div>-->
+            <div>
+                <a style="float:right; margin-right:10px;" href="http://0.0.0.0:4000/admin/category/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Category</a>
+            </div><br/></br>
+
+                    <div>
+                        <div class="row">
+                            <div class="column">
+                                <table style="width:200%" class="table">
+                                    <thead>
+                                    <tr style="height:60px">
+                                        <th scope="col">Category Title</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tr style="height:63px">
+                                        {% for item in category_id_title %}
+                                        <td style="height:63px"><a href="/post/{{ item.0}}">{{item.1}}</a> </td>
+                                        <td>
+                                            <a href="/admin/category/update/{{ item.0}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                            <a href="#" id="delete_button" type="button" class="btn btn-danger" onclick="confirm_msg({{item.0}});"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+<!--                            <div class="column">-->
+<!--                                <table class="table">-->
+<!--                                    <tr style="height:60px">-->
+<!--                                        <th>Actions</th>-->
+<!--                                    </tr>-->
+<!--                                    <tr style="height:65px">-->
+<!--                                        {% for items in category_id %}-->
+<!--                                        <td>-->
+<!--                                            <a href="/admin/category/update/{{ items}}" type="button" class="btn btn-primary"><i class="fa fa-edit"></i></a>-->
+<!--                                            <a href="#" id="delete_button" type="button" class="btn btn-danger" onclick="confirm_msg({{items}});"><i class="fa fa-trash-o"></i></a>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+<!--                                    {% endfor %}-->
+<!--                                </table>-->
+<!--                            </div><br/>-->
+                    </div>
+
+                </div><br/>
+            <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% for i in page_nav_links %}
+                <li class="page-item">
+                    <a id="page_id" onclick="go_to_pagination()" class="page-link" href="http://0.0.0.0:4000/admin/categories/{{ i }}" >{{ i }}</a>
+                </li><br/><br/>
+                {% endfor %}
+            </ul>
+        </nav>
+            </div>
+
+        </div>
+
+        <br/><br/>
+
+            <!--		<h2>Get Started, Create a Blog</h2><br/><br/>-->
+
+            <!--		<form action="/create_post" method="post">-->
+            <!--&lt;!&ndash;			<label><b>Post Id</b></label>&ndash;&gt;-->
+            <!--&lt;!&ndash;			<input type="number" placeholder="Enter Post Id" name="post_id">&ndash;&gt;-->
+
+            <!--			<label><b>Post Title</b></label>-->
+            <!--			<input type="text" placeholder="Enter Post Title" name="post_title">-->
+
+            <!--			<label><b>Post Body</b></label>-->
+            <!--			<input type="text" placeholder="Enter Post Description" name="post_body">-->
+
+            <!--			<select id="category_name" name="category_name">-->
+            <!--				<option id="category_name_gen_2">&#45;&#45;Select&#45;&#45;</option>-->
+            <!--				{% let name = " " %}-->
+            <!--				{% for name in index_sec %}-->
+            <!--				<option id="category_name_specific">{{ name }}</option>-->
+            <!--				{% endfor %}-->
+            <!--			</select>-->
+
+            <!--			<button type="submit">Create Post</button><br/><br/><br/>-->
+
+
+
+            <!--		</form>-->
+
+            <!--	<h2>Or, Create a Category</h2><br/><br/>-->
+
+            <!--	<form action="/create_category" method="post">-->
+
+            <!--	<label><b>Category Name</b></label>-->
+
+            <!--	<input type="text" placeholder="Enter Category Name" name="category_name">-->
+
+            <!--	<button type="submit">Create Category</button><br/><br/><br/>-->
+
+            <!--	<a href="/show_categories">Show Categories</a><br/><br/><br/>-->
+
+            <!--	</form>-->
+
+    </div>
+</div>
+</div>
+</body>
+
+<script>
+        document.getElementById("delete_button").addEventListener("click",confirm_delete)
+        function getval(sel){
+        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
+        let element  = document.getElementById("category");
+
+        element.value = sel.value;
+        }
+         function confirm_msg(item){
+      		if(confirm("Confirm delete, after deleting the category the posts belonging to this category will belong to No Category"+item) == true){
+      		window.location.replace("http://0.0.0.0:4000/delete/category/"+item);
+      		}
+      		else{
+      		alert("Not deleted")
+      		}
+      		}
+    </script>
+</html>

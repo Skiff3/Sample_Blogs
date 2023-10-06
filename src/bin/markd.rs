@@ -13,7 +13,7 @@ async fn main() -> Result<(), sqlx::Error> {
             let mut content = String::new();
             file.read_to_string(&mut content).unwrap();
             _inserter = content;
-        } // as ref in the
+        }
         Err(_error) => {
             panic!("could not insert into postgres")
         }
@@ -23,6 +23,5 @@ async fn main() -> Result<(), sqlx::Error> {
         .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
         .await
         .expect("couldn't create pool");
-
     Ok(())
 }
