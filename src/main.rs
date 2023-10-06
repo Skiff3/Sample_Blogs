@@ -31,6 +31,8 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
+use sqlx::{Pool, Postgres};
+use sqlx::postgres::PgPoolOptions;
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 use crate::controllers::category_crud_controller::{create_categories_form, delete_categories_form, show_all_categories, update_category_form, update_category_form_ui};
@@ -70,6 +72,21 @@ pub struct User {
 pub struct UserLogin {
     pub user_name: String,
     pub password: String,
+}
+
+pub struct GlobalPool{
+    pub pg_pool: Pool<Postgres>,
+}
+
+impl GlobalPool{
+    pub async fn global_pool() -> Pool<Postgres> {
+        let mut pg_pool =  PgPoolOptions::new()
+            .max_connections(5)
+            .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
+            .await
+            .expect("failed to connect");
+        pg_pool
+    }
 }
 
 pub fn global_number_of_items_per_page() -> i32 {
@@ -183,7 +200,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         .route("/posts/:post_id", get(show_posts))
         .layer(Extension(user.clone()))
         .layer(auth_layer)
-        .layer(session_layer) // session body
+        .layer(session_layer)
         .nest_service("/assets", ServeDir::new("assets"));
 
     axum::Server::bind(&"0.0.0.0:4000".parse().unwrap())

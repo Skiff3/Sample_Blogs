@@ -3,15 +3,14 @@
 // db functions
 use sqlx::{Error, Pool, Postgres};
 use sqlx::postgres::PgPoolOptions;
-use crate::global_number_of_items_per_page;
+use crate::GlobalPool;
+use crate::{global_number_of_items_per_page};
 use crate::model::models::{Blog, Category, Category_Id, Category_Name, Count, Max, Post, Post_Name};
 
+
 pub async fn pool_for_crud() -> Pool<Postgres> {
-    PgPoolOptions::new()
-        .max_connections(5)
-        .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
-        .await
-        .expect("failed to connect")
+    let pg_pool: Pool<Postgres> = GlobalPool::global_pool().await;
+    pg_pool
 }
 
 pub async fn posts_limit_3() -> std::result::Result<Vec<Post>, Error> {
