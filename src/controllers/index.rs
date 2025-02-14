@@ -1,13 +1,12 @@
-use std::collections::{BTreeMap, HashMap};
 use crate::controllers::posts_crud_controller::get_vec_len_of_count;
 use crate::global_number_of_items_per_page_64;
 use crate::model::models::{get_all_categories, get_connection, get_count_of_posts, IndexTemplate};
 use askama::Template;
 use axum::response::IntoResponse;
 use axum::{http::StatusCode, response::Html};
+use std::collections::BTreeMap;
 
 use axum_macros::debug_handler;
-use egui::TextBuffer;
 use std::string::String;
 
 #[debug_handler]
@@ -15,11 +14,11 @@ pub async fn index() -> impl IntoResponse {
     let mut psec: Vec<String> = vec![];
     let mut m2: i64 = 0;
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
-    let mut category_id_with_title: BTreeMap<i32, String> =BTreeMap::new();
+    let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let category_list = get_all_categories().await;
     category_list.iter().for_each(|categories| {
         categories.iter().for_each(|category| {
-            category_id_with_title.insert(category.category_id,category.category_name.clone());
+            category_id_with_title.insert(category.category_id, category.category_name.clone());
             psec.push(category.clone().category_name); // category id
         })
     });
@@ -29,32 +28,31 @@ pub async fn index() -> impl IntoResponse {
     m2 = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
     println!("count {} and number {}", m2, number_of_pages);
-    (1..number_of_pages + 1)
-        .into_iter()
-        .for_each(|i| pnav.push(i as i32));
-    posts.iter().for_each(|post| {post_id_with_title.insert(post.post_id,post.post_title.clone());});
+    (1..number_of_pages + 1).for_each(|i| pnav.push(i as i32));
+    posts.iter().for_each(|post| {
+        post_id_with_title.insert(post.post_id, post.post_title.clone());
+    });
     //let list_iter = s.iter().map()
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
-    let pids = posts.iter().map(|post1| post1.post_id.clone()).collect();
+    let pids = posts.iter().map(|post1| post1.post_id).collect();
     //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
     //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}",post_id_with_title);
-    let mut page_string = String::from("");
+    println!("hashmap {:?}", post_id_with_title);
+    let page_string = String::from("");
 
     // for i in 0..1{
     //     pagination_html = "{% for i in page_nav_links %}
-	// 		{% if i != \\"{{ page_number }}" %}
-	// 		<li class="page-item active">
-	// 			<a id="page_nav"  class="page-link" href="/admin/page/{{ i }}" >i</a>
-	// 		</li><br/><br/><br/>
-	// 		{% endif %}
-	// 		{% endfor %}";
+    // 		{% if i != \\"{{ page_number }}" %}
+    // 		<li class="page-item active">
+    // 			<a id="page_nav"  class="page-link" href="/admin/page/{{ i }}" >i</a>
+    // 		</li><br/><br/><br/>
+    // 		{% endif %}
+    // 		{% endfor %}";
     // }
 
-
     let template = IndexTemplate {
-        post_id_title:post_id_with_title,
-        category_id_title:category_id_with_title,
+        post_id_title: post_id_with_title,
+        category_id_title: category_id_with_title,
         index_id: &pids,
         index_title: String::from("Posts"),
         page_number: &1,
@@ -64,7 +62,7 @@ pub async fn index() -> impl IntoResponse {
         page_nav_links: &pnav,
     };
 
-    template.render().map(|html| Html(html)).map_err(|err| {
+    template.render().map(Html).map_err(|err| {
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             format!("Failed to render {}", err),

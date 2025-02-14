@@ -22,7 +22,12 @@ use crate::model::models::{BlogTemplate, IndexTemplate};
 use axum::response::Redirect;
 use axum::routing::post;
 use axum::{routing::get, Extension, Router};
-use axum_login::{axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer}, memory_store::MemoryStore as AuthMemoryStore, secrecy::SecretVec, AuthLayer, AuthUser, RequireAuthorizationLayer};
+use axum_login::{
+    axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer},
+    memory_store::MemoryStore as AuthMemoryStore,
+    secrecy::SecretVec,
+    AuthLayer, AuthUser,
+};
 use rand::Rng;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -39,7 +44,7 @@ pub struct CreatePost {
 }
 
 #[derive(Deserialize)]
-pub struct CreateCategory { 
+pub struct CreateCategory {
     pub category_name: String,
 }
 
@@ -186,7 +191,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         //.route("/post/main", get(create_guest_post_ui))
         .layer(Extension(user.clone()))
         .layer(auth_layer)
-        .layer(session_layer)// session body
+        .layer(session_layer) // session body
         .nest_service("/assets", ServeDir::new("assets"));
 
     axum::Server::bind(&"0.0.0.0:4000".parse().unwrap())

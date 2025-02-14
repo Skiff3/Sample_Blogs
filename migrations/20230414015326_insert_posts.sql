@@ -15,5 +15,5 @@ insert into posts values(12,'Post 7 of B','Description of Post 7 of Category B',
 
 insert into posts values(13,'Post 1 of C','Description of Post 1 of Category C',3);
 
-insert into posts values(14,'Post 1 of No Category','Description of Post 1 of No Category',4);
-insert into posts values(15,'Post 2 of No Category','Description of Post 2 of No Category',4);
+insert into posts values(14,'Post 1 of No Category','Description of Post 1 of No Category',3);
+insert into posts values(15,'Post 2 of No Category','Description of Post 2 of No Category',3);
