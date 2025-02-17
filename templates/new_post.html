@@ -207,10 +207,10 @@ h4 {
 
 
         <li>
-          <a href="http://0.0.0.0:4000/admin">Posts</a>
+          <a href="http://127.0.0.1:4000/admin">Posts</a>
         </li>
         <li>
-          <a href="http://0.0.0.0:4000/admin/categories">Categories</a>
+          <a href="http://127.0.0.1:4000/admin/categories">Categories</a>
         </li>
 
         <li>
@@ -261,7 +261,7 @@ h4 {
 </body>
 <script>
         function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
+        window.location.replace("http://127.0.0.1:4000/admin/posts/category/"+sel.value);
         let element  = document.getElementById("category");
 
         element.value = sel.value;

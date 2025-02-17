@@ -1,17 +1,15 @@
 extern crate core;
-
 mod authentication;
 mod controllers;
 mod model;
-
 use crate::authentication::login::{
     admin_gui, login_user, login_user_ui, register_user, register_user_ui,
 };
-use crate::controllers::controller_post::{show_post, show_posts};
-use crate::controllers::filter_navigate::{admin_blog_pagination, blog_pagination};
 use crate::controllers::filter_post::{admin_blogs, blogs};
 use crate::controllers::index::index;
-use crate::controllers::navigate::{page, pages};
+use crate::controllers::navigation_controller::{page, pages};
+use crate::controllers::pagination_controller::{admin_blog_pagination, blog_pagination};
+use crate::controllers::post_controller::{show_post, show_posts};
 use crate::controllers::posts_crud_controller::{
     create_category_form_ui, create_catgories_form, create_posts_form, create_posts_form_ui,
     delete_categories_form, delete_posts_form, home_gui, show_all_categories,
@@ -26,9 +24,9 @@ use axum_login::{
     axum_sessions::{async_session::MemoryStore as SessionMemoryStore, SessionLayer},
     memory_store::MemoryStore as AuthMemoryStore,
     secrecy::SecretVec,
-    AuthLayer, AuthUser,
+    AuthLayer, AuthUser, RequireAuthorizationLayer,
 };
-use rand::Rng;
+use rand::{random, Rng};
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -112,7 +110,7 @@ type AuthContext = axum_login::extractors::AuthContext<i64, User, AuthMemoryStor
 
 #[tokio::main]
 async fn main() -> std::result::Result<(), sqlx::Error> {
-    let secret = rand::thread_rng().gen::<[u8; 64]>();
+    let secret = random::<[u8; 64]>();
     let session_store = SessionMemoryStore::new();
     let session_timeout_duration = Some(Duration::new(600, 0));
     let session_layer = SessionLayer::new(session_store, &secret)
@@ -179,7 +177,7 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
             get(create_category_form_ui).post(create_catgories_form),
         )
         .route("/admins", get(admin_gui))
-        //.route_layer(RequireAuthorizationLayer::<i64, User>::login())
+        .route_layer(RequireAuthorizationLayer::<i64, User>::login())
         .route("/", get(home_gui))
         .route("/posts/page/:page_number", get(pages))
         .merge(blog_routes)
@@ -188,18 +186,18 @@ async fn main() -> std::result::Result<(), sqlx::Error> {
         .route("/login", get(login_user_ui).post(login_user))
         .route("/logout", get(logout_handler))
         .route("/posts/:post_id", get(show_posts))
-        //.route("/post/main", get(create_guest_post_ui))
         .layer(Extension(user.clone()))
         .layer(auth_layer)
         .layer(session_layer) // session body
         .nest_service("/assets", ServeDir::new("assets"));
 
-    axum::Server::bind(&"0.0.0.0:4000".parse().unwrap())
+    axum::Server::bind(&"127.0.0.1:4000".parse().unwrap()) // changing from 0.0.0.0:4000 to http://127.0.0.1:4000/
         .serve(app.into_make_service())
-        .await;
+        .await
+        .expect("Failed to redirect");
 
     Ok(())
-    /*
+    /*todo
     change urls
     database column to null
     from name to id

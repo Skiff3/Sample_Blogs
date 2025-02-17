@@ -27,18 +27,14 @@ pub async fn index() -> impl IntoResponse {
     let number_of_posts_vector = get_count_of_posts().await;
     m2 = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
-    println!("count {} and number {}", m2, number_of_pages);
+
     (1..number_of_pages + 1).for_each(|i| pnav.push(i as i32));
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
     });
-    //let list_iter = s.iter().map()
+
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
     let pids = posts.iter().map(|post1| post1.post_id).collect();
-    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}", post_id_with_title);
-    let page_string = String::from("");
 
     // for i in 0..1{
     //     pagination_html = "{% for i in page_nav_links %}

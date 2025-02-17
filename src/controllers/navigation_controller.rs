@@ -12,7 +12,6 @@ use axum::{
 use std::collections::BTreeMap;
 
 pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
-    println!("{}", page_number);
     let mut plinks: Vec<String> = vec![];
     let mut psec: Vec<String> = vec![];
     let mut pnav: Vec<i32> = vec![];
@@ -48,13 +47,8 @@ pub async fn page(Path(page_number): Path<i32>) -> impl IntoResponse {
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
     });
-    //let list_iter = s.iter().map()
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
     let pids = posts.iter().map(|post1| post1.post_id).collect();
-    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}", post_id_with_title);
-    let temp: i32 = page_number;
 
     let template = IndexTemplate {
         post_id_title: post_id_with_title,
@@ -115,12 +109,8 @@ pub async fn pages(Path(page_number): Path<i32>) -> impl IntoResponse {
     posts.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
     });
-    //let list_iter = s.iter().map()
     let plinks = posts.iter().map(|post| post.post_title.clone()).collect();
     pid = posts.iter().map(|post1| post1.post_id).collect();
-    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}", post_id_with_title);
 
     let template = HomeTemplate {
         post_id_title: post_id_with_title,

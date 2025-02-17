@@ -237,10 +237,10 @@ th, td {
 
 
         <li class="active">
-          <a href="http://0.0.0.0:4000/admin">Posts</a>
+          <a href="http://127.0.0.1:4000/admin">Posts</a>
         </li>
         <li>
-          <a href="http://0.0.0.0:4000/admin/categories">Categories</a>
+          <a href="http://127.0.0.1:4000/admin/categories">Categories</a>
         </li>
 
 
@@ -298,7 +298,7 @@ th, td {
 <br><br>
 
     <div>
-      <a style="float:right; margin-right:10px;" href="http://0.0.0.0:4000/admin/post/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Post</a>
+      <a style="float:right; margin-right:10px;" href="http://127.0.0.1:4000/admin/post/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Post</a>
     </div><br/><br/>
 
 
@@ -381,13 +381,13 @@ th, td {
     <script>
         function getval(sel){
         let selected_category = sel.value.toString();
-        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+selected_category);
+        window.location.replace("http://127.0.0.1:4000/admin/posts/category/"+selected_category);
         }
 
          function confirm_delete(item){
 
       		if(confirm("Confirm delete") == true){
-      		window.location.replace("http://0.0.0.0:4000/delete/"+item);
+      		window.location.replace("http://127.0.0.1:4000/delete/"+item);
       		}
       		else{
       		alert("Not deleted")

@@ -18,7 +18,7 @@ mod filters {
 pub struct Post {
     pub post_id: i32,
     pub post_title: String,
-    pub post_description: String,
+    //pub post_description: String,
     pub post_body: String,
 }
 
@@ -137,7 +137,7 @@ pub struct UpdateCategory {
 pub struct RegisterUsers {
     pub user_names: String,
     pub passwords: String,
-    pub repeat_passwords: String,
+    //pub repeat_passwords: String,
 }
 
 #[derive(Template)]
@@ -159,22 +159,22 @@ pub struct BlogTemplate<'a> {
 pub struct Blog {
     pub post_id: i32,
     pub post_title: String,
-    pub post_description: String,
-    pub post_body: String,
+    //pub post_description: String,
+    //pub post_body: String,
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct Category_Id {
-    pub category_id: i32,
+pub struct CategoryId {
+    //pub category_id: i32,
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct Post_Name {
+pub struct PostName {
     pub post_title: String,
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct Category_Name {
+pub struct CategoryName {
     pub category_name: String,
 }
 
@@ -270,29 +270,29 @@ pub async fn get_all_categories() -> std::result::Result<Vec<Category>, Error> {
         .await
 }
 
-pub async fn get_category_id_by_name(category_name: String) -> Vec<Category_Id> {
-    let pool = get_connection_for_crud().await;
-    let res = sqlx::query_as::<_, Category_Id>(
-        "select category_id from category_post where category_name = ($1);",
-    )
-    .bind(category_name)
-    .fetch_all(&pool)
-    .await;
-    res.unwrap()
-}
+// pub async fn get_category_id_by_name(category_name: String) -> Vec<CategoryId> {
+//     let pool = get_connection_for_crud().await;
+//     let res = sqlx::query_as::<_, CategoryId>(
+//         "select category_id from category_post where category_name = ($1);",
+//     )
+//     .bind(category_name)
+//     .fetch_all(&pool)
+//     .await;
+//     res.unwrap()
+// }
 
-pub async fn get_post_name_by_id(post_id: i32) -> Vec<Post_Name> {
+pub async fn get_post_name_by_id(post_id: i32) -> Vec<PostName> {
     let pool = get_connection_for_crud().await;
-    let res = sqlx::query_as::<_, Post_Name>("select post_title from posts where post_id = ($1);")
+    let res = sqlx::query_as::<_, PostName>("select post_title from posts where post_id = ($1);")
         .bind(post_id)
         .fetch_all(&pool)
         .await;
     res.unwrap()
 }
 
-pub async fn get_category_name_by_id(category_id: i32) -> Vec<Category_Name> {
+pub async fn get_category_name_by_id(category_id: i32) -> Vec<CategoryName> {
     let pool = get_connection_for_crud().await;
-    let res = sqlx::query_as::<_, Category_Name>(
+    let res = sqlx::query_as::<_, CategoryName>(
         "select category_name from category_post where category_id = ($1);",
     )
     .bind(category_id)
@@ -301,9 +301,9 @@ pub async fn get_category_name_by_id(category_id: i32) -> Vec<Category_Name> {
     res.unwrap()
 }
 
-pub async fn get_category_name_by_post_id(post_name: String) -> Vec<Category_Name> {
+pub async fn get_category_name_by_post_id(post_name: String) -> Vec<CategoryName> {
     let pool = get_connection_for_crud().await;
-    let res = sqlx::query_as::<_, Category_Name>(
+    let res = sqlx::query_as::<_, CategoryName>(
         "select category_name from category_post c,posts p where c.category_id = p.category_id and post_title = ($1);",
     )
         .bind(post_name)
@@ -378,19 +378,20 @@ pub async fn get_filtered_from_database(
 pub async fn get_filtered_from_database_by_category(
     final_category: String,
 ) -> std::result::Result<Vec<Blog>, Error> {
+    let category_id: i32 = final_category.parse().unwrap(); // Convert from String to i32
     let pool = get_connection_for_crud().await;
     sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id and c.category_id = ($1) limit 3")
-        .bind(final_category)
+        .bind(category_id)
         .fetch_all(&pool)
         .await
 }
-pub async fn get_filtered_from_database_by_category2() -> std::result::Result<Vec<Blog>, Error> {
-    let pool = get_connection_for_crud().await;
-    sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id limit 3")
-
-        .fetch_all(&pool)
-        .await
-}
+// pub async fn get_filtered_from_database_by_category2() -> std::result::Result<Vec<Blog>, Error> {
+//     let pool = get_connection_for_crud().await;
+//     sqlx::query_as::<_, Blog>("select p.post_id, p.post_title, p.post_description, p.post_body, c.category_id, c.category_name from posts p, category_post c where p.category_id=c.category_id limit 3")
+//
+//         .fetch_all(&pool)
+//         .await
+// }
 pub async fn count_of_get_filtered_from_database_by_category(
     final_category: i32,
 ) -> std::result::Result<Vec<Count>, Error> {
@@ -400,10 +401,10 @@ pub async fn count_of_get_filtered_from_database_by_category(
         .fetch_all(&pool)
         .await
 }
-pub async fn count_of_get_filtered_from_database_by_category2(
-) -> std::result::Result<Vec<Count>, Error> {
-    let pool = get_connection_for_crud().await;
-    sqlx::query_as::<_, Count>("select count(p.post_id) from posts p; ")
-        .fetch_all(&pool)
-        .await
-}
+// pub async fn count_of_get_filtered_from_database_by_category2(
+// ) -> std::result::Result<Vec<Count>, Error> {
+//     let pool = get_connection_for_crud().await;
+//     sqlx::query_as::<_, Count>("select count(p.post_id) from posts p; ")
+//         .fetch_all(&pool)
+//         .await
+// }

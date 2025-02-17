@@ -243,10 +243,10 @@ th, td {
 
 
                 <li>
-                    <a href="http://0.0.0.0:4000/admin">Posts</a>
+                    <a href="http://127.0.0.1:4000/admin">Posts</a>
                 </li>
                 <li class="active">
-                    <a href="http://0.0.0.0:4000/admin/categories">Categories</a>
+                    <a href="http://127.0.0.1:4000/admin/categories">Categories</a>
                 </li>
 
             <li>
@@ -274,7 +274,7 @@ th, td {
             <!--		   </ul>-->
             <!--		</div>-->
             <div>
-                <a style="float:right; margin-right:30px;" href="http://0.0.0.0:4000/admin/category/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Category</a>
+                <a style="float:right; margin-right:30px;" href="http://127.0.0.1:4000/admin/category/new" title="New" type="button" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;New Category</a>
             </div><br/><br/>
 
                     <div>
@@ -320,7 +320,7 @@ th, td {
             <ul class="pagination">
                 {% for i in page_nav_links %}
                 <li class="page-item">
-                    <a id="page_id" onclick="go_to_pagination()" class="page-link" href="http://0.0.0.0:4000/admin/categories/{{ i }}" >{{ i }}</a>
+                    <a id="page_id" onclick="go_to_pagination()" class="page-link" href="http://127.0.0.1:4000/admin/categories/{{ i }}" >{{ i }}</a>
                 </li><br/><br/>
                 {% endfor %}
             </ul>
@@ -379,14 +379,14 @@ th, td {
 
 <script>
         function getval(sel){
-        window.location.replace("http://0.0.0.0:4000/admin/posts/category/"+sel.value);
+        window.location.replace("http://127.0.0.1:4000/admin/posts/category/"+sel.value);
         let element  = document.getElementById("category");
 
         element.value = sel.value;
         }
          function confirm_delete(item){
       		if(confirm("Confirm delete, after deleting the category the posts belonging to this category will belong to No Category") == true){
-      		window.location.replace("http://0.0.0.0:4000/delete/category/"+item);
+      		window.location.replace("http://127.0.0.1:4000/delete/category/"+item);
       		}
       		else{
       		alert("Not deleted")

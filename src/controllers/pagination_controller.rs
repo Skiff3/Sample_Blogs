@@ -16,9 +16,6 @@ use std::collections::BTreeMap;
 pub async fn admin_blog_pagination(
     Path((category, page_number)): Path<(i32, i32)>,
 ) -> impl IntoResponse {
-    let plinks: Vec<String> = vec![];
-    let pids: Vec<i32> = vec![];
-    let len = 0;
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let final_category = category;
@@ -48,20 +45,17 @@ pub async fn admin_blog_pagination(
         .unwrap();
     let number_of_posts_vector =
         count_of_get_filtered_from_database_by_category(final_category).await;
-    println!("len {}", len);
+
     let m2 = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = (m2 + 2) / global_number_of_items_per_page_64();
-    println!("number in filter navigate {}", number_of_pages);
+
     (1..number_of_pages + 1).for_each(|i| pnav.push(i as i32));
     posts2.iter().for_each(|post| {
         post_id_with_title.insert(post.post_id, post.post_title.clone());
     });
-    //let list_iter = s.iter().map()
+
     let plinks = posts2.iter().map(|post| post.post_title.clone()).collect();
     let pids = posts2.iter().map(|post1| post1.post_id).collect();
-    //let v2: Vec<_> = posts.iter().map(|post| post.post_id.clone()).collect();
-    //(plinks, pids) = list_iter.unwrap_or_default();
-    println!("hashmap {:?}", post_id_with_title);
 
     let template = BlogTemplate {
         post_id_title: post_id_with_title,
@@ -85,7 +79,6 @@ pub async fn admin_blog_pagination(
 }
 
 pub async fn blog_pagination(Path((category, page_number)): Path<(i32, i32)>) -> impl IntoResponse {
-    let plinks: Vec<String> = vec![];
     let mut pids: Vec<i32> = vec![];
     let mut post_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
     let mut category_id_with_title: BTreeMap<i32, String> = BTreeMap::new();
@@ -108,7 +101,7 @@ pub async fn blog_pagination(Path((category, page_number)): Path<(i32, i32)>) ->
         })
     });
 
-    let page_number_integer: i32 = page_number;
+    //let page_number_integer: i32 = page_number;
     let pages: Pages = Pages::new(
         get_vec_len_of_count(get_count_of_posts().await)
             .try_into()
@@ -119,14 +112,14 @@ pub async fn blog_pagination(Path((category, page_number)): Path<(i32, i32)>) ->
     let page = pages.with_offset(page_number as usize);
     let no_of_pages = page.count_of_pages;
 
-    let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
+    //let offset_start: i32 = (page_number_integer - 1) * global_number_of_items_per_page();
     let posts2 = get_filtered_from_database(final_category, page.begin as i32)
         .await
         .unwrap();
 
-    let number_of_posts_vector =
+    let _number_of_posts_vector =
         count_of_get_filtered_from_database_by_category(final_category).await;
-    let m2 = get_vec_len_of_count(number_of_posts_vector);
+    //let m2 = get_vec_len_of_count(number_of_posts_vector);
     let number_of_pages: i64 = no_of_pages as i64; //(m2 + 2) / global_number_of_items_per_page_64();
 
     (1..number_of_pages + 1).for_each(|i| pnav.push(i as i32));
@@ -135,7 +128,7 @@ pub async fn blog_pagination(Path((category, page_number)): Path<(i32, i32)>) ->
     });
     let plinks = posts2.iter().map(|post| post.post_title.clone()).collect();
     pids = posts2.iter().map(|post1| post1.post_id).collect();
-    println!("hashmap {:?}", post_id_with_title);
+
     let template = HomeFilterTemplate {
         post_id_title: post_id_with_title,
         category_id_title: category_id_with_title,
