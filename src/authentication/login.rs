@@ -20,14 +20,16 @@ pub async fn login_user(
     mut auth: AuthContext,
     Form(user): Form<Users>,
 ) -> Redirect {
+    // println!("auth {:?}",&auth);
     let user_cred: User = User {
         id: 2,
         name: user.user_name,
         password_hash: user.password,
     };
-    auth.login(&user_cred).await.unwrap();
-    println!("Logged in {:?}", &auth.current_user);
-    Redirect::to("/admins")
+    match auth.login(&user_cred).await {
+        Ok(()) => Redirect::to("/admin"),
+        _ => Redirect::to("/login"),
+    }
 }
 
 pub async fn login_user_ui() -> impl IntoResponse {
@@ -66,7 +68,7 @@ pub async fn register_user_ui() -> impl IntoResponse {
 pub async fn register_user(Form(user): Form<RegisterUsers>) {
     let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect("postgres://sakibbagewadi:Sakib123@localhost/blog_temp")
+        .connect("postgres://postgres:Sakib123@localhost/blog_temp")
         .await
         .expect("couldn't connect to the database");
     let res =
@@ -75,8 +77,6 @@ pub async fn register_user(Form(user): Form<RegisterUsers>) {
             .bind(get_password_hash_form(user.clone().passwords.clone()).expose_secret())
             .execute(&pool)
             .await;
-
-    println!("user inserted {:?}", res);
 }
 
 pub async fn admin_gui() -> impl IntoResponse {
